@@ -1,0 +1,18 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-image: url("https://res.cloudinary.com/djb92etex/image/upload/v1731080101/xluwgx7ozknizoofllr2.jpg"); /* Đường dẫn đến hình nền */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+main {
+        flex: 1;
+    }
+
+    footer {
+        position: fixed;
+        width: 100%;
+        bottom: 0;
+    }
