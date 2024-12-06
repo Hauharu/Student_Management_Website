@@ -1,4 +1,5 @@
 from flask import Flask
+from urllib.parse import quote
 from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
