@@ -1,0 +1,136 @@
+<!--Kế thừa layout/base.hmtl-->
+{% extends 'layout/base.html' %}
+
+{% block title %}TRƯỜNG THPT OPEN {% endblock %}
+
+{% block body %}
+
+<!-- Hiển thị thời gian và dòng chữ chạy -->
+<div class="time-and-marquee">
+    <div id="current-time" class="time-left"></div>
+    <div class="marquee-container">
+        <div class="marquee-text">
+            <span>Chào mừng bạn đến với hệ thống quản lý Trường Trung học phổ thông OPEN! </span>
+        </div>
+    </div>
+</div>
+
+<!-- Phần chào mừng -->
+<div class="welcome">
+    <div class="welcome-text">
+        <!-- Hình ảnh logo hoặc biểu tượng -->
+        <img width="350px" src="{{ url_for('static', filename='images/profile3.png') }}">
+        <!-- Tiêu đề chính -->
+        <h4>Chào mừng bạn đến với</h4>
+        <h1>Trường Trung học phổ thông OPEN</h1>
+        <h2>OPEN High School</h2>
+    </div>
+</div>
+
+<!-- Phần giới thiệu -->
+<div class="gioithieu container-fluid" id="gioithieu">
+    <div class="col-md-12 col-xs-12 col-sm-12">
+        <div class="content-highlight content-home">
+            <!-- Tiêu đề -->
+            <h1 class="heading text-center">Vài nét về hệ thống</h1>
+            <p class="note text-center">Tính năng hệ thống quản lý học sinh</p>
+        </div>
+
+        <!-- Danh sách các tính năng nổi bật -->
+        <div class="highlights-list text-center">
+            <div class="row">
+                <!-- Tính năng 1 -->
+                <div class="highlight-items col-md-4 col-sm-6 mb-20">
+                    <div class="highlight-item">
+                        <img src="https://static.k12online.vn/LMS/K12/layouts/LandingpageHome/image/Group_05d20.png"
+                             alt="Đầy đủ, toàn trình" hspace="5">
+                        <div class="title-highlight">Đầy đủ, toàn trình</div>
+                        <div class="highlight-detail bg-dark text-left">
+                            <div class="title-highlight">Đầy đủ, toàn trình</div>
+                            <p class="detail">
+                                Đầy đủ tính năng của một hệ thống quản lý học tập trực tuyến và kiểm tra, đánh giá trực
+                                tuyến cho mọi đối tượng (từ cán bộ quản lý đến giáo viên và học sinh)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tính năng 2 -->
+                <div class="highlight-items col-md-4 col-sm-6 mb-20">
+                    <div class="highlight-item">
+                        <img src="https://static.k12online.vn/LMS/K12/layouts/LandingpageHome/image/Group__1__0ffea.png"
+                             alt="Đơn giản, dễ sử dụng" hspace="5">
+                        <div class="title-highlight">Đơn giản, dễ sử dụng</div>
+                        <div class="highlight-detail bg-dark text-left">
+                            <div class="title-highlight">Đơn giản, dễ sử dụng</div>
+                            <p class="detail">
+                                Xây dựng mô hình quản lý học sinh đầy đủ tính năng thân thiện và gần gũi với người dùng
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<!-- Phần đánh giá -->
+<div id="danhgia" class="feedback container-fluid">
+    <div class="col-md-12 col-xs-12 col-sm-12">
+        <!-- Tiêu đề -->
+        <h1 class="heading text-center">Đánh giá người dùng</h1>
+        <p class="note text-center">Nổi bật</p>
+        <!-- Slider đánh giá -->
+        <div class="feedback-slider">
+            <div class="list-feedback-slide owl-carousel owl-theme">
+                <!-- Mỗi mục đánh giá -->
+                <div class="item">
+                    <div class="item-block text-left">
+                        <div class="item-block-top">
+                            <!-- Tên người đánh giá -->
+                            <div class="post-name">Thầy Nguyễn Văn A</div>
+                            <i class="fa fa-commenting-o fa-4" aria-hidden="true"></i>
+                        </div>
+                        <p class="post">Hiệu trưởng</p>
+                        <p class="feedback-text">Tốt. Dễ sử dụng và rất tiện lợi.</p>
+                    </div>
+                </div>
+                <!-- Các đánh giá khác -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Liên kết đến thư viện Owl Carousel -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.js"></script>
+
+<script>
+    // Cấu hình cho slider Owl Carousel
+    $(document).ready(function() {
+      $(".owl-carousel").owlCarousel({
+        autoplay: true,
+        smartSpeed: 3000,
+        dots: false,
+        margin: 10,
+        center: false,
+        nav: true,
+        loop: true,
+        responsive: {
+          0: {
+              items: 1
+          },
+          600: {
+              items: 2
+          },
+          1000: {
+              items: 3
+          }
+        }
+      });
+    });
+</script>
+
+{% endblock %}
