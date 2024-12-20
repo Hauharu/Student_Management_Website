@@ -11,7 +11,7 @@ This is high school student management website using Python Flask Framework
 - We are implementing digital transformation, applying information technology to management tasks will help a lot. That is why the team built a student management system.
 - The system helps us manage data safely, organize and arrange data scientifically to avoid having to do repetitive work.
 
-# Execution environment and languages
+# Execution environment
 - Operating system: Windows, Linux, MacOS...
 - Framework: Python Flask
 - Other: HTML, CSS, JavaScript, Jquery
