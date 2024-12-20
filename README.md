@@ -1,4 +1,4 @@
-This is high school student management website using Python Flask Framework
+# This is a mid-term group assignment on the topic of a high school student management website using Python Flask Framework
 
 # Group information
 | MSSV       | Họ và Tên        |
