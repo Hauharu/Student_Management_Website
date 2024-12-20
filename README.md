@@ -1,6 +1,6 @@
 This is high school student management software using Python Flask Framework
 
-﻿# Thông tin nhóm
+# Group information
 | MSSV       | Họ và Tên        |
 | :---:      | :---:            |
 | 2251010027 | Nguyễn Trung Hậu | 
@@ -18,17 +18,17 @@ This is high school student management software using Python Flask Framework
 - Database: MySQL
 
 # Instructions for running the project
-**1. Open IDE you want and create a folder where you want to save the project to have a virtual environment available because many times the virtual environment is installed but fails and cannot be used.**
-**2. Git clone into the created directory and enabled virtual environment**
+- Open IDE you want and create a folder where you want to save the project to have a virtual environment available because many times the virtual environment is installed but fails and cannot be used.**
+- Git clone into the created directory and enabled virtual environment**
 
 **Environment settings in Terminal**
-cd/ at folder/package contain file requirements.txt anh install it in Terminal
+- cd/ at folder/package contain file requirements.txt anh install it in Terminal
 ```
 pip install -r requirements.txt 
 ```
 
 **Mysql database management system**
-Create the corresponding database name in the init.py file and change the root password accordingly to your computer.
+- Create the corresponding database name in the init.py file and change the root password accordingly to your computer.
 ```
 Charset/Collation:utf8mb4 + utf8mb4_unicode_ci
 ```
@@ -54,4 +54,4 @@ index.py
 - Regulation management
 - Subject management
 # Comment on the group's topic
-The team has completed the assigned task well, but there are still many shortcomings that may not be optimal for the best possible system, etc.
+- The team has completed the assigned task well, but there are still many shortcomings that may not be optimal for the best possible system, etc.
