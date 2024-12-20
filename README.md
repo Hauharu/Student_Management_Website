@@ -22,16 +22,14 @@ This is high school student management website using Python Flask Framework
 - Git clone into the created directory and enabled virtual environment**
 
 **Environment settings in Terminal**
-- cd/ at folder/package contain file requirements.txt anh install it in Terminal
+- cd/ at folder contain file requirements.txt and install it in Terminal
 ```
 pip install -r requirements.txt 
 ```
 
 **Mysql database management system**
 - Create the corresponding database name in the init.py file and change the root password accordingly to your computer.
-```
-Charset/Collation:utf8mb4 + utf8mb4_unicode_ci
-```
+- Charset/Collation:utf8mb4 + utf8mb4_unicode_ci
 
 **3. File models.py run it to create data tables then load each data in the tables**
 
