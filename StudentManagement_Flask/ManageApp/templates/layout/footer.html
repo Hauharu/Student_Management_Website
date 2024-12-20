@@ -1,5 +1,42 @@
-<footer class="bg-info text-white text-center text-lg-start mt-5 ">
-    <div class="text-center p-3 bg-dark"> © 2023 Bản quyền:
-        <a class="text-white" href="#">Bisme.com</a>
+<div id="alert"></div>
+
+<div class="container-fluid p-3 my-3 text-white" style="background-color: #091c50;">
+    <div id="lienhe">
+        <div class="site-logo text-center py-4">
+            <a href="/">Hệ thống quản lý học sinh Trường Trung học phổ thông OPEN</a>
+        </div>
+        <div class="social text-center">
+            <h5 class="text-uppercase">CONTACT US</h5>
+            <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-youtube"></i></a>
+            <a href="#" target="_blank"><i class="fas fa-blog"></i></a>
+        </div>
+        <div class="copyrights text-center">
+            <p class="para">
+                Copyright ©2024 Trường Trung học phổ thông OPEN | Design by Hauharu
+                <a href="#"><i class="fa fa-heart"></i></a>
+            </p>
+        </div>
     </div>
-</footer>
+</div>
+<a href="#" class="scrollToTop">
+    <img src="{{ url_for('static', filename='images/profile8.png') }}" style="width: 100%;height: 100%;margin: 1%;">
+</a>
+
+
+<style>
+
+    .social a > i {
+        font-size:25px;
+        padding: 2rem;
+        color: gray;
+    }
+
+    .social a:hover > i{
+        color: white;
+    }
+
+</style>
