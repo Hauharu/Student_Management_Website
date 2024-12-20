@@ -1,4 +1,4 @@
-This is high school student management software using Python Flask Framework
+This is high school student management website using Python Flask Framework
 
 # Group information
 | MSSV       | Họ và Tên        |
