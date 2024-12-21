@@ -1,11 +1,11 @@
 # This is a mid-term group assignment on the topic of a high school student management website using Python Flask Framework
 
 # Group information
-| MSSV       | Họ và Tên        |
+| ID         | Full Name        |
 | :---:      | :---:            |
-| 2251010027 | Nguyễn Trung Hậu | 
-| 2251010010 | Phạm Nguyên Bảo  | 
-| 2251050042 | Nguyễn Vũ Luân   |
+| 2251010027 | Nguyen Trung Hau | 
+| 2251010010 | Pham Nguyen Bao  | 
+| 2251050042 | Nguyen Vu Luan   |
 
 # Introducing the student management project
 - We are implementing digital transformation, applying information technology to management tasks will help a lot. That is why the team built a student management system.
