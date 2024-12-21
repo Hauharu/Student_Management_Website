@@ -1,7 +1,7 @@
 from xmlrpc.client import DateTime
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, Boolean, Date, Enum, DateTime, UniqueConstraint
 from sqlalchemy.orm import relationship, validates
-from StudentManagement_Flask.ManageApp import db, app
+from ManageApp import db, app
 from enum import Enum as UserEnum
 from datetime import datetime
 from flask_login import UserMixin
@@ -31,14 +31,12 @@ class Semester(UserEnum):
 
 class UserInformation(db.Model):
     __abstract__ = True
-    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), nullable=False)
     gender = Column(Enum(UserGender))
     dateOfBirth = Column(Date, nullable=True)
     address = Column(String(255), nullable=False)
     phoneNumber = Column(String(15), nullable=False, unique=False)
     email = Column(String(255), nullable=False, unique=True)
-    avatar = Column(String(255), nullable=True, default="")
     joined_date = Column(DateTime, default=datetime.now())
     is_active = Column(Boolean, default=True)
 
@@ -48,8 +46,7 @@ class User(UserInformation, UserMixin):
     id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String(50), nullable=False, unique=True)
     password = Column(String(50), nullable=False)
-    avatar = Column(String(255),
-                    default="https://th.bing.com/th/id/R.dbc8e6138b38860cee6899eabc67df45?rik=hZCUMR4xQ%2btlBA&pid=ImgRaw&r=0")
+    avatar = Column(String(255), default="https://th.bing.com/th/id/R.dbc8e6138b38860cee6899eabc67df45?rik=hZCUMR4xQ%2btlBA&pid=ImgRaw&r=0")
     user_role = Column(Enum(UserRole), nullable=False)
 
     # admin = relationship('admin', backref='user', uselist=False)
