@@ -1,6 +1,6 @@
-from StudentManagement_Flask.ManageApp import app, db
+from ManageApp import app, db
 from flask_admin import Admin
-from StudentManagement_Flask.ManageApp.models import Subject, UserRole, User, Teacher, SchoolStaff, Period, Semester, Student
+from ManageApp.models import Subject, UserRole, User, Teacher, SchoolStaff, Period, Semester, Student
 from flask_admin.contrib.sqla import ModelView
 
 admin = Admin(app=app, name='Quản trị Trường THPT',
