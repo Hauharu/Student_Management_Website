@@ -29,7 +29,7 @@
                                     <h4 class="mt-1 mb-5 pb-1" style="color:black;font-weight: bold">Đăng Nhập</h4>
                                 </div>
 
-                                <form method="post" action=" {{ url_for('user_signin') }}">
+                                <form method="post" action=" {{ url_for('user_login') }}">
                                     <p>Sử dụng tài khoản do nhà trường cung cấp</p>
 
                                     <div class="form-outline mb-4">
@@ -46,7 +46,7 @@
 
                                     <div class="form-check form-switch mb-4">
                                         <label class="toggle-switch">
-                                            <input type="checkbox" id="togglePassword" onclick="showPassword()">
+                                            <input type="checkbox"  id="togglePassword" onclick="showPassword()">
                                             <span class="slider"></span>
                                         </label>
                                         <label class="toggle-label" for="togglePassword">Hiện mật khẩu</label>
