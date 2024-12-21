@@ -1,6 +1,6 @@
 import hashlib
-from StudentManagement_Flask.ManageApp.models import *  # Import model User
-from StudentManagement_Flask.ManageApp import app, db    # SQLAlchemy session
+from ManageApp.models import *  # Import model User
+from ManageApp import app, db    # SQLAlchemy session
 
 
 def get_user_by_username(username):
