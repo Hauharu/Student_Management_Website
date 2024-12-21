@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, current_user
-from StudentManagement_Flask.ManageApp import dao
+from ManageApp import dao
 import hashlib  # Để mã hóa mật khẩu (nếu cần)
 
 def index():
