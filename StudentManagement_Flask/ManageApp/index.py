@@ -2,10 +2,10 @@ from tkinter.font import names
 
 from wtforms.validators import email
 
-from StudentManagement_Flask.ManageApp import app, controller, login, dao
+from ManageApp import app, controller, login, dao
 from flask import render_template, request, redirect, url_for, jsonify, session
 from flask_login import login_user,logout_user, login_required  # Hỗ trợ xác thực người dùng
-from StudentManagement_Flask.ManageApp.models import *
+from ManageApp.models import *
 # from  StudentManagement_Flask.ManageApp.decorators import logged_in
 # import pdb
 
