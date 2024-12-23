@@ -1,4 +1,5 @@
 import enum
+import hashlib
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, Boolean, Date, Enum, DateTime, CheckConstraint, \
     UniqueConstraint
 from sqlalchemy.orm import relationship, backref
@@ -90,30 +91,48 @@ class User(BaseModel, UserMixin):
     userInformation_id = Column(Integer, ForeignKey("user_information.id"), unique=True, nullable=False)
     userInformation = relationship("UserInformation", backref="user", lazy=True, uselist=False)
 
-    admin = relationship('Admin', backref='user', uselist=False)
-    teacher = relationship('Teacher', backref='user', uselist=False)
-    employee = relationship('Employee', backref='user', uselist=False)
+    student = relationship('Student', backref='student_info', uselist=False, lazy=True)
+    admin = relationship('Admin', backref='admin_info', uselist=False, lazy=True)
+    teacher = relationship('Teacher', backref='teacher_info', uselist=False, lazy=True)
+    staff = relationship('Staff', backref='staff_info', uselist=False, lazy=True)
 
     def __str__(self):
         return self.username
 
 
-class Teacher(UserInformation):
+class Teacher(BaseModel):
     __tablename__ = 'teacher'
     qualification = Column(String(20))
-    userInformation = relationship("UserInformation", backref="teacher", lazy=True, uselist=False)
-    userInformation_id = Column(Integer, ForeignKey("user_information.id"), unique=True, nullable=False)
+    user = relationship("User", backref="teacher", lazy=True, uselist=False)
+    user_id = Column(Integer, ForeignKey("user.id"), unique=True, nullable=False)
+    classes = relationship("Class", backref="teacher", lazy=True)
+    subject = relationship("TeacherSubject", backref="teacher", lazy=True)
 
 
 class Staff(BaseModel):
-    information = relationship("UserInformation", backref="staff", lazy=True, uselist=False)
-    information_id = Column(Integer, ForeignKey("user_information.id"), unique=True, nullable=False)
+    __tablename__ = 'staff'
+    user = relationship("User", backref="staff", lazy=True, uselist=False)
+    user_id = Column(Integer, ForeignKey("user.id"), unique=True, nullable=False)
 
 
 class Admin(BaseModel):
     __tablename__ = 'admin'
-    information = relationship("UserInformation", backref="admin", lazy=True, uselist=False)
-    information_id = Column(Integer, ForeignKey("user_information.id"), unique=True, nullable=False)
+    user = relationship("User", backref="admin", lazy=True, uselist=False)
+    user_id = Column(Integer, ForeignKey("user.id"), unique=True, nullable=False)
+
+
+class Semester(BaseModel):
+    __tablename__ = 'semester'
+    semesterName = Column(String(50), nullable=False)
+    year = Column(Integer, default=datetime.now().year)
+    student = relationship("Student", backref="semester", lazy=True)
+    score = relationship("Score", backref="semester", lazy=True)
+    __table_args__ = (
+        UniqueConstraint('semesterName', 'year', name='unique_semester_year'),
+    )
+
+    def __str__(self):
+        return f'{"Học kì 1" if self.semesterName == SemesterType.SEMESTER_1 else "Học kì 2"} {self.year}'
 
 
 class Student(BaseModel):
@@ -121,10 +140,11 @@ class Student(BaseModel):
     admission_date = Column(DateTime, default=datetime.now())
     grade = Column(Enum(StudentGrade), default=StudentGrade.GRADE_10TH)
     student_class = relationship('StudentClass', backref='student', lazy=True)
+    score = relationship("Score", backref="student", lazy=True)
     userInformation = relationship("UserInformation", backref="student", lazy=True, uselist=False)
     userInformation_id = Column(Integer, ForeignKey("user_information.id"), unique=True, nullable=False)
     regulation_id = Column(Integer, ForeignKey('regulation.id'), nullable=False)
-
+    semester_id = Column(Integer, ForeignKey('semester.id'), nullable=False)
     def __str__(self):
         return self.userInformation.name
 
@@ -135,14 +155,26 @@ class Subject(BaseModel):
     grade = Column(Enum(StudentGrade), default=StudentGrade.GRADE_10TH)
     exam_15mins = Column(Integer, nullable=False)
     exam_45mins = Column(Integer, nullable=False)
+    exam_Final = Column(Integer, default=False)
+    teachers = relationship("TeacherSubject", backref="subject_detail", lazy=True)
 
-    __table_args__ = (
-        CheckConstraint("exam_15mins >= 1 AND exam_15mins <=5", name="check_exam_15mins"),
-        CheckConstraint("exam_45mins >= 1 AND exam_45mins <=3", name="check_exam_45mins"),
-    )
 
-    def __str__(self):
-        return self.subjectName
+class TeacherSubject(BaseModel):
+    __tablename__ = 'teacher_subject'
+    teacher_id = Column(Integer, ForeignKey(Teacher.user_id), nullable=False)
+    subject_id = Column(Integer, ForeignKey(Subject.id), nullable=False)
+    __table_args__ = (UniqueConstraint('teacher_id', 'subject_id'),)
+
+
+__table_args__ = (
+    CheckConstraint("exam_15mins >= 1 AND exam_15mins <=5", name="check_exam_15mins"),
+    CheckConstraint("exam_45mins >= 1 AND exam_45mins <=3", name="check_exam_45mins"),
+    UniqueConstraint('exam_Final', 'subjectName', name="check_exam_Final")
+)
+
+
+def __str__(self):
+    return self.subjectName
 
 
 class Class(BaseModel):
@@ -151,10 +183,12 @@ class Class(BaseModel):
     quantity = Column(Integer, nullable=False)
     grade = Column(Enum(StudentGrade))
     year = Column(Integer, default=datetime.now().year)
-    studentClass = relationship('StudentClass', backref='class', lazy=True)
+    teacher_id = Column(Integer, ForeignKey(Teacher.id), unique=True)
+    student_Class = relationship('StudentClass', backref='class', lazy=True)
     regulation_id = Column(Integer, ForeignKey('regulation.id'), nullable=False)
 
     __table_args__ = (
+        UniqueConstraint('className', 'year'),
         CheckConstraint("quantity >= 0", name="check_quantity"),
     )
 
@@ -171,25 +205,12 @@ class StudentClass(BaseModel):
     )
 
 
-class Semester(BaseModel):
-    __tablename__ = 'semester'
-    semesterName = Column(String(50), nullable=False)
-    year = Column(Integer, default=datetime.now().year)
-
-    __table_args__ = (
-        UniqueConstraint('semesterName', 'year', name='unique_semester_year'),
-    )
-
-    def __str__(self):
-        return f'{"Học kì 1" if self.semesterName == SemesterType.SEMESTER_1 else "Học kì 2"} {self.year}'
-
-
 class Teach(BaseModel):
     __tablename__ = 'teach'
-    teacher_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    teacher_id = Column(Integer, ForeignKey(Teacher.id), nullable=False)
     subject_id = Column(Integer, ForeignKey(Subject.id), nullable=False)
     class_id = Column(Integer, ForeignKey(Class.id), nullable=False)
-    semester_id = Column(Integer, ForeignKey(Semester.id), nullable=False)
+    semester_id = Column(Integer, ForeignKey('semester.id'), nullable=False)
 
     classes = relationship('Class', backref='teach', lazy=True)
     semester = relationship('Semester', backref='teach', lazy=True)
@@ -217,9 +238,9 @@ class Score(BaseModel):
     type = Column(Enum(ScoreType))
     count = Column(Integer)
     scoreDetail_id = Column(Integer, ForeignKey(ScoreDetail.id), nullable=False)
-    student_id = Column(Integer, ForeignKey(Student.id), nullable=False)
-    semester_id = Column(Integer, ForeignKey(Semester.id), nullable=False)
-    subject_id = Column(Integer, ForeignKey(Subject.id), nullable=False)
+    student_id = Column(Integer, ForeignKey('student.id'), nullable=False)
+    semester_id = Column(Integer, ForeignKey('semester.id'), nullable=False)
+    subject_id = Column(Integer, ForeignKey('subject.id'), nullable=False)
     __table_args__ = (UniqueConstraint('type', 'score', 'student_id',
                                        'semester_id', 'subject_id',
                                        name='_mark_subject_uc'),
@@ -261,7 +282,7 @@ if __name__ == "__main__":
     with app.app_context():
         # db.drop_all()
         db.create_all()
-
+    #
     # import  hashlib
     # tkadm = TaiKhoan(username='admin', password=str(hashlib.md5('admin123'.encode('utf-8')).hexdigest()), loaiTaiKhoan=VaiTroTaiKhoan.ADMIN)
     # tkgv = TaiKhoan(username='giaovien', password=str(hashlib.md5('giaovien123'.encode('utf-8')).hexdigest()), loaiTaiKhoan=VaiTroTaiKhoan.TEACHER)
