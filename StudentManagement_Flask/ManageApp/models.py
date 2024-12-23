@@ -96,29 +96,10 @@ class User(BaseModel, UserMixin):
     teacher = relationship('Teacher', backref='teacher_info', uselist=False, lazy=True)
     staff = relationship('Staff', backref='staff_info', uselist=False, lazy=True)
 
+    classes = relationship("Class", backref="teacher", lazy=True)
+
     def __str__(self):
         return self.username
-
-
-class Teacher(BaseModel):
-    __tablename__ = 'teacher'
-    qualification = Column(String(20))
-    user = relationship("User", backref="teacher", lazy=True, uselist=False)
-    user_id = Column(Integer, ForeignKey("user.id"), unique=True, nullable=False)
-    classes = relationship("Class", backref="teacher", lazy=True)
-    subject = relationship("TeacherSubject", backref="teacher", lazy=True)
-
-
-class Staff(BaseModel):
-    __tablename__ = 'staff'
-    user = relationship("User", backref="staff", lazy=True, uselist=False)
-    user_id = Column(Integer, ForeignKey("user.id"), unique=True, nullable=False)
-
-
-class Admin(BaseModel):
-    __tablename__ = 'admin'
-    user = relationship("User", backref="admin", lazy=True, uselist=False)
-    user_id = Column(Integer, ForeignKey("user.id"), unique=True, nullable=False)
 
 
 class Semester(BaseModel):
@@ -157,11 +138,12 @@ class Subject(BaseModel):
     exam_45mins = Column(Integer, nullable=False)
     exam_Final = Column(Integer, default=False)
     teachers = relationship("TeacherSubject", backref="subject_detail", lazy=True)
+    subject = relationship("TeacherSubject", backref="teacher", lazy=True)
 
 
 class TeacherSubject(BaseModel):
     __tablename__ = 'teacher_subject'
-    teacher_id = Column(Integer, ForeignKey(Teacher.user_id), nullable=False)
+    teacher_id = Column(Integer, ForeignKey(User.id), nullable=False)
     subject_id = Column(Integer, ForeignKey(Subject.id), nullable=False)
     __table_args__ = (UniqueConstraint('teacher_id', 'subject_id'),)
 
@@ -183,7 +165,7 @@ class Class(BaseModel):
     quantity = Column(Integer, nullable=False)
     grade = Column(Enum(StudentGrade))
     year = Column(Integer, default=datetime.now().year)
-    teacher_id = Column(Integer, ForeignKey(Teacher.id), unique=True)
+    teacher_id = Column(Integer, ForeignKey(User.id), unique=True)
     student_Class = relationship('StudentClass', backref='class', lazy=True)
     regulation_id = Column(Integer, ForeignKey('regulation.id'), nullable=False)
 
@@ -207,7 +189,7 @@ class StudentClass(BaseModel):
 
 class Teach(BaseModel):
     __tablename__ = 'teach'
-    teacher_id = Column(Integer, ForeignKey(Teacher.id), nullable=False)
+    teacher_id = Column(Integer, ForeignKey(User.id), nullable=False)
     subject_id = Column(Integer, ForeignKey(Subject.id), nullable=False)
     class_id = Column(Integer, ForeignKey(Class.id), nullable=False)
     semester_id = Column(Integer, ForeignKey('semester.id'), nullable=False)
@@ -282,7 +264,7 @@ if __name__ == "__main__":
     with app.app_context():
         # db.drop_all()
         db.create_all()
-    #
+
     # import  hashlib
     # tkadm = TaiKhoan(username='admin', password=str(hashlib.md5('admin123'.encode('utf-8')).hexdigest()), loaiTaiKhoan=VaiTroTaiKhoan.ADMIN)
     # tkgv = TaiKhoan(username='giaovien', password=str(hashlib.md5('giaovien123'.encode('utf-8')).hexdigest()), loaiTaiKhoan=VaiTroTaiKhoan.TEACHER)
