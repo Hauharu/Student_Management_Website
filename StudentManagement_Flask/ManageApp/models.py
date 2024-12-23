@@ -8,7 +8,7 @@ from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey, Enum
     UniqueConstraint
 
 
-####################################### Class Abstract ##########################################
+################################################### Class Abstract #####################################################
 
 # Abstract dùng để tạo tự động id người dùng và auto increase
 class BaseModel(db.Model):
@@ -16,9 +16,8 @@ class BaseModel(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
 
 
-########################################## Class Enums ###########################################
+##################################################### Class Enums ######################################################
 
-# Enum vai trò người dùng
 class UserRole(enum.Enum):
     ADMIN = 1
     TEACHER = 2
@@ -33,41 +32,36 @@ class UserRole(enum.Enum):
             return 'QUẢN TRỊ VIÊN'
 
 
-# Enum giới tính người dùng
 class UserGender(enum.Enum):
     MALE = 'Nam'
     FEMALE = 'Nữ'
 
 
-# Enum khối của học sinh
 class StudentGrade(enum.Enum):
     GRADE_10TH = 10
     GRADE_11ST = 11
     GRADE_12ND = 12
 
 
-# Enum thể loại điểm
 class ScoreType(enum.Enum):
     EXAM_15MINS = 1
     EXAM_45MINS = 2
     EXAM_FINAL = 3
 
 
-# Enum về quy định tuổi và sỉ số học sinh
 class Regulations(enum.Enum):
     Re_Age = 'QuyDinhTuoi'
     Re_quantity = 'QuyDinhSoLuong'
 
 
-# Enum số học kỳ
 class SemesterType(enum.Enum):
     SEMESTER_1 = 1
     SEMESTER_2 = 2
 
 
-############################################### Classes ##########################################
+######################################################## Classes #######################################################
 
-# Class thông tin chung của một học sinh
+
 class UserInformation(BaseModel):
     __tablename__ = 'user_information'
     name = Column(String(50), nullable=False)
@@ -108,9 +102,9 @@ class Semester(BaseModel):
     __tablename__ = 'semester'
     semesterName = Column(String(50), nullable=False)
     year = Column(Integer, default=datetime.now().year)
-    teach = relationship('Teach', backref='semester', lazy=True)
-    student = relationship("Student", backref="semester", lazy=True)
-    score = relationship("Score", backref="semester", lazy=True)
+    teach = relationship('Teach', backref='semesters', lazy=True)
+    student = relationship("Student", backref="semestes", lazy=True)
+    score = relationship("Score", backref="semesters", lazy=True)
     __table_args__ = (
         UniqueConstraint('semesterName', 'year', name='unique_semester_year'),
     )
@@ -141,8 +135,6 @@ class Subject(BaseModel):
     exam_15mins = Column(Integer, nullable=False)
     exam_45mins = Column(Integer, nullable=False)
     exam_Final = Column(Integer, default=False)
-    teachers = relationship("TeacherSubject", backref="subject_detail", lazy=True)
-    subject = relationship("TeacherSubject", backref="teacher", lazy=True)
 
 
 class TeacherSubject(BaseModel):
@@ -198,11 +190,6 @@ class Teach(BaseModel):
     subject_id = Column(Integer, ForeignKey(Subject.id), nullable=False)
     class_id = Column(Integer, ForeignKey(Class.id), nullable=False)
     semester_id = Column(Integer, ForeignKey('semester.id'), nullable=False)
-
-    classes = relationship('Class', backref='teach', lazy=True)
-    semester = relationship('Semester', backref='teach', lazy=True)
-    subject = relationship('Subject', backref='teach', lazy=True)
-    teacher = relationship('User', backref='teach', lazy=True)
 
     __table_args__ = (
         UniqueConstraint('teacher_id', 'subject_id', 'class_id', 'semester_id', name='unique_teacher_assignment'),
@@ -262,69 +249,159 @@ class Regulation(BaseModel):
     def __str__(self):
         return self.regulationName
 
-
+########################################################################################################################
 if __name__ == "__main__":
-    from ManageApp import app
-
     with app.app_context():
         # db.drop_all()
-        db.create_all()
+        # db.create_all()
 
-    # import  hashlib
-    # tkadm = TaiKhoan(username='admin', password=str(hashlib.md5('admin123'.encode('utf-8')).hexdigest()), loaiTaiKhoan=VaiTroTaiKhoan.ADMIN)
-    # tkgv = TaiKhoan(username='giaovien', password=str(hashlib.md5('giaovien123'.encode('utf-8')).hexdigest()), loaiTaiKhoan=VaiTroTaiKhoan.TEACHER)
-    # tknv = TaiKhoan(username='nhanvien', password=str(hashlib.md5('nhanvien123'.encode('utf-8')).hexdigest()), loaiTaiKhoan=VaiTroTaiKhoan.STAFF)
-    #
-    # db.session.add(tkadm)
-    # db.session.add(tkgv)
-    # db.session.add(tknv)
-    #
-    # gv1 = GiaoVien(hoTen='Nguyễn Văn A', ngaySinh='2000-10-01', gioiTinh='Nam', email='example@gmail.com', diaChi='Hồ Chí Minh', soDT='0123456789', taiKhoan_id=2)
-    # db.session.add(gv1)
-    #
-    # nv1 = NhanVien(hoTen='Nguyễn Hoài Tâm', ngaySinh='2003-08-16', email='2151053055tam@ou.edu.vn', soDT='0394873588', taiKhoan_id=3)
-    # db.session.add(nv1)
-    #
-    # k10 = KhoiLop(tenKhoi='Khối 10')
-    # k11 = KhoiLop(tenKhoi='Khối 11')
-    # k12 = KhoiLop(tenKhoi='Khối 12')
-    # db.session.add_all([k10, k11, k12])
+        # Tạo dữ liệu mẫu cho UserInformation
+        user1 = UserInformation(
+            name="Nguyễn Trung Hậu",
+            gender=UserGender.MALE,
+            dateOfBirth=None,
+            address="Bến Tre",
+            phoneNumber="0912345678",
+            email="2251010027hau@osh.edu.vn"
+        )
+        user2 = UserInformation(
+            name="Phạm Nguyên Bảo",
+            gender=UserGender.MALE,
+            dateOfBirth=None,
+            address="Cần Thơ",
+            phoneNumber="0912345679",
+            email="2251010028bao@osh.edu.vn"
+        )
 
-    # l10a1 = Lop(tenLop='10A1', siSo=40, khoiLop_id=1)
-    # l11a1 = Lop(tenLop='11A1', siSo=39, khoiLop_id=2)
-    # l12a1 = Lop(tenLop='12A1', siSo=35, khoiLop_id=3)
-    # db.session.add_all([l10a1, l11a1, l12a1])
-    #
-    # hs1 = HocSinh(hoTen='Nguyễn Học Sinh', ngaySinh='2003-12-26', gioiTinh='Nam', diaChi='Hồ Chí Minh', soDT='012395784', email='sinh@ou.edu.vn', ngayNhapHoc='2022-05-02', lop_id=1)
-    # db.session.add(hs1)
-    #
-    # namhoc = NamHoc(tenNam='NH2425')
-    # db.session.add(namhoc)
+        user3 = UserInformation(
+            name="",
+            gender=UserGender.MALE,
+            dateOfBirth="None",
+            address="Hà Nội",
+            phoneNumber="0912345680",
+            email="2251010029luan@osh.edu.vn"
+        )
 
-    # hk12425 = HocKy(tenHocKy='HK1_2425', ngayBD='2024-01-01', ngayKT='2024-05-21', namHoc_id=2)
-    # db.session.add(hk12425)
-    #
-    # mhtoan = MonHoc(tenMon='Toán 10')
-    # db.session.add(mhtoan)
-    #
-    # d1 = Diem(tenDiem='Điểm 15p', monHoc_id=1, hocSinh_id=1, hocKy_id=2)
-    # db.session.add(d1)
-    #
-    # ld15p = LoaiDiem(tenLoaiDiem='15 phút')
-    # ld1t = LoaiDiem(tenLoaiDiem='1 tiết')
-    # ldck = LoaiDiem(tenLoaiDiem='Cuối kỳ')
-    # db.session.add_all([ld15p, ld1t, ldck])
-    #
-    # ctd1 = ChiTietDiem(diem=10, loaiDiem_id=1, diem_id=2)
-    # db.session.add(ctd1)
-    #
-    # qd = QuyDinh(tuoiToiThieu=15, tuoiToiDa=20, siSoToiDa=40)
-    # db.session.add(qd)
-    #
-    # lgv = LopGiaoVien(lop_id=1, giaoVien_id=1)
-    # db.session.add(lgv)
-    #
-    # mhgv = MonHocGiaoVien(monHoc_id=1, giaoVien_id=1)
-    # db.session.add(mhgv)
+        user4 = UserInformation(
+            name="Trần Xuân Đức",
+            gender=UserGender.MALE,
+            dateOfBirth=None,
+            address="TP.Hồ Chí Minh",
+            phoneNumber="0912345681",
+            email="2251010030duc@osh.edu.vn"
+        )
 
-    # db.session.commit()
+        user5 = UserInformation(
+            name="Hứa Quang Đạt",
+            gender=UserGender.MALE,
+            dateOfBirth=None,
+            address="Đà Nẵng",
+            phoneNumber="0912345682",
+            email="2251010026dat@osh.edu.vn"
+        )
+
+        user6 = UserInformation(
+            name="Nguyễn Thị Kim Ngân",
+            gender=UserGender.FEMALE,
+            dateOfBirth=None,
+            address="Hải Phòng",
+            phoneNumber="0912345683",
+            email="2251010023ngan@osh.edu.vn"
+        )
+
+        db.session.add_all([user1, user2 ,user3 ,user4 ,user5,user6])
+        db.session.commit()
+        # # Tạo dữ liệu mẫu cho User
+        # user1 = User(
+        #     username="admin",
+        #     password=hashlib.sha256("admin123".encode('utf-8')).hexdigest(),
+        #     user_role=UserRole.ADMIN,
+        #     is_supervisor=True,
+        #     userInformation=user_info1
+        # )
+        #
+        # user2 = User(
+        #     username="teacher1",
+        #     password=hashlib.sha256("teacher123".encode('utf-8')).hexdigest(),
+        #     user_role=UserRole.TEACHER,
+        #     is_supervisor=False,
+        #     userInformation=user_info2
+        # )
+        #
+        # # Tạo dữ liệu mẫu cho Semester
+        # semester1 = Semester(
+        #     semesterName="SEMESTER_1",
+        #     year=2024
+        # )
+        # semester2 = Semester(
+        #     semesterName="SEMESTER_2",
+        #     year=2024
+        # )
+        #
+        # # Tạo dữ liệu mẫu cho Regulation
+        # regulation1 = Regulation(
+        #     regulationName="Quy định về tuổi học sinh",
+        #     content="Độ tuổi học sinh phải từ 15 đến 18 tuổi.",
+        #     data=None,
+        #     min_value=15,
+        #     max_value=18,
+        #     type=Regulations.Re_Age
+        # )
+        #
+        # regulation2 = Regulation(
+        #     regulationName="Quy định về số lượng học sinh",
+        #     content="Sĩ số tối đa của mỗi lớp không vượt quá 50.",
+        #     data=None,
+        #     min_value=1,
+        #     max_value=50,
+        #     type=Regulations.Re_quantity
+        # )
+        #
+        # # Tạo dữ liệu mẫu cho Class
+        # class1 = Class(
+        #     className="10A1",
+        #     quantity=45,
+        #     grade=StudentGrade.GRADE_10TH,
+        #     year=2024,
+        #     teacher_id=1,  # ID của giáo viên
+        #     regulation=regulation2
+        # )
+        #
+        # # Tạo dữ liệu mẫu cho Student
+        # student1 = Student(
+        #     admission_date=datetime.now(),
+        #     grade=StudentGrade.GRADE_10TH,
+        #     userInformation=user_info1,
+        #     regulation=regulation1,
+        #     semester=semester1
+        # )
+        #
+        # student2 = Student(
+        #     admission_date=datetime.now(),
+        #     grade=StudentGrade.GRADE_11ST,
+        #     userInformation=user_info2,
+        #     regulation=regulation1,
+        #     semester=semester2
+        # )
+        #
+        # # Tạo dữ liệu mẫu cho Subject
+        # subject1 = Subject(
+        #     subjectName="Toán",
+        #     grade=StudentGrade.GRADE_10TH,
+        #     exam_15mins=3,
+        #     exam_45mins=2,
+        #     exam_Final=1
+        # )
+        #
+        # subject2 = Subject(
+        #     subjectName="Vật Lý",
+        #     grade=StudentGrade.GRADE_10TH,
+        #     exam_15mins=2,
+        #     exam_45mins=1,
+        #     exam_Final=1
+        # )
+        #
+        # # Thêm dữ liệu vào database
+        # db.session.add_all([user_info1, user_info2, user1, user2, semester1, semester2,
+        #                     regulation1, regulation2, class1, student1, student2, subject1, subject2])
+        # db.session.commit()
