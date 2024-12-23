@@ -1,15 +1,16 @@
 import enum
 import hashlib
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, Boolean, Date, Enum, DateTime, CheckConstraint, \
-    UniqueConstraint
-from sqlalchemy.orm import relationship, backref
+from ManageApp import db, app
 from datetime import datetime
 from flask_login import UserMixin
-from ManageApp import db, app
+from sqlalchemy.orm import relationship, backref
+from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey, Enum, Date, DateTime, CheckConstraint, \
+    UniqueConstraint
 
 
 ####################################### Class Abstract ##########################################
 
+# Abstract dùng để tạo tự động id người dùng và auto increase
 class BaseModel(db.Model):
     __abstract__ = True
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -17,6 +18,7 @@ class BaseModel(db.Model):
 
 ########################################## Class Enums ###########################################
 
+# Enum vai trò người dùng
 class UserRole(enum.Enum):
     ADMIN = 1
     TEACHER = 2
@@ -31,28 +33,33 @@ class UserRole(enum.Enum):
             return 'QUẢN TRỊ VIÊN'
 
 
+# Enum giới tính người dùng
 class UserGender(enum.Enum):
     MALE = 'Nam'
     FEMALE = 'Nữ'
 
 
+# Enum khối của học sinh
 class StudentGrade(enum.Enum):
     GRADE_10TH = 10
     GRADE_11ST = 11
     GRADE_12ND = 12
 
 
+# Enum thể loại điểm
 class ScoreType(enum.Enum):
     EXAM_15MINS = 1
     EXAM_45MINS = 2
     EXAM_FINAL = 3
 
 
+# Enum về quy định tuổi và sỉ số học sinh
 class Regulations(enum.Enum):
     Re_Age = 'QuyDinhTuoi'
     Re_quantity = 'QuyDinhSoLuong'
 
 
+# Enum số học kỳ
 class SemesterType(enum.Enum):
     SEMESTER_1 = 1
     SEMESTER_2 = 2
@@ -60,6 +67,7 @@ class SemesterType(enum.Enum):
 
 ############################################### Classes ##########################################
 
+# Class thông tin chung của một học sinh
 class UserInformation(BaseModel):
     __tablename__ = 'user_information'
     name = Column(String(50), nullable=False)
@@ -90,12 +98,6 @@ class User(BaseModel, UserMixin):
                     default="https://th.bing.com/th/id/R.dbc8e6138b38860cee6899eabc67df45?rik=hZCUMR4xQ%2btlBA&pid=ImgRaw&r=0")
     userInformation_id = Column(Integer, ForeignKey("user_information.id"), unique=True, nullable=False)
     userInformation = relationship("UserInformation", backref="user", lazy=True, uselist=False)
-
-    student = relationship('Student', backref='student_info', uselist=False, lazy=True)
-    admin = relationship('Admin', backref='admin_info', uselist=False, lazy=True)
-    teacher = relationship('Teacher', backref='teacher_info', uselist=False, lazy=True)
-    staff = relationship('Staff', backref='staff_info', uselist=False, lazy=True)
-
     classes = relationship("Class", backref="teacher", lazy=True)
 
     def __str__(self):
@@ -106,6 +108,7 @@ class Semester(BaseModel):
     __tablename__ = 'semester'
     semesterName = Column(String(50), nullable=False)
     year = Column(Integer, default=datetime.now().year)
+    teach = relationship('Teach', backref='semester', lazy=True)
     student = relationship("Student", backref="semester", lazy=True)
     score = relationship("Score", backref="semester", lazy=True)
     __table_args__ = (
@@ -126,6 +129,7 @@ class Student(BaseModel):
     userInformation_id = Column(Integer, ForeignKey("user_information.id"), unique=True, nullable=False)
     regulation_id = Column(Integer, ForeignKey('regulation.id'), nullable=False)
     semester_id = Column(Integer, ForeignKey('semester.id'), nullable=False)
+
     def __str__(self):
         return self.userInformation.name
 
@@ -165,6 +169,7 @@ class Class(BaseModel):
     quantity = Column(Integer, nullable=False)
     grade = Column(Enum(StudentGrade))
     year = Column(Integer, default=datetime.now().year)
+    teach = relationship('Teach', backref='class', lazy=True)
     teacher_id = Column(Integer, ForeignKey(User.id), unique=True)
     student_Class = relationship('StudentClass', backref='class', lazy=True)
     regulation_id = Column(Integer, ForeignKey('regulation.id'), nullable=False)
