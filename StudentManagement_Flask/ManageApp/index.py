@@ -12,7 +12,7 @@ app.secret_key="Admin@123"
 app.add_url_rule("/", 'index', controller.index)
 
 # Định tuyến cho trang đăng nhập
-app.add_url_rule("/user-login", 'user_signin', controller.user_signin, methods=['GET', 'POST'])
+app.add_url_rule("/user-login", 'user_signin',  controller.user_signin, methods=['GET', 'POST'])
 
 @login.user_loader
 def load_user(user_id):
@@ -42,7 +42,7 @@ def user_login():
 @app.route('/logout')
 def user_logout():
     logout_user()
-    return  redirect(url_for(user_login))
+    return  redirect(url_for('user_signin'))
 
 #Chức năng Staff
 @app.route('/staff')
@@ -75,9 +75,26 @@ def dshocsinh():
 
 @app.route('/dslop', methods=['GET', 'POST'])
 def dslophoc():
-    kw = request.args.get('kw')
     class_list=dao.get_class_list()
     return render_template('staff/dslophoc.html', class_list=class_list)
+
+#Chức năng Teacher
+@app.route('/teacher')
+@login_required
+def teacher():
+    return render_template('teacher/teacher.html')
+
+@app.route('/nhapdiem')
+@login_required
+def input_score():
+    return render_template('teacher/nhapdiem.html')
+
+@app.route('/dsmon')
+@login_required
+def dsmonhoc():
+    subject = dao.get_subject_list()
+    return render_template('teacher/dsmon.html', subject=subject)
+
 
 
 if __name__ == "__main__":
