@@ -257,16 +257,9 @@ class Regulation(BaseModel):
 ########################################################################################################################
 if __name__ == "__main__":
     with app.app_context():
-        # db.drop_all()
-        db.create_all()
+         # db.drop_all()
+        # db.create_all()
         #
-
-
-        # READEME
-        # LƯU Ý CHẠY TỪNG BẢNG DỮ LIỆU NHƯNG BẢNG SCOREDETAIL VÀ SCORE PHẢI CHẠY MỘT LƯỢT
-
-
-
         # Tạo dữ liệu mẫu cho UserInformation
         # user_info1 = UserInformation(
         #     name="Nguyễn Văn A", gender=UserGender.MALE, dateOfBirth=datetime(1990, 5, 15), address="Bến Tre",
@@ -319,7 +312,7 @@ if __name__ == "__main__":
         # )
         # db.session.add_all([user1, user2, user3, user4, user5, user6])
         # db.session.commit()
-        #
+
         # Tạo dữ liệu mẫu cho Semester
         # semester1 = Semester(
         #     semesterName="SEMESTER_1", year=2024)
@@ -327,7 +320,7 @@ if __name__ == "__main__":
         #     semesterName="SEMESTER_2", year=2024)
         # db.session.add_all([semester1, semester2])
         # db.session.commit()
-        #
+
         # Tạo dữ liệu mẫu cho Regulation
         # regulation1 = Regulation(
         #     regulationName="Quy định về tuổi học sinh", content="Độ tuổi học sinh phải từ 15 đến 20 tuổi.", data=None,
@@ -379,8 +372,8 @@ if __name__ == "__main__":
         # )
         # db.session.add_all([student1, student2, student3, student4, student5, student6])
         # db.session.commit()
-        #
-        # Tạo dữ liệu mẫu cho Subject
+
+        #Tạo dữ liệu mẫu cho Subject
         # subject1 = Subject(subjectName="Toán", grade=StudentGrade.GRADE_10TH, exam_15mins=2, exam_45mins=2,
         #                    exam_Final=1)
         # subject2 = Subject(subjectName="Vật Lý", grade=StudentGrade.GRADE_11ST, exam_15mins=3, exam_45mins=2,
@@ -404,7 +397,7 @@ if __name__ == "__main__":
         # db.session.add_all(
         #     [subject1, subject2, subject3, subject4, subject5, subject6, subject7, subject8, subject9, subject10])
         # db.session.commit()
-        #
+        # #
         # Tạo dữ liệu mẫu cho Class
         # class1 = Class(
         #     className="10C1", quantity=40, grade=StudentGrade.GRADE_10TH, year=2024, teacher_id=3, regulation_id=2)
@@ -414,41 +407,37 @@ if __name__ == "__main__":
         #     className="12C1", quantity=30, grade=StudentGrade.GRADE_12ND, year=2024, teacher_id=5, regulation_id=2)
         # db.session.add_all([class1, class2, class3])
         # db.session.commit()
-        #
-        # Tạo dữ liệu mẫu cho ScoreDetail
-        # score_detail1 = ScoreDetail(score=10.0, type=ScoreType.EXAM_15MINS, created_date=datetime.now(), student_id=1)
-        # score_detail2 = ScoreDetail(score=8.0, type=ScoreType.EXAM_45MINS, created_date=datetime.now(), student_id=2)
-        # score_detail3 = ScoreDetail(score=7.0, type=ScoreType.EXAM_FINAL, created_date=datetime.now(), student_id=3)
-        # score_detail4 = ScoreDetail(score=6.5, type=ScoreType.EXAM_15MINS, created_date=datetime.now(), student_id=4)
-        # score_detail5 = ScoreDetail(score=6.0, type=ScoreType.EXAM_FINAL, created_date=datetime.now(), student_id=5)
-        # score_detail6 = ScoreDetail(score=9.0, type=ScoreType.EXAM_45MINS, created_date=datetime.now(), student_id=6)
-        # db.session.add_all([score_detail1, score_detail2, score_detail3, score_detail4, score_detail5, score_detail6])
-        # db.session.commit()
-        #
+
+      #  Tạo dữ liệu mẫu cho ScoreDetail
+        score_detail1 = ScoreDetail(score=10.0, type=ScoreType.EXAM_15MINS, created_date=datetime.now(), student_id=1)
+        score_detail2 = ScoreDetail(score=8.0, type=ScoreType.EXAM_45MINS, created_date=datetime.now(), student_id=2)
+        score_detail3 = ScoreDetail(score=7.0, type=ScoreType.EXAM_FINAL, created_date=datetime.now(), student_id=3)
+        score_detail4 = ScoreDetail(score=6.5, type=ScoreType.EXAM_15MINS, created_date=datetime.now(), student_id=4)
+        score_detail5 = ScoreDetail(score=6.0, type=ScoreType.EXAM_FINAL, created_date=datetime.now(), student_id=5)
+        score_detail6 = ScoreDetail(score=9.0, type=ScoreType.EXAM_45MINS, created_date=datetime.now(), student_id=6)
+        db.session.add_all([score_detail1, score_detail2, score_detail3, score_detail4, score_detail5, score_detail6])
+        db.session.commit()
+
         # Tạo dữ liệu mẫu cho Score
-        # score1 = Score(
-        #     score=10.0, type=ScoreType.EXAM_15MINS, count=1, scoreDetail_id=score_detail1.id, student_id=1, semester_id=1,
-        #     subject_id=1
-        # )
-        # score2 = Score(
-        #     score=8.0, type=ScoreType.EXAM_45MINS, count=1, scoreDetail_id=score_detail2.id, student_id=2, semester_id=1,
-        #     subject_id=2
-        # )
-        # score3 = Score(
-        #     score=7.0, type=ScoreType.EXAM_FINAL, count=1, scoreDetail_id=score_detail3.id, student_id=3, semester_id=1,
-        #     subject_id=3
-        # )
-        # score4 = Score(
-        #     score=6.5, type=ScoreType.EXAM_15MINS, count=1, scoreDetail_id=score_detail4.id, student_id=4, semester_id=1,
-        #     subject_id=4
-        # )
-        # score5 = Score(
-        #     score=6.0, type=ScoreType.EXAM_FINAL, count=1, scoreDetail_id=score_detail5.id, student_id=5, semester_id=1,
-        #     subject_id=5
-        # )
-        # score6 = Score(
-        #     score=9.0, type=ScoreType.EXAM_45MINS, count=1, scoreDetail_id=score_detail6.id, student_id=6, semester_id=1,
-        #     subject_id=6
-        # )
-        # db.session.add_all([score1, score2, score3, score4, score5, score6])
-        # db.session.commit()
+        score1 = Score(
+            score=10.0, type=ScoreType.EXAM_15MINS, count=1, scoreDetail_id=score_detail1, student_id=1, semester_id=1, subject_id=1
+        )
+        score2 = Score(
+            score=8.0, type=ScoreType.EXAM_45MINS, count=1, scoreDetail_id=score_detail2, student_id=2, semester_id=1, subject_id=2
+        )
+        score3 = Score(
+            score=7.0, type=ScoreType.EXAM_FINAL, count=1, scoreDetail_id=score_detail3, student_id=3, semester_id=1, subject_id=3
+        )
+        score4 = Score(
+            score=6.5, type=ScoreType.EXAM_15MINS, count=1, scoreDetail_id=score_detail4, student_id=4, semester_id=1, subject_id=4
+        )
+        score5 = Score(
+            score=6.0, type=ScoreType.EXAM_FINAL, count=1, scoreDetail_id=score_detail5, student_id=5, semester_id=1, subject_id=5
+        )
+        score6 = Score(
+            score=9.0, type=ScoreType.EXAM_45MINS, count=1, scoreDetail_id=score_detail6, student_id=6, semester_id=1, subject_id=6
+        )
+        db.session.add_all([score1, score2, score3, score4, score5, score6])
+        db.session.commit()
+
+
