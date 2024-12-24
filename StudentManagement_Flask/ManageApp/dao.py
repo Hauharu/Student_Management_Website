@@ -76,6 +76,10 @@ def add_student(name, gender, dateOfBirth, address, phoneNumber, email, admissio
 def get_class_by_id(id):
     return Class.query.get(id)
 
-def get_class_list(kw=None):
+def get_class_list():
     class_list = Class.query.all()
     return class_list
+
+def get_subject_list():
+    subject = Subject.query.all()
+    return subject
