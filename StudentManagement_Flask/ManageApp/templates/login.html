@@ -29,8 +29,18 @@
                                     <h4 class="mt-1 mb-5 pb-1" style="color:black;font-weight: bold">Đăng Nhập</h4>
                                 </div>
 
+
+
                                 <form method="post" action=" {{ url_for('user_login') }}">
                                     <p>Sử dụng tài khoản do nhà trường cung cấp</p>
+                                      <div class="mb-3 form-outline">
+<!--                                        <label for="role">Vai trò</label>-->
+                                        <select class="form-select form-control" id="role" name="role">
+                                            <option value="TEACHER">Teacher</option>
+                                            <option value="STAFF">Staff</option>
+                                            <option value="ADMIN">Admin</option>
+                                        </select>
+                                    </div>
 
                                     <div class="form-outline mb-4">
                                         <input type="text" name="username" id="username" class="form-control"
