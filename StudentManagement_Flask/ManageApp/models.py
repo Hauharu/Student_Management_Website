@@ -20,17 +20,18 @@ class BaseModel(db.Model):
 
 
 class UserRole(enum.Enum):
-    ADMIN = 1
-    TEACHER = 2
-    STAFF = 3
+    ADMIN = "QUẢN TRỊ VIÊN"
+    TEACHER = "GIẢNG VIÊN"
+    STAFF = "NHÂN VIÊN"
+    STUDENT = "HỌC SINH"
 
     def __str__(self):
         if str(self.name).__eq__('STAFF'):
-            return 'NHÂN VIÊN NHÀ TRƯỜNG'
+            return 'SCHOOL STAFF'
         elif str(self.name).__eq__('TEACHER'):
-            return 'GIÁO VIÊN'
+            return 'TEACHER'
         else:
-            return 'QUẢN TRỊ VIÊN'
+            return 'ADMIN'
 
 
 class UserGender(enum.Enum):
@@ -100,7 +101,7 @@ class User(BaseModel, UserMixin):
 
 class Student(BaseModel):
     __tablename__ = 'student'
-    name = Column(String(50), nullable=False)
+    fullName = Column(String(50), nullable=False)
     gender = Column(Enum(UserGender), default=UserGender.MALE)
     dateOfBirth = Column(DateTime, nullable=False)
     address = Column(String(255), nullable=False)
@@ -186,7 +187,7 @@ class StudentClass(BaseModel):
     class_id = Column(Integer, ForeignKey('class.id'), nullable=False)
     semester_id = Column(Integer, ForeignKey('semester.id'), nullable=False)
     __table_args__ = (
-        UniqueConstraint('class_id', 'student_id','semester_id', name='unique_student_per_class'),
+        UniqueConstraint('class_id', 'student_id', 'semester_id', name='unique_student_per_class'),
     )
 
 
@@ -259,62 +260,53 @@ class Regulation(BaseModel):
 
 if __name__ == "__main__":
     with app.app_context():
-        # db.drop_all()
+        db.drop_all()
         db.create_all()
 
         # CHẠY TỪNG BẢNG DỮ LIỆU, CHẠY CẢ 2 BẢNG DỮ LIỆU SCOREDETAIL VÀ SCORE
 
         # Tạo dữ liệu mẫu cho UserInformation
         # user_info1 = UserInformation(
-        #     name="Nguyễn Văn A", gender=UserGender.MALE, dateOfBirth=datetime(1990, 5, 15), address="Bến Tre",
-        #     phoneNumber="0123765789", email="nguyenvana@osh.edu.vn")
+        #     name="Nguyễn Trung Hậu", gender=UserGender.MALE, dateOfBirth=datetime(1990, 5, 15), address="Bến Tre",
+        #     phoneNumber="0123765789", email="trunghau@osh.edu.vn")
         # user_info2 = UserInformation(
-        #     name="Trần Thị B", gender=UserGender.FEMALE, dateOfBirth=datetime(1992, 7, 20), address="Trà Vinh",
-        #     phoneNumber="0234567890", email="tranthib@osh.edu.vn")
+        #     name="Phạm Nguyên Bảo", gender=UserGender.MALE, dateOfBirth=datetime(1992, 7, 20), address="Trà Vinh",
+        #     phoneNumber="0234567890", email="nguyenbao@osh.edu.vn")
         # user_info3 = UserInformation(
-        #     name="Phan Thị C", gender=UserGender.FEMALE, dateOfBirth=datetime(1985, 3, 30), address="Đồng Tháp",
-        #     phoneNumber="0345678901", email="phanthic@osh.edu.vn")
+        #     name="Nguyễn Vũ Luân", gender=UserGender.MALE, dateOfBirth=datetime(1985, 3, 30), address="Đồng Tháp",
+        #     phoneNumber="0345678901", email="vuluan@osh.edu.vn")
         # user_info4 = UserInformation(
-        #     name="Trần Xuân D", gender=UserGender.MALE, dateOfBirth=datetime(1988, 11, 10), address="An Giang",
-        #     phoneNumber="0456789012", email="tranxuand@osh.edu.vn")
+        #     name="Trần Xuân Đức", gender=UserGender.MALE, dateOfBirth=datetime(1985, 3, 30), address="Bạc Liêu",
+        #     phoneNumber="0765437890", email="xuanduc@osh.edu.vn")
         # user_info5 = UserInformation(
-        #     name="Lương Xuân E", gender=UserGender.MALE, dateOfBirth=datetime(1995, 1, 25), address="Bạc Liêu",
-        #     phoneNumber="0456789636", email="luongxuane@osh.edu.vn")
-        # user_info6 = UserInformation(
-        #     name="Lê Đức F", gender=UserGender.MALE, dateOfBirth=datetime(1995, 6, 26), address="Long An",
-        #     phoneNumber="0123789636", email="leducf@osh.edu.vn")
-        # db.session.add_all([user_info1, user_info2, user_info3, user_info4, user_info5, user_info6])
+        #     name="Hứa Quang Đạt", gender=UserGender.MALE, dateOfBirth=datetime(1985, 3, 30), address="An Giang",
+        #     phoneNumber="0398234901", email="quangdat@osh.edu.vn")
+        # db.session.add_all([user_info1, user_info2, user_info3, user_info4, user_info5])
         # db.session.commit()
 
         # Tạo dữ liệu mẫu cho User
         # user1 = User(
-        #     username="2251010001", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
+        #     username="hau", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
         #     user_role=UserRole.ADMIN, userInformation_id=1)
         #
         # user2 = User(
-        #     username="2251010002", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
-        #     user_role=UserRole.ADMIN, userInformation_id=2
+        #     username="bao", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
+        #     user_role=UserRole.STAFF, userInformation_id=2
         # )
         #
         # user3 = User(
-        #     username="2251010003", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
-        #     user_role=UserRole.STAFF, userInformation_id=5
-        # )
-        # user4 = User(
-        #     username="2251010004", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
-        #     user_role=UserRole.STAFF, userInformation_id=6
-        # )
-        # user5 = User(
-        #     username="2251010005", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
+        # username = "luan", password = str(hashlib.md5("123".encode("utf-8")).hexdigest()),
         #     user_role=UserRole.TEACHER, userInformation_id=3
         # )
-        #
-        # user6 = User(
-        #     username="2251010006", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
+        # user4 = User(
+        #     username="duc", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
         #     user_role=UserRole.TEACHER, userInformation_id=4
         # )
-        #
-        # db.session.add_all([user1, user2, user3, user4, user5, user6])
+        # user5 = User(
+        #     username="dat", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
+        #     user_role=UserRole.TEACHER, userInformation_id=5
+        # )
+        # db.session.add_all([user1, user2, user3, user4, user5])
         # db.session.commit()
 
         # Tạo dữ liệu mẫu cho Semester
@@ -327,51 +319,50 @@ if __name__ == "__main__":
 
         # Tạo dữ liệu mẫu cho Regulation
         # regulation1 = Regulation(
-        #     regulationName="Quy định về tuổi học sinh", content="Độ tuổi học sinh phải từ 15 đến 20 tuổi.", data=None,
+        #     regulationName="Quy định về tuổi học sinh", content="Độ tuổi học sinh phải từ 15 đến 20 tuổi.",
         #     min_value=15, max_value=20, type=Regulations.Re_Age
         # )
         #
-        #
         # regulation2 = Regulation(
         #     regulationName="Quy định về số lượng học sinh", content="Sĩ số tối đa của mỗi lớp không vượt quá 40.",
-        #     data=None, min_value=0, max_value=40, type=Regulations.Re_quantity
+        #     min_value=0, max_value=40, type=Regulations.Re_quantity
         # )
         # db.session.add_all([regulation1, regulation2])
         # db.session.commit()
 
         # Tạo dữ liệu mẫu cho Student
         # student1 = Student(
-        #     first_name="Lan", last_name="Trần", gender=UserGender.FEMALE, dateOfBirth=datetime(2007, 4, 20),
+        #     fullName="Trần Thị Lan", gender=UserGender.FEMALE, dateOfBirth=datetime(2007, 4, 20),
         #     address="Trà Vinh", phoneNumber="0789012345", email="lantran@osh.edu.vn", grade=StudentGrade.GRADE_11ST,
         #     regulation_id=1, semester_id=1
         # )
         #
         # student2 = Student(
-        #     first_name="Hoa", last_name="Lê", gender=UserGender.FEMALE, dateOfBirth=datetime(2009, 2, 10),
+        #     fullName="Lê Thị Hoa", gender=UserGender.FEMALE, dateOfBirth=datetime(2009, 2, 10),
         #     address="Đồng Tháp", phoneNumber="0890123456", email="hoale@osh.edu.vn", grade=StudentGrade.GRADE_12ND,
         #     regulation_id=1, semester_id=1
         # )
         #
         # student3 = Student(
-        #     first_name="Nam", last_name="Phạm", gender=UserGender.MALE, dateOfBirth=datetime(2008, 5, 5),
+        #     fullName="Phạm Văn Nam", gender=UserGender.MALE, dateOfBirth=datetime(2008, 5, 5),
         #     address="An Giang", phoneNumber="0901234567", email="nampham@osh.edu.vn", grade=StudentGrade.GRADE_10TH,
         #     regulation_id=1, semester_id=1
         # )
         #
         # student4 = Student(
-        #     first_name="Hương", last_name="Hoàng", gender=UserGender.FEMALE, dateOfBirth=datetime(2007, 10, 10),
+        #     fullName="Hoàng thị Hương", gender=UserGender.FEMALE, dateOfBirth=datetime(2007, 10, 10),
         #     address="Bạc Liêu", phoneNumber="0912345678", email="huonghoang@osh.edu.vn", grade=StudentGrade.GRADE_11ST,
         #     regulation_id=1, semester_id=1
         # )
         #
         # student5 = Student(
-        #     first_name="Phúc", last_name="Ngô", gender=UserGender.MALE, dateOfBirth=datetime(2006, 12, 15),
+        #     fullName="Ngô Trọng Phúc", gender=UserGender.MALE, dateOfBirth=datetime(2006, 12, 15),
         #     address="Cà Mau", phoneNumber="0923456789", email="phucngo@osh.edu.vn", grade=StudentGrade.GRADE_12ND,
         #     regulation_id=1, semester_id=1
         # )
         #
         # student6 = Student(
-        #     first_name="Mai", last_name="Dương", gender=UserGender.FEMALE, dateOfBirth=datetime(2008, 9, 25),
+        #     fullName="Dương Hoàng Mai", gender=UserGender.FEMALE, dateOfBirth=datetime(2008, 9, 25),
         #     address="Hậu Giang", phoneNumber="0934567890", email="maiduong@osh.edu.vn", grade=StudentGrade.GRADE_10TH,
         #     regulation_id=1, semester_id=1
         # )

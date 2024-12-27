@@ -42,17 +42,54 @@
                 <a class="nav-link nav-item" href="/#lienhe">
                     <i class="fa fa-phone" aria-hidden="true"></i> LIÊN HỆ</a>
             </li>
-
+            <li class="main active">
+                <a class="nav-link nav-item" href="/admin">
+                    <i class="fas fa-user-shield" aria-hidden="true"></i> TRANG ADMIN</a>
+            </li>
         </ul>
     </div>
 
-    {% if current_user.is_authenticated and request.endpoint not in ['user_login', 'index'] %}
-    <a class="nav-link mr-auto" id="nav_user_logout" href="{{ url_for('user_logout') }}">
-        <i class="fas fa-sign-out-alt"></i> ĐĂNG XUẤT
-    </a>
+    {% if current_user.is_authenticated %}
+    <!-- Navbar Item -->
+    <li class="nav-item d-flex align-items-center">
+        <!-- Username and Role -->
+        <p class="d-inline text-sm text-capitalize z-index-1 font-weight-bold mb-0 me-2" style="color: #ffffff;">
+            {{ current_user.username }}
+            <span class="badge badge-success" style="font-size: 10px;">{{ current_user.user_role }}</span>
+        </p>
+        <!-- Avatar -->
+        <div class="dropdown ms-2">
+            <a
+                    class="dropdown-toggle d-flex align-items-center hidden-arrow"
+                    href="#"
+                    id="navbarDropdownMenuAvatar"
+                    role="button"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+            >
+                <img
+                        src="{{ current_user.avatar }}"
+                        class="rounded-circle"
+                        height="30"
+                        alt="{{ current_user.username }}"
+                        loading="lazy"
+                />
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuAvatar">
+                <a class="dropdown-item" href="#">My profile</a>
+                <a class="dropdown-item" href="#">Change Password</a>
+            </div>
+        </div>
+        <!-- Logout -->
+        <a class="nav-link mr-auto" id="nav_user_logout" href="{{ url_for('user_signout') }}">
+            <i class="fas fa-sign-out-alt"></i> ĐĂNG XUẤT
+        </a>
+    </li>
     {% else %}
-    <a class="nav-link mr-auto" id="nav_user_login" href="{{ url_for('user_login') }}">
+    <a class="nav-link mr-auto" id="nav_user_login" href="{{ url_for('user_signin') }}">
         <i class="fas fa-sign-in-alt"></i> ĐĂNG NHẬP
     </a>
     {% endif %}
+
 </nav>

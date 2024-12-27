@@ -109,3 +109,9 @@ updateTime();
       }
     }
  /**********************************************************************************************************************/
+
+
+ /*************************** Nhấn vào ảnh hiện My profile và Change password *****************************************/
+document.getElementById('navbarDropdownMenuAvatar').addEventListener('click', function() {
+    console.log('Dropdown clicked!');
+});

@@ -1,10 +1,63 @@
 {% extends 'admin/master.html' %}
 {% block body %}
 
-<h1 class="text-center text-success">TRANG CHỦ QUẢN TRỊ HỌC SINH</h1>
 {% if current_user.is_authenticated  %}
-<h4 class="text-center" style="color: black;"> Xin chào <span> {{ current_user.username }}</span> bạn đang truy cập với vai trò {{ current_user.user_role }} </h4>
-<h6 class="text-center text-info">Với vai trò admin bạn có thể thực quản trị hệ thống </h6>
+<h2 class="alert-success p-3">Chào Nguyễn Trung {{ current_user.username }}, Bạn đang truy cập với vai trò {{ current_user.user_role.value }}</h2>
+<div class="row">
+    <div class="col-md-5">
+        <table class="table">
+            <th colspan="2">THỐNG KÊ NGƯỜI DÙNG</th>
+            <tr>
+                <th>Vai trò</th>
+                <th>Số lượng</th>
+            </tr>
+            {% for role, count in user_count %}
+            <tr>
+                <td>{{ role }}</td>
+                <td>{{ count }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="col-md-7">
+         <canvas id="myChart"></canvas>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    let data = [];
+    let labels = [];
+
+    {% for role, count in user_count %}
+    data.push({{ count }})
+    labels.push('{{ role }}')
+    {% endfor %}
+
+    window.onload = function() {
+    const ctx = document.getElementById('myChart');
+
+      new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: '# Số lượng',
+            data: data,
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+</script>
 
 {% else %}
 <h2 class="text-center text-danger">ĐĂNG NHẬP QUẢN TRỊ</h2>

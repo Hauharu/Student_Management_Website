@@ -39,6 +39,14 @@ def add_user(name, username, password, avatar):
     db.session.add(u)
     db.session.commit()
 
+
+
+def user_count():
+    with app.app_context():
+        result = db.session.query(User.user_role, func.count(User.id)) \
+            .group_by(User.user_role).all()
+        return [(UserRole(role).value, count) for role, count in result]
+
 #
 #
 # def get_all_student_info():

@@ -10,15 +10,18 @@ def index():
     return render_template('index.html')
 
 
-def access_denied():
-    return render_template('home/page_denied.html')
+@app.route('/signout', methods=['GET', 'POST'])
+def user_signout():
+    logout_user()
+    return redirect(url_for('user_signin'))
 
 
+@app.route('/signin', methods=['GET', 'POST'])
 @annonynous_user
 def user_signin():
     err_msg = ''
     if current_user.is_authenticated:
-        return redirect(url_for('index.py'))
+        return redirect(url_for('index'))
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -32,11 +35,6 @@ def user_signin():
         flash('Tên đăng nhập hoặc mật khẩu không đúng!', 'danger')
 
     return render_template('login.html', err_msg=err_msg)
-
-
-def user_signout():
-    logout_user()
-    return redirect(url_for('user_signin'))
 
 @admin_requirement
 def admin_login():

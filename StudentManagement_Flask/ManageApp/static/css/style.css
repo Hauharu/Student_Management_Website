@@ -20,6 +20,11 @@
     .social a:hover > i{
         color: white;
     }
+.nav-item p {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0; /* Loại bỏ khoảng cách dưới */
+}
 
 /*********************************************************************************************************************/
 

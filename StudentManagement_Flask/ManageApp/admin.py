@@ -50,14 +50,7 @@ class CKTextAreaField(TextAreaField):
 class HomeView(AdminIndexView):
     @expose('/')
     def index(self):
-        amount_of_students_by_semester = dao.stats_students_count_by_period(
-            semester=request.args.get('semester', SemesterType.SEMESTER_1.name),
-            year=request.args.get('year', datetime.now().year)
-        )
-        return self.render('admin/index.html', amount_of_students_by_semester=amount_of_students_by_semester)
-
-    def is_accessible(self):
-        return True
+        return self.render('admin/index.html', user_count = dao.user_count())
 
 
 # Quản lý đăng xuất đưa ra trang đăng nhập
@@ -76,14 +69,14 @@ class BackHomeView(BaseView):
 
 
 class StudentView(AuthenticatedModelView):
-    column_searchable_list = ['name']
-    column_filters = ['name', 'email', 'dateOfBirth']
+    column_searchable_list = ['fullName']
+    column_filters = ['fullName', 'email', 'dateOfBirth']
 
-    column_editable_list = ['name']
+    column_editable_list = ['fullName']
     column_export_list = ['students']
     column_labels = {
         'id': 'Mã số',
-        'name': 'Họ và tên',
+        'fullName': 'Họ và tên',
         'gender': 'Giới tính',
         'dateOfBirth': 'Ngày sinh',
         'address': 'Địa chỉ',
@@ -91,7 +84,7 @@ class StudentView(AuthenticatedModelView):
         'email': 'Email'
 
     }
-    column_sortable_list = ['id', 'name']
+    column_sortable_list = ['id', 'fullName']
 
     page_size = 20
     extra_js = ['//cdn.ckeditor.com/4.6.0/standard/ckeditor.js']
@@ -209,7 +202,7 @@ class StatsView(BaseView):
 
 
 # Thiết lập quản trị
-admin = Admin(app, index_view=HomeView(), name="Trang quản trị học sinh", template_mode='bootstrap4')
+admin = Admin(app, index_view=HomeView(), name="Trang quản trị", template_mode='bootstrap4')
 admin.add_view(BackHomeView(name='Trang chính'))
 admin.add_view(UserView(User, db.session, name='User'))
 admin.add_view(MyClassView(Class, db.session, name='Lớp', category='QL Lớp'))

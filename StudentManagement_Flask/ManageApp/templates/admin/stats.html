@@ -1,140 +1,147 @@
 {% extends 'admin/master.html' %}
 
 {% block body %}
-<div class="container">
+<h1 class="text-center text-info" xmlns="http://www.w3.org/1999/html">BÁO CÁO TỔNG KẾT MÔN HỌC</h1>
+<br>
+<form action="" style="display: flex; flex-direction: column; align-items: center">
+    <div style="display: flex; justify-content: space-between; width: 100%">
     <div>
-        <form id="stats">
-            <div class="d-flex justify-content-around p-3">
-                <div>
-                    <label class="" for="subject">Môn học:</label>
-                    <select class="form-select" id="subject" name="subjectId">
-                        {% for s in subjects %}
-                        <option value="{{s.id}}">{{s.name}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div>
-                    <label for="semester">Học kỳ:</label>
-                    <select class="form-select" id="semester" name="semester">
-                        <option value="SEMESTER_1"> Học kỳ 1</option>
-                        <option value="SEMESTER_2"> Học kỳ 2</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="" for="year">Năm học:</label>
-                    <select class="form-select" id="year" name="year">
-                        {% for year in years %}
-                        <option value="{{year}}">{{year}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div>
-                    <button type="submit" class="btn btn-primary"> Thống kê</button>
-                </div>
-            </div>
-        </form>
-        <div class="row">
-            <div class="col-md-5">
-                <table class="table table-bordered">
-                    <thead class="table-primary">
-                    <tr>
-                        <th colspan="5" class="text-center">BÁO CÁO TỔNG KÊT MÔN HỌC</th>
-                    </tr>
-                    <tr>
-                        <th colspan="2"> Môn học: {{ subject.name }}</th>
-                        <th colspan="2"> Học kỳ:
-                            {% if period %}
-                            {% if period.semester.name.__eq__('SEMESTER_1') %}
-                            Học kỳ 1
-                            {% else %}
-                            Học kỳ 2
-                            {% endif %}
-                            {% endif %}
-                        </th>
-                        <th>Năm học: {{period.year}}</th>
-                    </tr>
-                    <tr>
-                        <th>STT</th>
-                        <th>Lớp</th>
-                        <th>Sĩ số</th>
-                        <th>Số lượng đạt</th>
-                        <th>Tỷ lệ</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for s in stats %}
-                    <tr>
-                        <td>{{s[0]}}</td>
-                        <td>{{s[1][1]}}</td>
-                        <td>{{s[1][2]}}</td>
-                        <td>
-                            {% if s[1][3]%}
-                            {{s[1][3]}}
-                            {% else %}
-                            0
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if s[1][4]%}
-                            {{s[1][4]}}%
-                            {% else %}
-                            0 %
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-md-7">
-                <canvas id="reportChart"></canvas>
-            </div>
-        </div>
+        <label for="grade"> Khối </label>
+        <select name="grade" id="grade" onchange="load()">
+            <option value="">...Chọn khối...</option>
+            {% for g in StudentGrade%}
+            <option value="{{g.name}}">Khối {{g.value}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <label for="subject"> Môn học :</label>
+        <select name="subject" id="subject">
+            <option value="">...Môn học...</option>
+        </select>
+    </div>
+    <div>
+        <label for="semester"> Học Kì </label>
+        <select name="semester" id="semester">
+            <option value="">...Chọn học kì...</option>
+            {% for s in semester_list%}
+            <option value="{{s.id}}">Học kì {{s.semester}} năm {{s.year}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    </div>
+    <br>
+    <button type="submit" class="btn btn-success">Thống kê</button>
+</form>
+<div class="row">
+    <div class="col-md-5">
+        <table class="table">
+            <th colspan="3">BÁO CÁO TỔNG KẾT MÔN HỌC</th>
+            <tr>
+
+                <th>Môn học:</th>
+                <th>{{subject.name if subject else ""}}</th>
+                <th>Học kì:</th>
+                <th>{{semester if semester else ''}}</th>
+            </tr>
+            <tr>
+                <th>STT</th>
+                <th>Lớp</th>
+                <th>Sĩ số</th>
+                <th>Số lượng đạt</th>
+                <th>Tỷ lệ</th>
+            </tr>
+
+            {% if subject_report != [] %}
+                {% for s in subject_report %}
+                <tr>
+                <td>{{subject_report.index(s) + 1}}</td>
+                <td>{{s['class_name']}}</td>
+                <td>{{s['number_students']}}</td>
+                <td>{{s['students_passed']}}</td>
+                <td>{{s['passing_rate']}}%</td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+
+        </table>
+    </div>
+    <div class="col-md-7">
+         <canvas id="myChart"></canvas>
     </div>
 </div>
+
+<div class="row">
+    <div class="col-md-5 col-xs-12">
+        <table class="table">
+            <tr>
+                <th>Id</th>
+                <th>Tháng</th>
+
+            </tr>
+            {% for s in mon_stats %}
+            <tr>
+                <td>{{s[0]}}</td>
+                <td>{{"{:,.0f}".format(s[1])}} VNĐ</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="col-md-7 col-xs-12" >
+        <canvas id="myChart2"></canvas>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    let labels = [];
-    let dataTotalStudent = [];
-    let dataTotalStudentPassed = [];
-    {% for s in stats %}
-        dataTotalStudent.push({{ s[1][2] }});
-        {% if s[1][3] %}
-            dataTotalStudentPassed.push({{s[1][3]}});
-        {% else %}
-            dataTotalStudentPassed.push(0);
-        {% endif%}
-        labels.push('{{ s[1][1] }}');
-    {% endfor %}
-    window.onload = function() {
-    const ctx = document.getElementById('reportChart');
+  let data=[];
+  let labels=[];
+
+  {% for class_data in subject_report %}
+  data.push({{ class_data.passing_rate }})
+  labels.push('{{ class_data.class_name }}')
+  {% endfor %}
+
+  window.onload = function() {
+      const ctx = document.getElementById('myChart');
 
       new Chart(ctx, {
-        type: 'scatter',
-        data: {
-          labels: labels,
-          datasets: [{
-            type: 'bar',
-            label: 'Sĩ số',
-            data: dataTotalStudent,
-            borderWidth: 1
-          }, {
-            type: 'bar',
-            label: 'Số học sinh đạt',
-            data: dataTotalStudentPassed,
-            borderWidth: 1
-          }]
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true
-            }
+          type: 'bar',
+          data: {
+              labels: labels,
+              datasets: [{
+                  label: 'Tỷ lệ đạt',
+                  data: data,
+                  borderWidth: 1,
+                  backgroundColor: ['blue']
+              }]
+          },
+          options: {
+              scales: {
+                  y: {
+                      beginAtZero: true
+                  }
+              }
           }
-        }
       });
+
+  }
+
+function load(){
+    grade = document.getElementById('grade').value
+    subj = document.getElementById('subject')
+    if (grade != ""){
+        fetch(`/api/subjects/${grade}`
+        ).then(res => res.json()
+        ).then(function(data){
+            temp = '<option value="">...Chọn môn học...</option>'
+            for(i = 0; i<data.length; i++)
+                temp += `<option value="${data[i].id}"> ${data[i].name}</option>`
+            subj.innerHTML = temp
+        })
     }
+    else
+    subj.innerHTML = '<option value="">...MÔN HỌC...</option>'
+}
 </script>
 {% endblock %}
-
-
