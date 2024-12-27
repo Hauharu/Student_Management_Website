@@ -20,6 +20,7 @@ def auth_user(username, password, role):
     return User.query.filter(User.username.__eq__(username.strip()),
                              User.password.__eq__(password),
                              User.user_role.__eq__(role)).first()
+ #
 #
 # def get_all_student_info():
 #     active_students = Student.query.filter_by(is_active=True).all()
@@ -53,27 +54,42 @@ def auth_user(username, password, role):
 def get_student_by_id(id):
     return Student.query.get(id)
 
-def get_student_list(kw=None):
-    student = Student.query
+def get_student_list():
+    student = Student.query.all()
+    return student
 
-    if kw:
-        student = Student.filter(Student.name.contains(kw))
-
-    return student.all()
-
-def get_add_student(name, dateOfBirth, address, phoneNumber, email, joined_date, class_id):
-    st=Student(name=name, dateOfBirth=dateOfBirth, address=address,phoneNumber=phoneNumber,email=email,joined_date=joined_date,class_id=class_id)
-
-    db.session.add(st)
+def add_student(name, gender, dateOfBirth, address, phoneNumber, email, admission_date, regulation_id, semester_id):
+    new_student = Student(
+        name=name,
+        gender=gender,
+        dateOfBirth=dateOfBirth,
+        address=address,
+        phoneNumber=phoneNumber,
+        email=email,
+        admission_date=admission_date,
+        # class_id=class_id , class_id
+        regulation_id= regulation_id,
+        semester_id =  semester_id
+    )
+    db.session.add(new_student)
     db.session.commit()
+    return new_student
 
 def get_class_by_id(id):
     return Class.query.get(id)
 
-def get_class_list(kw=None):
-    class_list = Class.query
+def get_class_list():
+    class_list = Class.query.all()
+    return class_list
 
-    if kw:
-        class_list = Class.filter(Class.name.contains(kw))
+def get_subject_list():
+    subject = Subject.query.all()
+    return subject
 
-    return class_list.all()
+def get_regulation():
+    qd=Regulation.query
+    return qd.first()
+
+def get_semester():
+    s=Semester.query
+    return s.all()

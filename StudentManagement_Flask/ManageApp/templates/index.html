@@ -1,11 +1,9 @@
 <!--Kế thừa layout/base.hmtl-->
 {% extends 'layout/base.html' %}
-
 {% block title %}TRƯỜNG THPT OPEN {% endblock %}
-
 {% block body %}
 
-<!-- Hiển thị thời gian và dòng chữ chạy -->
+<!-- start current-time -->
 <div class="time-and-marquee">
     <div id="current-time" class="time-left"></div>
     <div class="marquee-container">
@@ -14,8 +12,9 @@
         </div>
     </div>
 </div>
+<!-- end current-time-->
 
-<!-- Phần chào mừng -->
+<!-- start welcome -->
 <div class="welcome">
     <div class="welcome-text">
         <!-- Hình ảnh logo hoặc biểu tượng -->
@@ -26,118 +25,647 @@
         <h2>OPEN High School</h2>
     </div>
 </div>
+<!-- end welcome -->
 
-<!-- Phan gioi thieu -->
+<!-- start gioithieu -->
 <div class="gioithieu container-fluid" id="gioithieu">
-<div class="col-md-12 col-xs-12 col-sm-12">
-  <div class="content-highlight content-home">
-    <h1 class="heading text-center">Vài nét về hệ thống</h1>
-    <p class="note text-center">Tính năng hệ thống quản lý học sinh</p>
-  </div>
-
-  <div class="highlights-list text-center">
-    <div class="row">
-      <div class="highlight-items col-md-4 col-sm-6 mb-20">
-        <div class="highlight-item">
-          <img src="https://static.k12online.vn/LMS/K12/layouts/LandingpageHome/image/Group_05d20.png"
-               alt="Đầy đủ, toàn trình"
-               hspace="5">
-          <div class="title-highlight">Đầy đủ, toàn trình</div>
-          <div class="highlight-detail bg-dark text-left">
-            <div class="title-highlight">Đầy đủ, toàn trình</div>
-            <p class="detail">
-              Đầy đủ tính năng của một hệ thống quản lý học tập trực tuyến và kiểm tra, đánh giá trực tuyến cho mọi đối tượng (từ cán bộ quản lý đến giáo viên và học sinh)
-            </p>
-          </div>
+    <div class="col-md-12 col-xs-12 col-sm-12">
+        <div class="content-highlight content-home">
+            <h1 class="heading text-center">Giới thiệu về hệ thống</h1>
+            <p class="note text-center">Tính năng hệ thống quản lý học sinh</p>
         </div>
-      </div>
 
-      <div class="highlight-items col-md-4 col-sm-6 mb-20">
-        <div class="highlight-item">
-          <img src="https://static.k12online.vn/LMS/K12/layouts/LandingpageHome/image/Group__1__0ffea.png"
-               alt="Đơn giản, dễ sử dụng"
-               hspace="5">
-          <div class="title-highlight">Đơn giản, dễ sử dụng</div>
-          <div class="highlight-detail bg-dark text-left">
-            <div class="title-highlight">Đơn giản, dễ sử dụng</div>
-            <p class="detail">
-              Xây dựng mô hình quản lý học sinh đầy đủ tính năng thân thiện và gần gữi với người dùng
-            </p>
-          </div>
-        </div>
-      </div>
+        <div class="highlights-list text-center">
+            <div class="row">
+                <div class="highlight-items col-md-4 col-sm-6 mb-20">
+                    <div class="highlight-item">
+                        <img src="https://static.k12online.vn/LMS/K12/layouts/LandingpageHome/image/Group_05d20.png"
+                             alt="Đầy đủ, toàn trình"
+                             hspace="5">
+                        <div class="title-highlight">Đầy đủ, toàn trình</div>
+                        <div class="highlight-detail bg-dark text-left">
+                            <div class="title-highlight">Đầy đủ, toàn trình</div>
+                            <p class="detail">
+                                Đầy đủ tính năng của một hệ thống quản lý học tập trực tuyến và kiểm tra, đánh giá trực
+                                tuyến cho mọi đối tượng (từ cán bộ quản lý đến giáo viên và học sinh)
+                            </p>
+                        </div>
+                    </div>
+                </div>
 
-      <div class="highlight-items col-md-4 col-sm-6 mb-20">
-        <div class="highlight-item">
-          <img src="https://static.k12online.vn/LMS/K12/layouts/LandingpageHome/image/Group__2__0fd7a.png"
-               alt="Đáp ứng quy chuẩn"
-               hspace="5">
-          <div class="title-highlight">Đáp ứng quy chuẩn</div>
-          <div class="highlight-detail bg-dark text-left">
-            <div class="title-highlight">Đáp ứng quy chuẩn</div>
-            <p class="detail">
-              Được thiết kế và xây dựng dựa trên các định hướng và yêu cầu, tiêu chuẩn của thầy và đề quy định
-            </p>
-          </div>
-        </div>
-      </div>
+                <div class="highlight-items col-md-4 col-sm-6 mb-20">
+                    <div class="highlight-item">
+                        <img src="https://static.k12online.vn/LMS/K12/layouts/LandingpageHome/image/Group__1__0ffea.png"
+                             alt="Đơn giản, dễ sử dụng"
+                             hspace="5">
+                        <div class="title-highlight">Đơn giản, dễ sử dụng</div>
+                        <div class="highlight-detail bg-dark text-left">
+                            <div class="title-highlight">Đơn giản, dễ sử dụng</div>
+                            <p class="detail">
+                                Xây dựng mô hình quản lý học sinh đầy đủ tính năng thân thiện và gần gữi với người dùng
+                            </p>
+                        </div>
+                    </div>
+                </div>
 
-      <div class="highlight-items col-md-4 col-sm-6 mb-20">
-        <div class="highlight-item">
-          <img src="https://static.k12online.vn/LMS/K12/layouts/LandingpageHome/image/Group__3__8dd5b.png"
-               alt="Tính hệ thống"
-               hspace="5">
-          <div class="title-highlight">Tính hệ thống</div>
-          <div class="highlight-detail bg-dark text-left">
-            <div class="title-highlight">Tính hệ thống</div>
-            <p class="detail">
-              Cung cấp tính năng quản trị theo mô hình quản lý phân cấp rõ ràng (Quản trị, Nhân viên, Giáo viên) và đồng bộ dữ liệu với các phần mềm khác
-            </p>
-          </div>
-        </div>
-      </div>
+                <div class="highlight-items col-md-4 col-sm-6 mb-20">
+                    <div class="highlight-item">
+                        <img src="https://static.k12online.vn/LMS/K12/layouts/LandingpageHome/image/Group__2__0fd7a.png"
+                             alt="Đáp ứng quy chuẩn"
+                             hspace="5">
+                        <div class="title-highlight">Đáp ứng quy chuẩn</div>
+                        <div class="highlight-detail bg-dark text-left">
+                            <div class="title-highlight">Đáp ứng quy chuẩn</div>
+                            <p class="detail">
+                                Được thiết kế và xây dựng dựa trên các định hướng và yêu cầu, tiêu chuẩn của thầy và đề
+                                quy định
+                            </p>
+                        </div>
+                    </div>
+                </div>
 
-      <div class="highlight-items col-md-4 col-sm-6 mb-20">
-        <div class="highlight-item">
-          <img src="https://static.k12online.vn/LMS/K12/layouts/LandingpageHome/image/Group__4__88898.png"
-               alt="Liên tục cập nhật"
-               hspace="5">
-          <div class="title-highlight">Liên tục cập nhật</div>
-          <div class="highlight-detail bg-dark text-left">
-            <div class="title-highlight">Liên tục cập nhật</div>
-            <p class="detail">
-              Hệ thống được phát triển và cải tiến liên tục, đảm bảo đáp ứng các yêu cầu thay đổi và xu hướng phát triển của ngành giáo dục
-            </p>
-          </div>
-        </div>
-      </div>
+                <div class="highlight-items col-md-4 col-sm-6 mb-20">
+                    <div class="highlight-item">
+                        <img src="https://static.k12online.vn/LMS/K12/layouts/LandingpageHome/image/Group__3__8dd5b.png"
+                             alt="Tính hệ thống"
+                             hspace="5">
+                        <div class="title-highlight">Tính hệ thống</div>
+                        <div class="highlight-detail bg-dark text-left">
+                            <div class="title-highlight">Tính hệ thống</div>
+                            <p class="detail">
+                                Cung cấp tính năng quản trị theo mô hình quản lý phân cấp rõ ràng (Quản trị, Nhân viên,
+                                Giáo viên) và đồng bộ dữ liệu với các phần mềm khác
+                            </p>
+                        </div>
+                    </div>
+                </div>
 
-      <div class="highlight-items col-md-4 col-sm-6 mb-20">
-        <div class="highlight-item">
-          <img src="https://static.k12online.vn/LMS/K12/layouts/LandingpageHome/image/Group__5__b80c9.png"
-               alt="Công nghệ tiên tiến"
-               hspace="5">
-          <div class="title-highlight">Công nghệ tiên tiến</div>
-          <div class="highlight-detail bg-dark text-left">
-            <div class="title-highlight">Công nghệ tiên tiến</div>
-            <p class="detail">
-              Hệ thống được xây dựng với công nghệ hiện đại nhất giúp tối ưu trong quá trình sử dụng và bảo mật thông tin
-            </p>
-          </div>
+                <div class="highlight-items col-md-4 col-sm-6 mb-20">
+                    <div class="highlight-item">
+                        <img src="https://static.k12online.vn/LMS/K12/layouts/LandingpageHome/image/Group__4__88898.png"
+                             alt="Liên tục cập nhật"
+                             hspace="5">
+                        <div class="title-highlight">Liên tục cập nhật</div>
+                        <div class="highlight-detail bg-dark text-left">
+                            <div class="title-highlight">Liên tục cập nhật</div>
+                            <p class="detail">
+                                Hệ thống được phát triển và cải tiến liên tục, đảm bảo đáp ứng các yêu cầu thay đổi và
+                                xu hướng phát triển của ngành giáo dục
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight-items col-md-4 col-sm-6 mb-20">
+                    <div class="highlight-item">
+                        <img src="https://static.k12online.vn/LMS/K12/layouts/LandingpageHome/image/Group__5__b80c9.png"
+                             alt="Công nghệ tiên tiến"
+                             hspace="5">
+                        <div class="title-highlight">Công nghệ tiên tiến</div>
+                        <div class="highlight-detail bg-dark text-left">
+                            <div class="title-highlight">Công nghệ tiên tiến</div>
+                            <p class="detail">
+                                Hệ thống được xây dựng với công nghệ hiện đại nhất giúp tối ưu trong quá trình sử dụng
+                                và bảo mật thông tin
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
-</div>
-
+<!-- end gioithieu -->
 <hr>
+<!-- start feature hightlight -->
+<div class="feature-highlight" id="chucnang">
+    <div class="feature-highlight-left-background">
+    </div>
+    <div class="container">
+        <div class="feature-highlight__title text-center">
+            <h1 class="heading text-center">Các chức năng chính của hệ thống</h1>
+        </div>
+        <div class="feature-highlight-content">
+            <div class="row">
+                <div class="col feature-highlight-box" id="sass">
+                    <div class="feature-highlight-box__title">Tiếp nhận học sinh</div>
+                    <div class="feature-highlight-box__text">
+                        Chức năng này cho phép nhân viên của trường tiếp nhận học sinh, nhập thông tin cá nhân và đảm
+                        bảo học sinh đạt độ tuổi quy định từ 15 đến 20 tuổi.
+                    </div>
+                    <div class="feature-highlight-box__icon float-right">
+                        <img src="https://lms.vnedu.vn/theme/lms/v2/public/image/saas.png" alt=""
+                             class="img-responsive">
+                    </div>
+                </div>
 
-<!-- Phần đánh giá -->
+                <div class="col feature-highlight-box" id="document">
+                    <div class="feature-highlight-box__title">Lập danh sách lớp</div>
+                    <div class="feature-highlight-box__text">
+                        Chức năng này cho phép hệ thống tạo và điều chỉnh danh sách lớp cho các học sinh, phân bổ học
+                        sinh vào các lớp theo khối lớp (10, 11, 12) và theo quy định về sĩ số tối đa 40 học sinh/lớp
+                    </div>
+
+                    <div class="feature-highlight-box__icon float-right">
+                        <img src="https://lms.vnedu.vn/theme/lms/v2/public/image/document.png" alt=""
+                             class="img-responsive">
+                    </div>
+                </div>
+
+                <div class="col feature-highlight-box" id="interactive">
+                    <div class="feature-highlight-box__title">Nhập điểm và xuất điểm</div>
+                    <div class="feature-highlight-box__text">Chức năng này cho phép giáo viên nhập điểm cho các học sinh
+                        theo từng môn học và học kỳ, bao gồm các cột điểm 15 phút, bài kiểm tra 1 tiết và điểm thi cuối
+                        kỳ. Hệ thống cũng cho phép xuất bảng điểm trung bình của lớp theo từng học kỳ.
+                    </div>
+
+                    <div class="feature-highlight-box__icon float-right">
+                        <img src="https://lms.vnedu.vn/theme/lms/v2/public/image/interactive.png" alt=""
+                             class="img-responsive">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col feature-highlight-box" id="multiple-choice">
+                    <div class="feature-highlight-box__title">Thống kê và báo cáo</div>
+                    <div class="feature-highlight-box__text">
+                        Chức năng này cho phép người quản trị xem báo cáo tổng kết môn học theo các lớp và sử dụng biểu
+                        đồ để trực quan hóa kết quả, như tỷ lệ học sinh đạt môn học.
+                    </div>
+
+                    <div class="feature-highlight-box__icon float-right">
+                        <img src="https://lms.vnedu.vn/theme/lms/v2/public/image/to-do-list.png" alt=""
+                             class="img-responsive">
+                    </div>
+                </div>
+
+                <div class="col feature-highlight-box" id="blockchain">
+                    <div class="feature-highlight-box__title">Quản lý quy định</div>
+                    <div class="feature-highlight-box__text">
+                        Chức năng này cho phép người quản trị thay đổi các quy định của hệ thống, bao gồm thay đổi độ
+                        tuổi tối đa và tối thiểu khi tiếp nhận học sinh, điều chỉnh sĩ số tối đa của lớp học và các quy
+                        định liên quan đến môn học.
+                    </div>
+
+                    <div class="feature-highlight-box__icon float-right">
+                        <img src="https://lms.vnedu.vn/theme/lms/v2/public/image/quality.png" alt=""
+                             class="img-responsive">
+                    </div>
+                </div>
+
+                <div class="col feature-highlight-box" id="suport">
+                    <div class="feature-highlight-box__title">Quản lý môn học</div>
+                    <div class="feature-highlight-box__text">
+                        Chức năng này cho phép người quản trị quản lý các môn học của các khối lớp, bao gồm thêm, xóa,
+                        cập nhật và tìm kiếm các môn học.
+                    </div>
+
+                    <div class="feature-highlight-box__icon float-right">
+                        <img src="https://lms.vnedu.vn/theme/lms/v2/public/image/suport-icon.png" alt=""
+                             class="img-responsive">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end feature highlight -->
+<hr>
+<!-- start tintucsukien-->
+<div class="background" id="tintucsukien">
+    <div class="container">
+        <div class="students-image">
+            <img src="https://www.wff.com.vn/uploads/slideshow/2018100105373711_news-image.jpg" alt="news Image">
+        </div>
+        <div class="features-section">
+            <div class="feature-card green">
+                <a href="https://trandainghia.edu.vn/nhung-chi-dan-dac-sac-cua-chu-tich-ho-chi-minh-ve-xay-dung-quan-doi-nhan-dan/"
+                   target="_blank">
+                    <img src="https://trandainghia.edu.vn/wp-content/uploads/2023/02/hcm.png" alt="news Image">
+                    <p>08/12/2024</p>
+                    <h3>Những Chỉ Dẫn Đặc Sắc</h3>
+                    <p>Chủ tịch Hồ Chí Minh – lãnh tụ vĩ đại của cách mạng Việt Nam.</p>
+                </a>
+            </div>
+            <div class="feature-card blue">
+                <a href="https://moet.gov.vn/pages/tim-kiem.aspx?ItemID=10137" target="_blank">
+                    <img src="https://trandainghia.edu.vn/wp-content/uploads/2019/02/bogiaoduc.jpg" alt="news Image">
+                    <p>19/12/2024</p>
+                    <h3>Gặp mặt kỷ niệm 80 năm Ngày thành lập Quân đội nhân dân Việt Nam</h3>
+                    <p>Sáng 5/12, Bộ Giáo dục và Đào tạo (GDĐT) tổ chức gặp mặt nhân kỷ niệm 80 năm Ngày thành lập Quân
+                        đội nhân dân Việt Nam </p>
+                </a>
+            </div>
+            <div class="feature-card orange">
+                <a href="https://hvctcand.bocongan.gov.vn/nha-nuoc-va-phap-luat/day-manh-cai-cach-thu-tuc-hanh-chinh-nang-cao-chat-luong-phuc-vu-nguoi-dan-doanh-nghiep-6952"
+                   target="_blank">
+                    <img src="https://trandainghia.edu.vn/wp-content/uploads/2019/02/sogiaoduc.jpg" alt="news Image">
+                    <p>19/12/2024</p>
+                    <h3>Thông báo</h3>
+                    <p>(Tin khẩn) : Kế hoạch phúc tra công tác cải cách hành chính, kiểm soát thủ tục hành chính, công
+                        tác
+                        ứng dụng công nghệ thông tin và Chuyển đổi số trong lĩnh vực giáo dục và đào tạo</p>
+                </a>
+            </div>
+
+            <div class="feature-card red">
+                <a href="https://trandainghia.edu.vn/lich-cong-tac-tuan-16-nam-hoc-2024-2025/" target="_blank">
+                    <img src="https://trandainghia.edu.vn/wp-content/uploads/2019/04/lichcongtac.jpg" alt="news Image">
+                    <p>15/12/2024</p>
+                    <h3>Lịch công tác tuần 16 * Năm học 2024 – 2025</h3>
+                    <p>LỊCH CÔNG TÁC THEO TUẦN NĂM HỌC 2024 – 2025 Tuần Thời gian Nội …</p>
+                </a>
+            </div>
+
+            <div class="feature-card purple">
+                <a href="https://trandainghia.edu.vn/thong-bao-ve-cuoc-thi-hoc-sinh-nghien-cuu-khoa-hoc-2024-2025/"
+                   target="_blank">
+                    <img src="https://trandainghia.edu.vn/wp-content/uploads/2019/02/nckh.png" alt="news Image">
+                    <p>25/5/2024</p>
+                    <h3>Thông báo về cuộc thi “Học sinh nghiên cứu khoa học 2024-2025”</h3>
+                    <p>THÔNG BÁO VỀ CUỘC THI “HỌC SINH NGHIÊN CỨU KHOA HỌC 2024 – 2025” …</p>
+                </a>
+            </div>
+
+            <div class="feature-card yellow">
+                <a href="http://tdnlms.thessc.vn/#" target="_blank">
+                    <img src="https://trandainghia.edu.vn/wp-content/uploads/2023/09/hoclieuso1.png" alt="news Image">
+                    <p>14/12/2024</p>
+                    <h3>KHÓA HỌC NỔI BẬT</h3>
+                    <p>Tiếng Anh (English) là một ngôn ngữ German Tây. Ảnh hưởng đáng kể của ngôn ngữ German</p>
+                </a>
+            </div>
+            <div class="feature-card red">
+                <a href="https://trandainghia.edu.vn/american-study-danh-tang-hoc-sinh-thpt-chuyen-tran-dai-nghia/"
+                   target="_blank">
+                    <img src="https://trandainghia.edu.vn/wp-content/uploads/2019/02/tkb.png" alt="news Image">
+                    <p>16/12/2024</p>
+                    <h3>American Study – Dành tặng học sinh THPT OPEN</h3>
+                    <p>American Study – DÀNH TẶNG CÁC EM HỌC SINH THPT OPEN …</p>
+                </a>
+            </div>
+
+            <div class="feature-card purple">
+                <a href="https://trandainghia.edu.vn/nghi-dinh-29-2023-nd-cp-quy-dinh-ve-tinh-gian-bien-che/"
+                   target="_blank">
+                    <img src="https://trandainghia.edu.vn/wp-content/uploads/2019/02/ttpl_0.png" alt="news Image">
+                    <p>14/12/2023</p>
+                    <h3>Nghị định 29/2023/NĐ-CP Quy định về tinh giản biên chế</h3>
+                    <p>Nghị định Quy định về tinh giản biên chế</p>
+                </a>
+            </div>
+
+            <div class="feature-card yellow">
+                <a href="https://trandainghia.edu.vn/ngay-trai-nghiem-cac-hoat-dong-cau-lac-bo-du-an-open-day-tao-khong-khi-soi-noi-dau-nam/"
+                   target="_blank">
+                    <img src="https://trandainghia.edu.vn/wp-content/uploads/2019/02/caulacbo.png" alt="news Image">
+                    <p>31/8/2023</p>
+                    <h3>Ngày trải nghiệm các hoạt động câu lạc bộ, dự án (Open day) tạo không khí sôi nổi đầu năm
+                        học</h3>
+                    <p>Thực hiện theo kế hoạch năm học 2024-2025, tại cơ sở 1 trường THPT …</p>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end tintucsukien -->
+<hr>
+<!-- start benefit solution -->
+<div class="benefit-solution" id="chibodoanthe">
+    <div class="container1">
+        <div class="content-highlight content-home">
+            <h1 class="heading text-center">Chi bộ và Đoàn thể </h1>
+        </div>
+        <div class="benefit-solution__background">
+            <div class="benefit-item" id="edu-management">
+                <div class="icon"></div>
+                <h3>Chi bộ</h3>
+                <ul>
+                    <li>Định nghĩa: Chi bộ là đơn vị cơ sở của Đảng Cộng sản Việt Nam, bao gồm các đảng viên trong một
+                        cơ quan, tổ chức, trường học, hoặc địa phương.
+                    </li>
+                    <li>Vai trò: Lãnh đạo, định hướng chính trị cho các hoạt động trong đơn vị, trường học. Phát triển
+                        tư tưởng, chính trị, giáo dục đảng viên và quần chúng. Thực hiện các nghị quyết của Đảng, lãnh
+                        đạo các tổ chức đoàn thể khác trong trường học.
+                    </li>
+                </ul>
+            </div>
+            <div class="benefit-item" id="teacher">
+                <div class="icon"></div>
+                <h3>Đoàn trường</h3>
+                <ul>
+                    <li>Định nghĩa: Đoàn trường là tổ chức Đoàn Thanh niên Cộng sản Hồ Chí Minh trong các trường trung
+                        học, trung cấp, cao đẳng, đại học.
+                    <li>Vai trò:
+                        Tập hợp, giáo dục, rèn luyện đoàn viên, học sinh, sinh viên.
+                        Tổ chức các hoạt động phong trào như văn hóa, văn nghệ, thể dục thể thao, tình nguyện.
+                        Thúc đẩy phong trào học tập, thi đua trong nhà trường.
+                        Phát triển đội ngũ đoàn viên ưu tú để giới thiệu vào Đảng.
+                    </li>
+                </ul>
+            </div>
+            <div class="benefit-item" id="parent">
+                <div class="icon"></div>
+                <h3>Chi đoàn giáo viên</h3>
+                <ul>
+                    <li>Định nghĩa: Là tổ chức Đoàn trong đội ngũ giáo viên, cán bộ trẻ trong trường học.</li>
+                    <li>Vai trò:
+                        Tập hợp, động viên giáo viên trẻ tham gia các hoạt động Đoàn, phong trào thanh niên.
+                        Thúc đẩy giáo viên trẻ gương mẫu trong công việc, tích cực tham gia giảng dạy và các hoạt động
+                        cộng đồng.
+                        Làm cầu nối giữa Đoàn trường và đội ngũ giáo viên.
+                    </li>
+                </ul>
+            </div>
+            <div class="benefit-item" id="school">
+                <div class="icon"></div>
+                <h3>Công đoàn</h3>
+                <ul>
+                    <li>Định nghĩa: Công đoàn là tổ chức đại diện cho quyền lợi của cán bộ, giáo viên, người lao động
+                        trong nhà trường.
+                    </li>
+                    <li>Vai trò:
+                        Bảo vệ quyền lợi hợp pháp của giáo viên và nhân viên trong nhà trường.
+                        Thúc đẩy phong trào thi đua dạy tốt, học tốt.
+                        Quan tâm, chăm lo đời sống vật chất và tinh thần của giáo viên, nhân viên.
+                        Phối hợp với các tổ chức khác trong trường để nâng cao chất lượng dạy học.
+                    </li>
+                </ul>
+            </div>
+            <div class="benefit-item" id="student">
+                <div class="icon"></div>
+                <h3>Đoàn đội</h3>
+                <ul>
+                    <li>Định nghĩa: Đội là tổ chức dành cho thiếu nhi từ 9 đến 15 tuổi, dưới sự quản lý của Đoàn Thanh
+                        niên Cộng sản Hồ Chí Minh.
+                    </li>
+                    <li>Vai trò:
+                        Giáo dục tư tưởng, đạo đức, lối sống cho học sinh tiểu học và trung học cơ sở.
+                        Tổ chức các hoạt động phong trào như học tập, vui chơi, văn nghệ, thể thao, và công tác xã hội.
+                        Rèn luyện thiếu nhi theo 5 điều Bác Hồ dạy.
+                        Tạo tiền đề để các em tiếp tục tham gia Đoàn Thanh niên khi đủ tuổi.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end benefit solution-->
+<hr>
+<!-- start admin -->
+<div class="background">
+    <!-- Phan huong dan danh cho quan tri vien -->
+    <div id="admin" class="feedback container-fluid">
+        <div class="col-md-12 col-xs-12 col-sm-12">
+            <div class="management-features">
+                <h1 class="heading text-center">Tính năng dành cho quản trị viên </h1>
+                <p class="description">Người quản trị được phép thay đổi quy định cho phù hợp với nhu cầu của nhà
+                    trường </p>
+
+                <div class="features-list">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="https://cdn-icons-png.flaticon.com/128/78/78948.png"
+                                 alt="Icon">
+                        </div>
+                        <div>
+                            <h3>Công cụ hữu hiệu để quản lý chuyên môn</h3>
+                            <p>Hệ thống xây dựng các tính năng dành riêng cho nhà trường phân công chuyên môn và phân
+                                quyền
+                                cho đối
+                                tượng sử dụng.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="https://cdn-icons-png.flaticon.com/128/78/78948.png"
+                                 alt="Icon">
+                        </div>
+                        <div>
+                            <h3>Kiểm duyệt nội dung dễ dàng</h3>
+                            <p>Nhà trường có thể kiểm duyệt nội dung bài giảng, kế hoạch bài dạy... một cách dễ dàng
+                                trên hệ
+                                thống.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="https://cdn-icons-png.flaticon.com/128/78/78948.png"
+                                 alt="Icon">
+                        </div>
+                        <div>
+                            <h3>Xây dựng và quản trị kho học liệu tiện lợi</h3>
+                            <p>Có công cụ xây dựng và quản lý kho học liệu, ngân hàng câu hỏi, đề thi chung của đơn
+                                vị.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="https://cdn-icons-png.flaticon.com/128/78/78948.png"
+                                 alt="Icon">
+                        </div>
+                        <div>
+                            <h3>Tổ chức các cuộc họp, trao đổi chuyên môn trực tuyến</h3>
+                            <p>Khởi tạo và quản lý cuộc họp trực tuyến một cách nhanh chóng.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="https://cdn-icons-png.flaticon.com/128/78/78948.png"
+                                 alt="Icon">
+                        </div>
+                        <div>
+                            <h3>Báo cáo thống kê đa dạng, nhiều thông tin</h3>
+                            <p>Cung cấp đa dạng các báo cáo, thống kê để hỗ trợ theo dõi, điều hành việc dạy học, kiểm
+                                tra,
+                                đánh giá
+                                trực tuyến một cách chủ động.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end admin -->
+<hr>
+<!-- start staff -->
+<div class="background">
+    <!-- Hướng dẫn dành cho nhân viên trường học -->
+    <div id="staff" class="feedback container-fluid">
+        <div class="col-md-12 col-xs-12 col-sm-12">
+            <div class="management-features">
+                <h1 class="heading text-center">Tính năng dành cho nhân viên</h1>
+                <p class="description">Hệ thống hỗ trợ nhân viên nhà trường thực hiện các công việc hành chính, quản lý
+                    học
+                    sinh, giám sát cơ sở vật chất và hỗ trợ giảng dạy một cách hiệu quả.</p>
+
+                <div class="features-list">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="https://cdn-icons-png.flaticon.com/128/15618/15618980.png"
+                                 alt="Quản lý hồ sơ">
+                        </div>
+                        <div>
+                            <h3>Quản lý hồ sơ học sinh và giáo viên</h3>
+                            <p>Hỗ trợ lưu trữ, cập nhật và tra cứu hồ sơ học sinh, giáo viên, nhân viên một cách dễ dàng
+                                và
+                                chính xác.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="https://cdn-icons-png.flaticon.com/128/15618/15618980.png"
+                                 alt="Lịch trình công việc">
+                        </div>
+                        <div>
+                            <h3>Quản lý lịch trình và công việc</h3>
+                            <p>Tạo và theo dõi lịch làm việc, phân công nhiệm vụ, nhắc nhở công việc để đảm bảo tiến độ
+                                công
+                                việc hành chính.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="https://cdn-icons-png.flaticon.com/128/15618/15618980.png"
+                                 alt="Quản lý cơ sở vật chất">
+                        </div>
+                        <div>
+                            <h3>Quản lý cơ sở vật chất</h3>
+                            <p>Hỗ trợ kiểm kê, bảo trì và cập nhật tình trạng thiết bị, phòng học và các tài sản khác
+                                của
+                                nhà trường.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="https://cdn-icons-png.flaticon.com/128/15618/15618980.png"
+                                 alt="Hỗ trợ học vụ">
+                        </div>
+                        <div>
+                            <h3>Hỗ trợ các hoạt động học vụ</h3>
+                            <p>Quản lý sổ điểm, sổ đầu bài, thông báo học vụ và hỗ trợ các hoạt động dạy học trực tuyến
+                                hoặc
+                                trực tiếp.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="https://cdn-icons-png.flaticon.com/128/15618/15618980.png"
+                                 alt="Thống kê báo cáo">
+                        </div>
+                        <div>
+                            <h3>Thống kê và báo cáo hành chính</h3>
+                            <p>Cung cấp báo cáo tổng hợp về học sinh, giáo viên, tình hình cơ sở vật chất, hỗ trợ nhà
+                                trường
+                                trong việc ra quyết định nhanh chóng và chính xác.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end staff -->
+<hr>
+<!-- start teachers -->
+<div class="background">
+    <!-- Phan huong dan danh cho giao vien -->
+    <div id="teachers" class="feedback container-fluid">
+        <div class="col-md-12 col-xs-12 col-sm-12">
+            <div class="management-features">
+                <h1 class="heading text-center">Tính năng dành cho giáo viên</h1>
+                <p class="description">Hệ thống cung cấp các tính năng để hỗ trợ giáo viên dạy học và kiểm tra, đánh giá
+                    học
+                    sinh dễ dàng</p>
+
+                <div class="features-list">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="https://cdn-icons-png.flaticon.com/128/484/484568.png"
+                                 alt="Icon">
+                        </div>
+                        <div>
+                            <h3>Khởi tạo và quản lý lớp học trực tuyến dễ dàng</h3>
+                            <p>Giáo viên có thể khởi tạo lớp học trực tuyến một cách dễ dàng và có nhiều công cụ để quản
+                                lý
+                                lớp học như điểm danh, báo cáo...</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="https://cdn-icons-png.flaticon.com/128/484/484568.png"
+                                 alt="Icon">
+                        </div>
+                        <div>
+                            <h3>Xây dựng bài giảng trực tuyến từ nhiều định dạng</h3>
+                            <p>Giáo viên có thể xây dựng và thiết kế bài giảng trực tuyến để học sinh tự học với nhiều
+                                dịnh
+                                dạng từ video, tài liệu, bài giảng scorm, bài học dạng text, bài tập...</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="https://cdn-icons-png.flaticon.com/128/484/484568.png"
+                                 alt="Icon">
+                        </div>
+                        <div>
+                            <h3>Giao bài tập, bài kiểm tra với nhiều cấu hình linh hoạt</h3>
+                            <p>Có công cụ xây dựng và quản lý kho học liệu, ngân hàng câu hỏi, đề thi chung của đơn
+                                vị.Giáo
+                                viên có thể xây dựng và thiết kế bài giảng trực tuyến để học sinh tự học với nhiều dịnh
+                                dạng
+                                từ video, tài liệu, bài giảng scorm, bài học dạng text, bài tập...</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="https://cdn-icons-png.flaticon.com/128/484/484568.png"
+                                 alt="Icon">
+                        </div>
+                        <div>
+                            <h3>Quản lý kế hoạch bài dạy một cách đơn giản, khoa học</h3>
+                            <p>Giáo viên có thể đưa các kế hoạch bài dạy của mình lên hệ thống để quản lý và yêu cầu tổ
+                                trưởng chuyên môn và nhà trường kiểm duyệt dễ dàng</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="https://cdn-icons-png.flaticon.com/128/484/484568.png"
+                                 alt="Icon">
+                        </div>
+                        <div>
+                            <h3>Quản lý lớp học dễ dàng, thuận tiện</h3>
+                            <p>Giáo viên có thể quản lý lớp học một cách dễ dàng qua các báo cáo, thống kê và lịch sử
+                                học
+                                tập trên hệ thống.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end teachers -->
+<hr>
+<!-- start danhgia -->
 <div id="danhgia" class="feedback container-fluid">
     <div class="col-md-12 col-xs-12 col-sm-12">
         <!-- Tiêu đề -->
-        <h1 class="heading text-center">Đánh giá người dùng</h1>
+        <h1 class="heading text-center">Phản hồi từ người dùng</h1>
         <p class="note text-center">Nổi bật</p>
         <!-- Slider đánh giá -->
         <div class="feedback-slider">
@@ -147,19 +675,65 @@
                     <div class="item-block text-left">
                         <div class="item-block-top">
                             <!-- Tên người đánh giá -->
-                            <div class="post-name">Thầy Nguyễn Văn A</div>
+                            <div class="post-name">Phạm Nguyên Bảo</div>
                             <i class="fa fa-commenting-o fa-4" aria-hidden="true"></i>
                         </div>
                         <p class="post">Hiệu trưởng</p>
-                        <p class="feedback-text">Tốt. Dễ sử dụng và rất tiện lợi.</p>
+                        <p class="feedback-text">Thuận lợi dễ sử dụng, không cần đòi hỏi trình độ CNTT cao vẫn dùng
+                            được. </p>
                     </div>
                 </div>
-                <!-- Các đánh giá khác -->
+                <div class="item">
+                    <div class="item-block text-left">
+                        <div class="item-block-top">
+                            <!-- Tên người đánh giá -->
+                            <div class="post-name">Nguyễn Trung Hậu</div>
+                            <i class="fa fa-commenting-o fa-4" aria-hidden="true"></i>
+                        </div>
+                        <p class="post">Nhân viên</p>
+                        <p class="feedback-text">Hệ thống giúp tương tác với thông tin học sinh và lập danh sách lớp dễ
+                            dàng</p>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="item-block text-left">
+                        <div class="item-block-top">
+                            <!-- Tên người đánh giá -->
+                            <div class="post-name">Nguyễn Vũ Luân</div>
+                            <i class="fa fa-commenting-o fa-4" aria-hidden="true"></i>
+                        </div>
+                        <p class="post">giáo viên</p>
+                        <p class="feedback-text">Hệ thống giúp nhập, xuất điểm dễ dàng mà không phải sử dụng thêm phần
+                            mềm nào nữa.</p>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="item-block text-left">
+                        <div class="item-block-top">
+                            <!-- Tên người đánh giá -->
+                            <div class="post-name">Trần Xuân Đức</div>
+                            <i class="fa fa-commenting-o fa-4" aria-hidden="true"></i>
+                        </div>
+                        <p class="post">giáo viên</p>
+                        <p class="feedback-text">Tốt, hệ thống rất tiện lợi</p>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="item-block text-left">
+                        <div class="item-block-top">
+                            <!-- Tên người đánh giá -->
+                            <div class="post-name">Hứa Quang Đạt</div>
+                            <i class="fa fa-commenting-o fa-4" aria-hidden="true"></i>
+                        </div>
+                        <p class="post">giáo viên</p>
+                        <p class="feedback-text">Người lập trình xứng đáng 10đ </p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
+<!-- end danhgia -->
 <!-- Liên kết đến thư viện Owl Carousel -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css">
