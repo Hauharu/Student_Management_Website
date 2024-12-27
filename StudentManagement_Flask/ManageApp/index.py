@@ -6,19 +6,19 @@ from wtforms.validators import email
 from ManageApp.models import *
 
 
-app.secret_key="Admin@123"
+app.secret_key="12345678@"
 
 # Định tuyến cho trang chủ
 app.add_url_rule("/", 'index', controller.index)
 
 # Định tuyến cho trang đăng nhập
-app.add_url_rule("/user-login", 'user_signin', controller.user_signin, methods=['GET', 'POST'])
+app.add_url_rule("/user-login", 'user_signin',  controller.user_signin, methods=['GET', 'POST'])
 
 @login.user_loader
 def load_user(user_id):
     return dao.get_user_by_id(user_id=user_id)
 
-
+app.add_url_rule("/admin-login", 'admin_login', controller.admin_login, methods=['post'])
 @app.route("/login", methods=['get', 'post'])
 def user_login():
     err_msg = ''
@@ -42,9 +42,15 @@ def user_login():
 @app.route('/logout')
 def user_logout():
     logout_user()
-    return  redirect(url_for(user_login))
+    return  redirect(url_for('user_signin'))
 
-#Chức năng Staff
+# # Định tuyến trang Admin
+# @app.route('/admin')
+# @login_required
+# def admin():
+#     return render_template('admin/index.html')
+
+# Định tuyến trang Staff
 @app.route('/staff')
 @login_required
 def staff():
@@ -75,9 +81,26 @@ def dshocsinh():
 
 @app.route('/dslop', methods=['GET', 'POST'])
 def dslophoc():
-    kw = request.args.get('kw')
     class_list=dao.get_class_list()
     return render_template('staff/dslophoc.html', class_list=class_list)
+
+#Chức năng Teacher
+@app.route('/teacher')
+@login_required
+def teacher():
+    return render_template('teacher/teacher.html')
+
+@app.route('/nhapdiem')
+@login_required
+def input_score():
+    return render_template('teacher/nhapdiem.html')
+
+@app.route('/dsmon')
+@login_required
+def dsmonhoc():
+    subject = dao.get_subject_list()
+    return render_template('teacher/dsmon.html', subject=subject)
+
 
 
 if __name__ == "__main__":

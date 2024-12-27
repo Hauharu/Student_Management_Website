@@ -26,7 +26,7 @@
                 <a class="nav-link nav-item" href="/#chucnang">
                     <i class="fa fa-plus"></i> CHỨC NĂNG</a>
             </li>
-              <li class="main active" id="nav_read">
+            <li class="main active" id="nav_read">
                 <a class="nav-link nav-item" href="/#admin">
                     <i class="fa fa-user"></i> NGƯỜI DÙNG</a>
             </li>
@@ -34,12 +34,8 @@
                 <a class="nav-link nav-item" href="/#tintucsukien">
                     <i class="fa fa-bullhorn"></i> TIN TỨC - SỰ KIỆN </a>
             </li>
-            <li class="main active" id="nav_branch">
-                <a class="nav-link nav-item" href="/#chibodoanthe">
-                    <i class="fas fa-users"></i> CHI BỘ - ĐOÀN THỂ</a>
-            </li>
             <li class="main active" id="nav_contact">
-                <a class="nav-link nav-item" href="/#danhgia">
+                <a class="nav-link nav-item" href="/#danhgia-padding">
                     <i class="fa fa-thumbs-up"></i> ĐÁNH GIÁ</a>
             </li>
             <li class="main active" id="">
@@ -49,6 +45,14 @@
 
         </ul>
     </div>
-    <a class="nav-link mr-auto" id="nav_user_login" href="{{url_for('user_signin')}}">
-        <i class="fas fa-sign-in-alt"></i> ĐĂNG NHẬP</a>
+
+    {% if current_user.is_authenticated and request.endpoint not in ['user_login', 'index'] %}
+    <a class="nav-link mr-auto" id="nav_user_logout" href="{{ url_for('user_logout') }}">
+        <i class="fas fa-sign-out-alt"></i> ĐĂNG XUẤT
+    </a>
+    {% else %}
+    <a class="nav-link mr-auto" id="nav_user_login" href="{{ url_for('user_login') }}">
+        <i class="fas fa-sign-in-alt"></i> ĐĂNG NHẬP
+    </a>
+    {% endif %}
 </nav>

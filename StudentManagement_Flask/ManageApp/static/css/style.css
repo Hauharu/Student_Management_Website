@@ -1,6 +1,34 @@
+/******************************************* Định dạng phần header trang chủ ******************************************/
+.header {
+    height: 60px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
 
-/******************************************* Định dạng phần thân trang chủ *****************************************/
+/*********************************************************************************************************************/
 
+/******************************************* Định dạng phần footer trang chủ *******************************************/
+.social a > i {
+        font-size:25px;
+        padding: 2rem;
+        color: gray;
+    }
+
+    .social a:hover > i{
+        color: white;
+    }
+
+/*********************************************************************************************************************/
+
+/******************************************* Định dạng phần thân trang chủ *******************************************/
+.target {
+    position: relative;
+    padding-top: 50px;
+    margin-top: -50px;
+}
 .time-and-marquee {
     display: flex;
     align-items: center;
@@ -9,8 +37,19 @@
     color: white;
     font-family: Arial, sans-serif;
     padding: 5px 10px;
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    z-index: 999;
     overflow: hidden;
-    position: relative;
+}
+.content-highlight {
+    padding-top: 60px;
+}
+
+.feature-highlight {
+    padding-top: 40px;
 }
 
 .time-left {
@@ -246,8 +285,14 @@ img {
 /*********************************************************************************************************************/
 
 
-
 /**********************************************Định dạng trang đăng nhập *********************************************/
+.form-select {
+  height: auto !important;
+  line-height: 1.5 !important;
+  padding: 8px !important;
+  font-size: 16px !important;
+
+}
 .gradient-custom-2 {
     background-size: cover;
     background-position: center;
@@ -394,6 +439,7 @@ input:checked + .slider:before {
 
 
 /*********************************************** Scroll to top ******************************************************/
+
 .scrollToTop{
     width: 4vw;
     height: 7vh;
@@ -418,6 +464,7 @@ input:checked + .slider:before {
 
 
 /*********************************************** phần định dạng hướng dẫn ********************************************/
+
 .management-features {
             max-width: 1200px;
             margin: 0 auto;
@@ -483,6 +530,7 @@ input:checked + .slider:before {
 
 
 /************************************ phần định dạng các tin tức sự kiện của trang chủ *******************************/
+
 .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -571,6 +619,7 @@ input:checked + .slider:before {
 
 
 /**************************************** Định dạng phần chi bộ đoàn thể ********************************************/
+
 .container1 {
     width: 90%;
     max-width: 1200px;
@@ -692,6 +741,7 @@ input:checked + .slider:before {
 
 
 /********************************* Định dạng phần các chức năng chính hệ thống ****************************************/
+
 .feature-highlight {
   height: 775px;
   background: #3C7AD9;

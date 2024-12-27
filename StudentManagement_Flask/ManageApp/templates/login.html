@@ -1,13 +1,5 @@
 {% extends 'layout/base.html' %}
 {% block body %}
-{% block css %}
-<style>
-    .form-outline .form-control{
-      border:1px solid #C5C5C5  !important
-  }
-
-</style>
-{% endblock %}
 {% if err_msg %}
 <div class="alert alert-danger mt-4">
     {{ err_msg }}
@@ -26,37 +18,35 @@
                                     <img class="rounded-circle"
                                          src="static/images/profile4.png"
                                          style="width: 185px;" alt="logo">
-                                    <h4 class="mt-1 mb-5 pb-1" style="color:black;font-weight: bold">Đăng Nhập</h4>
+                                    <h4 class="mt-1 mb-5 pb-1" style="color:black;font-weight: bold">Đăng Nhập bằng tài
+                                        khoản OHS-SSO</h4>
                                 </div>
-
-
-
                                 <form method="post" action=" {{ url_for('user_login') }}">
                                     <p>Sử dụng tài khoản do nhà trường cung cấp</p>
-                                      <div class="mb-3 form-outline">
-<!--                                        <label for="role">Vai trò</label>-->
+
+                                    <div class="form-outline mb-4">
                                         <select class="form-select form-control" id="role" name="role">
-                                            <option value="TEACHER">Teacher</option>
-                                            <option value="STAFF">Staff</option>
-                                            <option value="ADMIN">Admin</option>
+                                            <option value="ADMIN">Quản trị viên</option>
+                                            <option value="STAFF">Nhân viên</option>
+                                            <option value="TEACHER">Giảng viên</option>
                                         </select>
                                     </div>
 
                                     <div class="form-outline mb-4">
                                         <input type="text" name="username" id="username" class="form-control"
                                                placeholder=" "/>
-                                        <label class="form-label" for="username">Username</label>
+                                        <label class="form-label" for="username">Tài Khoản</label>
                                     </div>
 
                                     <div class="form-outline mb-4">
                                         <input type="password" name="password" id="password" class="form-control"
                                                placeholder=" "/>
-                                        <label class="form-label" for="password">Password</label>
+                                        <label class="form-label" for="password">Mật khẩu</label>
                                     </div>
 
                                     <div class="form-check form-switch mb-4">
                                         <label class="toggle-switch">
-                                            <input type="checkbox"  id="togglePassword" onclick="showPassword()">
+                                            <input type="checkbox" id="togglePassword" onclick="showPassword()">
                                             <span class="slider"></span>
                                         </label>
                                         <label class="toggle-label" for="togglePassword">Hiện mật khẩu</label>
@@ -83,7 +73,7 @@
                                     thống.</p>
                                 <div class="text-center mt-4">
                                     <button class="btn btn-custom">
-                                        LƯU Ý: TÀI KHOẢN NGƯỜI DÙNG SẼ BỊ HỦY KHI KHÔNG CÒN PHẬN SỰ TRONG TRƯỜNG HỌC!!!
+                                        LƯU Ý: Nếu chưa có tài khoản, vui lòng liên hệ với quản trị viên để được cấp tài khoản!!!
                                     </button>
                                 </div>
 
@@ -98,15 +88,4 @@
 </section>
 {% endblock %}
 
-{% block js %}
-<script>
-    function showPassword() {
-      var x = document.getElementById("password");
-      if (x.type === "password") {
-        x.type = "text";
-      } else {
-        x.type = "password";
-      }
-    }
-</script>
-{% endblock  %}
+

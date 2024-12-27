@@ -384,54 +384,65 @@ table.table td h2 span {
 {%block js%}
 <script>
 $(document).ready(function () {
-        // Handle select box change event
-        $('#classSelector').change(function () {
-            // Get the selected class ID
-            var selectedClassId = $(this).val();
+    // Handle select box change event
+    $('#classes_id').change(function () {
+        // Get the selected class ID
+        var selectedClassId = $(this).val();
 
-            // Make an AJAX request to get data for the selected class
-            $.ajax({
-                url: '/get_data',  // Replace with your Flask route
-                type: 'POST',
-                data: { 'class_id': selectedClassId },
-                success: function (data) {
-                    // Update the table with the received data
-                    updateTable(data);
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
+        // Make an AJAX request to get data for the selected class
+        $.ajax({
+            url: '/get_students',  // Đường dẫn đến Flask route
+            type: 'POST',
+            contentType: 'application/json', // Đặt kiểu dữ liệu gửi
+            data: JSON.stringify({ 'class_id': selectedClassId }), // Chuyển đổi dữ liệu thành JSON
+            success: function (response) {
+                // Update the table with the received data
+                updateTable(response.students, response.class_name);
+            },
+            error: function (error) {
+                console.log('Error fetching data:', error);
+            }
         });
+    });
 
-        // Function to update the table with data
-        function updateTable(data) {
-            // Clear existing rows
-            $('#dataTable tbody').empty();
+    // Function to update the table with data
+    function updateTable(students, className) {
+        // Clear existing rows
+        $('#hs_table_body').empty();
 
-            // Append new rows
-            data.forEach(function (row) {
-                var formatteddateOfBirth = formatdateOfBirth==(row.dateOfBirth);
+        // Append new rows
+        if (students.length === 0) {
+            // Nếu không có học sinh, hiển thị thông báo
+            $('#hs_table_body').append('<tr><td colspan="6" class="text-center">Không có học sinh nào trong lớp này.</td></tr>');
+        } else {
+            students.forEach(function (student) {
+                var formattedDateOfBirth = formatDateOfBirth(student.dateOfBirth);
                 var newRow = '<tr>' +
-                    '<td>' + row.id + '</td>' +
-                    '<td>' + row.name + '</td>' +
-                    '<td>' + row.gender + '</td>' +
-                    '<td>' + formatteddateOfBirth  + '</td>' +
-                    '<td>' + row.address + '</td>' +
-                    '<td><button class="btn-sua-hs btn btn-warning" data-id="' + row.id + '"><i class="fas fa-pen"></i></button></td>' +
+                    '<td>' + student.id + '</td>' +
+                    '<td>' +
+                    '<h2 class="table-avatar">' +
+                    '<a href="#">' + student.name + '</a>' +
+                    '</h2>' +
+                    '</td>' +
+                    '<td>' + student.gender + '</td>' +
+                    '<td>' + formattedDateOfBirth + '</td>' +
+                    '<td>' + student.address + '</td>' +
+                    '<td><button class="btn-sua-hs btn btn-warning" data-id="' + student.id + '"><i class="fas fa-pen"></i></button></td>' +
                     '</tr>';
-                $('#dataTable tbody').append(newRow);
+                $('#hs_table_body').append(newRow);
             });
         }
-        // Function to format dateOfBirth
-        function formatdateOfBirth(dateOfBirth) {
-            var date = new Date(dateOfBirth);
-            var day = date.getDate();
-            var month = date.getMonth() + 1;
-            var year = date.getFullYear();
-            return (day < 10 ? '0' : '') + day + '/' + (month < 10 ? '0' : '') + month + '/' + year;
-        }
-    });
+    }
+
+    // Function to format dateOfBirth
+    function formatDateOfBirth(dateOfBirth) {
+        var date = new Date(dateOfBirth);
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+        return (day < 10 ? '0' : '') + day + '/' + (month < 10 ? '0' : '') + month + '/' + year;
+    }
+});
 </script>
 {%endblock%}
 
@@ -485,11 +496,11 @@ $(document).ready(function () {
     <div class="content container-fluid">
         <div class="col-12 col-sm-3">
             <div class="form-group">
-                <label>Chọn lớp</label>
-                <select class="form-control" name="" id="classSelector">
-                    <option disabled selected>Chọn lớp</option>
+                <label for="class_id">Chọn lớp</label>
+                <select class="form-control" name="" id="classes_id" required>
+                    <option value="" disabled selected>Chọn lớp</option>
                     {% for l in class_list %}
-                    <option value="{{ l.id }}">{{ l.name }}</option>
+                    <option value="{{ l.id }}">{{ l.className }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -561,10 +572,10 @@ $(document).ready(function () {
                                     <td>{{ l.id }}</td>
                                     <td>
                                         <h2 class="table-avatar">
-                                            <a href="#">{{ l.name }}</a>
+                                            <a href="#">{{ l.className }}</a>
                                         </h2>
                                     </td>
-                                    <td>{{ l.siSo }}</td>
+                                    <td>{{ l.quantity }}</td>
                                     <td>{{ l.grade }}</td>
                                     <td>
                                         <div class="actions">

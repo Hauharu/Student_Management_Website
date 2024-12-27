@@ -100,8 +100,7 @@ class User(BaseModel, UserMixin):
 
 class Student(BaseModel):
     __tablename__ = 'student'
-    first_name = Column(String(50), nullable=False)
-    last_name = Column(String(50), nullable=False)
+    name = Column(String(50), nullable=False)
     gender = Column(Enum(UserGender), default=UserGender.MALE)
     dateOfBirth = Column(DateTime, nullable=False)
     address = Column(String(255), nullable=False)
@@ -120,17 +119,18 @@ class Student(BaseModel):
 
 class Semester(BaseModel):
     __tablename__ = 'semester'
-    semesterName = Column(String(50), nullable=False)
+    semester = Column(String(50), nullable=False)
     year = Column(Integer, default=datetime.now().year)
     teach = relationship('Teach', backref='semester', lazy=True)
     student = relationship("Student", backref="semester", lazy=True)
     score = relationship("Score", backref="semester", lazy=True)
+    student_class = relationship('StudentClass', backref='semester', lazy=True)
     __table_args__ = (
-        UniqueConstraint('semesterName', 'year', name='unique_semester_year'),
+        UniqueConstraint('semester', 'year', name='unique_semester_year'),
     )
 
     def __str__(self):
-        return f'{"Học kì 1" if self.semesterName == SemesterType.SEMESTER_1 else "Học kì 2"} {self.year}'
+        return f'{"Học kì 1" if self.semester == SemesterType.SEMESTER_1 else "Học kì 2"} {self.year}'
 
 
 class Subject(BaseModel):
@@ -168,7 +168,7 @@ class Class(BaseModel):
     teach = relationship('Teach', backref='class', lazy=True)
     teacher_id = Column(Integer, ForeignKey(User.id), unique=True)
     student_Class = relationship('StudentClass', backref='class', lazy=True)
-    regulation_id = Column(Integer, ForeignKey('regulation.id'), nullable=False)
+    regulation_id = Column(Integer, ForeignKey('regulation.id'), nullable=True)
 
     __table_args__ = (
         UniqueConstraint('className', 'year'),
@@ -181,10 +181,12 @@ class Class(BaseModel):
 
 class StudentClass(BaseModel):
     __tablename__ = 'student_class'
-    class_id = Column(Integer, ForeignKey(Class.id), nullable=False)
-    student_id = Column(Integer, ForeignKey(Student.id), nullable=False)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    student_id = Column(Integer, ForeignKey('student.id'), nullable=False)
+    class_id = Column(Integer, ForeignKey('class.id'), nullable=False)
+    semester_id = Column(Integer, ForeignKey('semester.id'), nullable=False)
     __table_args__ = (
-        UniqueConstraint('class_id', 'student_id', name='unique_student_per_class'),
+        UniqueConstraint('class_id', 'student_id','semester_id', name='unique_student_per_class'),
     )
 
 
@@ -220,7 +222,7 @@ class Score(BaseModel):
         return "{value} - {type} - {student} - {subject} - HK{semester}".format(value=self.value, type=self.type,
                                                                                 student=self.student.name,
                                                                                 subject=self.subject.subjectName,
-                                                                                semester=self.semester.semesterName)
+                                                                                semester=self.semester.semester)
 
 
 class ScoreDetail(BaseModel):
@@ -237,7 +239,6 @@ class Regulation(BaseModel):
     __tablename__ = 'regulation'
     regulationName = Column(String(100))
     content = Column(String(255))
-    data = Column(Integer)
     min_value = Column(Integer, nullable=False)
     max_value = Column(Integer, nullable=False)
     type = Column(Enum(Regulations), default=Regulations.Re_Age)
@@ -255,17 +256,13 @@ class Regulation(BaseModel):
 
 
 ########################################################################################################################
+
 if __name__ == "__main__":
     with app.app_context():
         # db.drop_all()
         db.create_all()
-        #
 
-
-        # READEME
-        # LƯU Ý CHẠY TỪNG BẢNG DỮ LIỆU NHƯNG BẢNG SCOREDETAIL VÀ SCORE PHẢI CHẠY MỘT LƯỢT
-
-
+        # CHẠY TỪNG BẢNG DỮ LIỆU, CHẠY CẢ 2 BẢNG DỮ LIỆU SCOREDETAIL VÀ SCORE
 
         # Tạo dữ liệu mẫu cho UserInformation
         # user_info1 = UserInformation(
@@ -288,51 +285,52 @@ if __name__ == "__main__":
         #     phoneNumber="0123789636", email="leducf@osh.edu.vn")
         # db.session.add_all([user_info1, user_info2, user_info3, user_info4, user_info5, user_info6])
         # db.session.commit()
-        #
-        # # Tạo dữ liệu mẫu cho User
+
+        # Tạo dữ liệu mẫu cho User
         # user1 = User(
-        #     username="nguyenvana", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
+        #     username="2251010001", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
         #     user_role=UserRole.ADMIN, userInformation_id=1)
         #
         # user2 = User(
-        #     username="tranthib", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
+        #     username="2251010002", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
         #     user_role=UserRole.ADMIN, userInformation_id=2
         # )
         #
         # user3 = User(
-        #     username="phanthic", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
+        #     username="2251010003", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
+        #     user_role=UserRole.STAFF, userInformation_id=5
+        # )
+        # user4 = User(
+        #     username="2251010004", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
+        #     user_role=UserRole.STAFF, userInformation_id=6
+        # )
+        # user5 = User(
+        #     username="2251010005", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
         #     user_role=UserRole.TEACHER, userInformation_id=3
         # )
         #
-        # user4 = User(
-        #     username="tranxuand", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
+        # user6 = User(
+        #     username="2251010006", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
         #     user_role=UserRole.TEACHER, userInformation_id=4
         # )
         #
-        # user5 = User(
-        #     username="luongxuane", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
-        #     user_role=UserRole.TEACHER, userInformation_id=5
-        # )
-        # user6 = User(
-        #     username="leducf", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
-        #     user_role=UserRole.STAFF, userInformation_id=6
-        # )
         # db.session.add_all([user1, user2, user3, user4, user5, user6])
         # db.session.commit()
-        #
+
         # Tạo dữ liệu mẫu cho Semester
         # semester1 = Semester(
-        #     semesterName="SEMESTER_1", year=2024)
+        #     semester="SEMESTER_1", year=2024)
         # semester2 = Semester(
-        #     semesterName="SEMESTER_2", year=2024)
+        #     semester="SEMESTER_2", year=2024)
         # db.session.add_all([semester1, semester2])
         # db.session.commit()
-        #
+
         # Tạo dữ liệu mẫu cho Regulation
         # regulation1 = Regulation(
         #     regulationName="Quy định về tuổi học sinh", content="Độ tuổi học sinh phải từ 15 đến 20 tuổi.", data=None,
         #     min_value=15, max_value=20, type=Regulations.Re_Age
         # )
+        #
         #
         # regulation2 = Regulation(
         #     regulationName="Quy định về số lượng học sinh", content="Sĩ số tối đa của mỗi lớp không vượt quá 40.",
@@ -340,7 +338,7 @@ if __name__ == "__main__":
         # )
         # db.session.add_all([regulation1, regulation2])
         # db.session.commit()
-        #
+
         # Tạo dữ liệu mẫu cho Student
         # student1 = Student(
         #     first_name="Lan", last_name="Trần", gender=UserGender.FEMALE, dateOfBirth=datetime(2007, 4, 20),
@@ -379,7 +377,7 @@ if __name__ == "__main__":
         # )
         # db.session.add_all([student1, student2, student3, student4, student5, student6])
         # db.session.commit()
-        #
+
         # Tạo dữ liệu mẫu cho Subject
         # subject1 = Subject(subjectName="Toán", grade=StudentGrade.GRADE_10TH, exam_15mins=2, exam_45mins=2,
         #                    exam_Final=1)
@@ -404,7 +402,7 @@ if __name__ == "__main__":
         # db.session.add_all(
         #     [subject1, subject2, subject3, subject4, subject5, subject6, subject7, subject8, subject9, subject10])
         # db.session.commit()
-        #
+
         # Tạo dữ liệu mẫu cho Class
         # class1 = Class(
         #     className="10C1", quantity=40, grade=StudentGrade.GRADE_10TH, year=2024, teacher_id=3, regulation_id=2)
@@ -414,7 +412,7 @@ if __name__ == "__main__":
         #     className="12C1", quantity=30, grade=StudentGrade.GRADE_12ND, year=2024, teacher_id=5, regulation_id=2)
         # db.session.add_all([class1, class2, class3])
         # db.session.commit()
-        #
+
         # Tạo dữ liệu mẫu cho ScoreDetail
         # score_detail1 = ScoreDetail(score=10.0, type=ScoreType.EXAM_15MINS, created_date=datetime.now(), student_id=1)
         # score_detail2 = ScoreDetail(score=8.0, type=ScoreType.EXAM_45MINS, created_date=datetime.now(), student_id=2)
@@ -424,31 +422,31 @@ if __name__ == "__main__":
         # score_detail6 = ScoreDetail(score=9.0, type=ScoreType.EXAM_45MINS, created_date=datetime.now(), student_id=6)
         # db.session.add_all([score_detail1, score_detail2, score_detail3, score_detail4, score_detail5, score_detail6])
         # db.session.commit()
-        #
+
         # Tạo dữ liệu mẫu cho Score
         # score1 = Score(
-        #     score=10.0, type=ScoreType.EXAM_15MINS, count=1, scoreDetail_id=score_detail1.id, student_id=1, semester_id=1,
-        #     subject_id=1
+        #     score=10.0, type=ScoreType.EXAM_15MINS, count=1, scoreDetail_id=score_detail1.id, student_id=1,
+        #     semester_id=1, subject_id=1
         # )
         # score2 = Score(
-        #     score=8.0, type=ScoreType.EXAM_45MINS, count=1, scoreDetail_id=score_detail2.id, student_id=2, semester_id=1,
-        #     subject_id=2
+        #     score=8.0, type=ScoreType.EXAM_45MINS, count=1, scoreDetail_id=score_detail2.id, student_id=2,
+        #     semester_id=1, subject_id=2
         # )
         # score3 = Score(
         #     score=7.0, type=ScoreType.EXAM_FINAL, count=1, scoreDetail_id=score_detail3.id, student_id=3, semester_id=1,
         #     subject_id=3
         # )
         # score4 = Score(
-        #     score=6.5, type=ScoreType.EXAM_15MINS, count=1, scoreDetail_id=score_detail4.id, student_id=4, semester_id=1,
-        #     subject_id=4
+        #     score=6.5, type=ScoreType.EXAM_15MINS, count=1, scoreDetail_id=score_detail4.id, student_id=4,
+        #     semester_id=1, subject_id=4
         # )
         # score5 = Score(
         #     score=6.0, type=ScoreType.EXAM_FINAL, count=1, scoreDetail_id=score_detail5.id, student_id=5, semester_id=1,
         #     subject_id=5
         # )
         # score6 = Score(
-        #     score=9.0, type=ScoreType.EXAM_45MINS, count=1, scoreDetail_id=score_detail6.id, student_id=6, semester_id=1,
-        #     subject_id=6
+        #     score=9.0, type=ScoreType.EXAM_45MINS, count=1, scoreDetail_id=score_detail6.id, student_id=6,
+        #     semester_id=1, subject_id=6
         # )
         # db.session.add_all([score1, score2, score3, score4, score5, score6])
         # db.session.commit()

@@ -1,121 +1,24 @@
 {% extends 'admin/master.html' %}
-
 {% block body %}
-{% if current_user.is_authenticated %}
-<div class="container-fluid p-0">
-  <div class="row justify-content-center">
-  <div class="col-lg-12">
-    <div class="single_element">
-      <div class="quick_activity">
-        <div class="row">
-          <div class="col-12">
-            <div class="quick_activity_wrap">
 
-              <div class="single_quick_activity d-flex">
-                <div class="icon">
-                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRI8Qc0TSxVe-ZUlpTtLjf9YuSuZOGToy5grg&usqp=CAU" alt="student">
-                </div>
-                <div class="count_content">
-                  <h3><span class="counter">{{ count_student[0] }}</span> </h3>
-                  <p>Student</p>
-                </div>
-              </div>
-              <div class="single_quick_activity d-flex">
-                <div class="icon">
-                  <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAdVBMVEX///8AAADj4+OQkJDq6uqCgoK7u7vZ2dng4OBWVlbz8/P7+/sqKirm5uZ1dXX4+PjNzc1ERERLS0tQUFDS0tIxMTGIiIi0tLRubm7Hx8efn58cHBxpaWmwsLA0NDSVlZWdnZ0PDw9iYmIfHx87OzsWFhZ8fHz8tB7LAAAE4klEQVR4nO2c6ULqMBBGKYJAWQVBcAPX93/Eq5cqzSRN03bSZOp3/omJ5tB2Mtna6wEAAAAAAAAAAAAAAAAAAAAAAAAyOVx3gUOh3zrpCpuRye82dLNYmRsMN6EbxcpCF1w+h24UK9ulZtgP3SZm+jAUDwzlYzMcj+QydjLUexJBwBCG8QNDGMYPDGEYPzCEYfzAEIbxA0MYxg8MYRia0XFzvbKWEG54Xh472oqINly9Zw20KUo23P02cGMpJddw/phcGBSXE2t4lySdNpwOFcFXS1GZhrcvimBybSkr0vBe9UsebYUFGqYzInhvLS7P8Jr4TfSWK4gz3BPBYVkFYYZ0m9a2eMfaD7IMaYhZT8vrSDIck42ED/YQkyHIkIYYWyKTQ4xhuiB+pSEmQ4rh+IEIjl1ryjBcallM6lxXhuE7EbTPW6hIMDwQv7VxR3MRAgwnRPDeoRPM0ZqhW2jXGW1Vv9ldxT/QiuFg//KQLGo50j5i4R5iMtowPP7cXpVrzl+JoHXe0Ix/w+XlOaqqePpQ/damEwVleDe8zY9XN1WCRHpF79BaDfBt+KQ2cuuueKBD+Up9xAXPhrSrTra2SaM85KuxTqdZ8Wp4IJH+P06KfXriyvWL0fFpSJPJjFN5zRW98pX7iAseDWku8stNWU3aR1xVy2JUvBmOivy+mFg7f1rzo2aIyfBlqM66Jy+P6s+3xTV3asnktW6+l+HHcECTrXnvU/2g6LqkdKRbNQ3V8GI4Jq3cGz7cG2vekSxmVieLUfFheCKCWaQnz5chQ5nSELOrLqTBbzglXdnN7zM3VaPrG33ARjQ/sDyt7rAb0l5+kv8l6UDUW5CGGNvSdQW4De9IM0kuQnKx3GAjpaeOG4eYDGZDcpFmWqQncy5XP5/Tb4YhxGSwGtJ1k4V+uPiyQ+TM8JyPke4yOdX10eE0pHlowYD3Rin0keq9S1K+ouQOn6E27V6Yi6hLgG9jOtIdNsizddgM57SZlmyZjv1Uqk/nWOEypKHeHgktihPnBQlHeAxTkozMypq5fCsQNCdzTWAxHJFs0mHGYUmqnHnmDDEZHIb0nnNrJo0vX2xrCJTCYEjSNOd1E03xqXrzHWhsOCJvQLHuT1JR85sHQ3rAQVPDqdp/V7sO+bc2HD0JNjZU0623in31ZV2iZGNTAxoaLpWJ6V31ZOScCNVbl3KjoeEg5/dxqtOAwefrE9s4wgTjNfTazvqwPYf1FoZaoKnhNBvucY3I+Wlq2Jt+X8UFy5yRHxobfqXdKet4jhsGw8iBIQzjB4YwjB8YwjB+YAjD+IEhDOMHhjCMHxjCMH5gCMP4gaGLIVnodsDjgqgGh2HhwYpCPv3IGAljmLS4lhPI8NmPjYlAhqw7SO2EMpz50TEQyrC9ixjMsLVgE86Q4zyMC+EMaxw8r0Uww5fO36V+NpMaCGVYelKWjVCG7W0xCmS49mNjIpBhlZcENSSMoet7ujiwGF7O+ZT8jcqGrfUU3/z+19z+1z494tMldn11Z3MXGWjvz+wa+155GeHAUD4wlM9fMlwNusTKYOjvPFkI+gZD7lPVYRnDUDwwlA8M5QND+fxNw0gPZ9dkbjBcDLvEwmDYVWAoHxjK5w8Y2t8XJ5+nHn3lb8f4v/MzveouUb/DAwAAAAAAAAAAAAAAWfwD0MlYtMoqqyAAAAAASUVORK5CYII=" alt="classroom">
-                </div>
-                <div class="count_content">
-                  <h3><span class="counter">{{ count_classroom[0] }}</span> </h3>
-                  <p>ClassRoom</p>
-                </div>
-              </div>
-              <div class="single_quick_activity d-flex">
-                <div class="icon">
-                  <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAflBMVEX///8AAABbW1tXV1crKys/Pz+fn5/j4+Pn5+fz8/MEBAQ4ODj7+/sODg4UFBT19fXc3Nzt7e2xsbF3d3eSkpJoaGh+fn4iIiJvb28ZGRmqqqrKysrAwMC5ubk2NjZHR0eKiopOTk6YmJjT09MnJydiYmKDg4PFxcUdHR1KSkp+6Fa/AAAHh0lEQVR4nO2d6XbqOgyFCZQpJBAKLfR0IOl0et7/BS9xGDLYli3LWF03308WpBJ43Np2B4Oenp6enp4ev2Sv283DcPS1//7zsQodDJZsW6RRjXj8+Dd0TPbM3xeRhN3jNHRkVqwfU1ka4ncZfoSOzphkq0xD8LAOHaEZz3faNI4sJ6FjNCGPoTyODOehw4RYFQZpHPnMQkeqZy0dq6TN6zl0rDpmYPe4kr6EjlbN/M08j2MmbMfhZGyTRxQ9ce0ne7s8ougtCR2ylHvbPKJoHzpmGeulfSLRa+ioJXwh8og++TWuZ0weUfQdOu4OB1wiKbe1CvIHiaI8dOQtRthElrx6ydpkySvnPnTsDd7ReUSj0LE3sFyc1Ik5qSsrfMviNSm+OuQRbUJHX+PbJZFx6OhrDF0SWYaOvobVhqoDI3VIr2NBMNq9O+XBaNhauSXCZ25fuyXCR3ecuyXyJ3T8V9wS4dNHHEctRuUfC4FRwix0+FfQ26qSNHT0NR5dEnkLHX0NhDZ3hZNKN3fZj/CZD48Yl0W6xKwEoRyfyCF07A1m+LbFaF4v+YfNI+WkPRx5wSbCaccuQHb3lNH2sAIppLD7QQaDApPHE6uxt2KKWQIzG7IqEPovL933grW6tWPYsErmltuSlJEO1GS2s8kjZrTFbZM9WeTBsqOfyYx/k5jV6r3LzFAGXjJSHOQkRo6U8W8wm96DHSV+5FXKVTHf63cnB672pi7ZlzqVMeNRV0K2+ZFlkQ7Zd/Iur/vWTP8znDDbDhqzft3uR4fF27j4yu9/T8/oYUZi3XZm7DbsR7L9cmc7zQ3jETcX84coLLxbfqj8zIJTKuuHav57shtdi9NEz8aRPbkYZXObj13cg/GGxfQyrXm1ltJN+Er+ldfsnDsG8/2koQI9St4x30VDycsNkTXeBF4Pr1rKiUwBnRzjlNQ7WxrrW9AdStbRTSR1tEI6nnWqdcuAw9dL1w4fd75YUZbrmsu60lG8vUnQEiayTcdD513i5Xbb+iP5aKiyqNz/F7cXKlUJqPVtJ3K1ZRiiy6tEhtYIdbI2t9qWSic+3F5EfVCEEkXNWWNyerXRtlbS7WPJ4tZzozqPqGi88VxcbLQtTRF4fNtMNupImh7Fi2m+3rbmusM/h1v2E31ZvR7z5PJqrW3pbcLF7TKZaANpOMmuC6pr21oDta3OCO6LF8gdsLjGHEte1LbLZs5eyeBi4UVpr/925zkfdkncpnJiUpe6O7+5fvLq/D1rBrwz6S2kIyO33MkB2zjoc2pbmYlt5dP/xLg1ySM66RDNCbxqW2YlU9kOhpRnQxtQtW5vnunLy5c+zD7vuwK/+jSM40dM0M2JT3zLheEDPHcTg456Ii/f3lxYll+y+XnFhc950cI5I3SIxtQnOrvFAVLZ/p+IlU0dXcRRX4yUW1kbW1fsT++yOnkvdIjVtZ4oFsVWri5vh69MR6wTwop1GYDF92vpD/Z1HsPSJCc0oOQ8zH2VT7A0q3hyc0Fr3g5iFXtSGdLpQKE46PCiRswtfCYVlQ5RWSHKdpaYTkLXJ/jwDyGM/GIGFAOVGIwRzjQP7mZoNyRFDKDl1FGufBOl4qCBXt22vvSkRAy5H3G1hjRbbrYgH4KnOM+4aOOvm7KzaBUHNdSKMOoHabRx5MFk4p8EbeK/fKGoPlZCu+0F9QIVC7onUDDHn8876RAz/BMo5xLUgFNx0iHMNzIdKHe9VjbYFmLPaqQ4KIjp/BFOh9rEHOJ0BUFOlgj6uI7g3VxxkLOjygM5GZ75WQ0KpweQHfBzumPjSI6+IenEP6JEXLp6ydLhHpsKmho8+hwYHTlJIg5TABUk55IT3KqVFoq25TSJUJETJIK67Y8aipUjh5ZF0bb+yh98N/aEQjxzLyvK9xGpP6lcLnO7ty25OOjxvjXFT+J6VcdU/lh/l7Kobl1wrWCpdFJv1irVaO/qIlDVcO/gj+JQyTWuf1A5+Pq6XkapD7v9QfWOyFPtQtUnXTuJWnf2VAhX1y7cOol6r/1EFHkLta/CrZNo9lR+SpWaBZFLJ5mpH+vHi6TbFLt0Et0Snmoj3UBnzXO550JXpfKy3NL5CVyqV4XmueSViwFwS63L8KItlnm40kRvEcFLp7q+7uWmMn3tAd8EAA8N/eE7vaEAP04C1QRyb5i+BVTmCRSAokXuzwWcEfhdIiB1kqnkZwDBBn8PImTaoHbrQY4C7N8D71q1PAkKAVZRsOUF8MEF/AwbwEoldthSSFpXiFcpBfT3sP/jA67PkFpeErCCnSOfnIGJkP4bFLABoLfXCVg7JDWKwIYwdAMAS2ak13eClkm8vAlf7El4JRP8L0zwWzm4Lk0oOMLOTYe1HWhY+KRLBCxVWl8pUQO+spDu8DZYBHdabIOTLZngCI71jssIqHGNJ0RALcv1sFJSQN/Ubfh0bsNmV7H5Zkyxrb7HGI9JSXOa1Wny7nZTvyPLDWEt5mM7HN8FYDH6fvkdF+/19PQEYj38RehmSXV5mCG6+aVPJAR9ItzoE+FGnwg3+kS40SfCjT4RbvwvElmPfhEcr9Tu6enp6ekJzH/IpXNR6yB3VwAAAABJRU5ErkJggg==" alt="student">
-                </div>
-                <div class="count_content">
-                  <h3><span class="counter">{{ count_staff[0] }}</span> </h3>
-                  <p>Staff</p>
-                </div>
-              </div>
-              <div class="single_quick_activity d-flex">
-                <div class="icon">
-                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQS7onrtTIyJnwNyUx0nYJJE6wMUwxI3SOOMPVU0QAOznDILNCFIwv3puxGBPqJXgFccHk&usqp=CAU" alt="teacher">
-                </div>
-                <div class="count_content">
-                  <h3><span class="counter">{{ count_teacher[0] }}</span> </h3>
-                  <p>Teacher</p>
-                </div>
-              </div>
+<h1 class="text-center text-success">TRANG CHỦ QUẢN TRỊ HỌC SINH</h1>
+{% if current_user.is_authenticated  %}
+<h4 class="text-center" style="color: black;"> Xin chào <span> {{ current_user.username }}</span> bạn đang truy cập với vai trò {{ current_user.user_role }} </h4>
+<h6 class="text-center text-info">Với vai trò admin bạn có thể thực quản trị hệ thống </h6>
 
-            </div>
-          </div>
-        </div>
-      </div>
+{% else %}
+<h2 class="text-center text-danger">ĐĂNG NHẬP QUẢN TRỊ</h2>
+<form method="post" action="{{ url_for('admin_login') }}">
+    <div class="mb-3 mt-3">
+        <label for="email" class="form-label">Tên đăng nhập:</label>
+        <input type="text" class="form-control" id="email" placeholder="Nhập tên đăng nhập" name="username">
     </div>
-  </div>
-
-  <div class="col-lg-12 col-xl-12">
-      <div class="col-md-6">
-        <canvas id="chart"></canvas>
-      </div>
-  </div>
-  {% else %}
-  <h1 class="text-info">Đăng nhập để tiếp tục</h1>
-  <a href="{{ url_for('user_login', next='/admin') }}" class="text-danger">Đăng nhập</a>
-  {% endif %}
-  </div>
-</div>
-
-<!--animation counter-->
-<script src = "//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-$('.counter').each(function () {
-    $(this).prop('Counter',0).animate({
-        Counter: $(this).text()
-    }, {
-        duration: 4000,
-        easing: 'swing',
-        step: function (now) {
-            $(this).text(Math.ceil(now));
-        }
-    });
-});
-</script>
-
-<script>
-  let labels = [], student = 0, staff = 0, teacher = 0, data = [] , colors = [], borderColors = []
-  let r, g, b
-
-  student = {{ count_student[0] }};
-  staff = {{ count_staff[0] }};
-  teacher = {{ count_teacher[0] }};
-
-
-  {% for i in range(2) %}
-  <!--    Random mau-->
-    r = parseInt(Math.random()*255)
-    g = parseInt(Math.random()*255)
-    b = parseInt(Math.random()*255)
-    colors.push(`rgba(${r}, ${g}, ${b}, 0.2)`)
-    borderColors.push(`rgba(${r}, ${g}, ${b}, 1)`)
-  {% endfor %}
-
-  labels.push('Học sinh')
-  labels.push('Giáo viên')
-  labels.push('Nhân viên')
-  data.push(student)
-  data.push(teacher)
-  data.push(staff)
-
-<!--  ve chartjs-->
-  window.onload = function() {
-      const ctx = document.getElementById('chart').getContext('2d')
-
-      loadChart(ctx, labels, data, 'bar', colors, borderColors, 'Thống kê số người dùng')
-  }
-
-</script>
+    <div class="mb-3">
+        <label for="pwd" class="form-label">Mật khẩu:</label>
+        <input type="password" class="form-control" id="pwd" placeholder="Nhập mật khẩu" name="password">
+    </div>
+    <button type="submit" class="btn btn-primary">Đăng nhập</button>
+</form>
+{% endif %}
 
 {% endblock %}
