@@ -355,13 +355,13 @@ if __name__ == "__main__":
         # )
         #
         # student5 = Student(
-        #     fullName="Ngô Trọng Phúc", gender=UserGender.MALE, dateOfBirth=datetime(2006, 12, 15),
+        #     name="Ngô Trọng Phúc", gender=UserGender.MALE, dateOfBirth=datetime(2006, 12, 15),
         #     address="Cà Mau", phoneNumber="0923456789", email="phucngo@osh.edu.vn", grade=StudentGrade.GRADE_12ND,
         #     regulation_id=1, semester_id=1
         # )
         #
         # student6 = Student(
-        #     fullName="Dương Hoàng Mai", gender=UserGender.FEMALE, dateOfBirth=datetime(2008, 9, 25),
+        #     name="Dương Hoàng Mai", gender=UserGender.FEMALE, dateOfBirth=datetime(2008, 9, 25),
         #     address="Hậu Giang", phoneNumber="0934567890", email="maiduong@osh.edu.vn", grade=StudentGrade.GRADE_10TH,
         #     regulation_id=1, semester_id=1
         # )
