@@ -1,0 +1,473 @@
+{% extends 'layout/base.html' %}
+
+{%block css%}
+<style>
+    .sidebar {
+        background-color: #f7f7fa;
+        border-right: 1px solid #ececf5;
+        bottom: 0;
+        left: 0;
+        margin-top: 0;
+        position: fixed;
+        top: 60px;
+        transition: all 0.2s ease-in-out 0s;
+        width: 320px;
+        z-index: 1001;
+    }
+    .sidebar.opened {
+        -webkit-transition: all 0.4s ease;
+        -moz-transition: all 0.4s ease;
+        transition: all 0.4s ease;
+    }
+    .sidebar-inner {
+        height: 100%;
+        min-height: 100%;
+        transition: all 0.2s ease-in-out 0s;
+    }
+    .sidebar-menu {
+        padding: 15px;
+    }
+    .sidebar-menu ul {
+        font-size: 15px;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        position: relative;
+    }
+    .sidebar-menu li a {
+        color: #6f6f6f;
+        display: block;
+        font-size: 16px;
+        height: auto;
+        padding: 0 20px;
+    }
+    .sidebar-menu li a:hover {
+        color: #18aefa;
+    }
+    .sidebar-menu > ul > li > a:hover {
+        background-color: #fff;
+        color: #18aefa;
+        margin: 0px -15px;
+        padding-left: 30px;
+    }
+    .sidebar-menu li.active > a {
+        background-color: #fff;
+        color: #18aefa;
+        position: relative;
+        margin: 0px -15px;
+        padding-left: 30px;
+    }
+    .sidebar-menu li.active > a::before {
+        width: 5px;
+        content: "";
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        background: #18aefa;
+        -webkit-transition: all 0.5s;
+        -ms-transition: all 0.5s;
+        transition: all 0.5s;
+    }
+    .menu-title {
+        color: #9e9e9e;
+        display: flex;
+        font-size: 14px;
+        opacity: 1;
+        padding: 5px 15px;
+        white-space: nowrap;
+    }
+    .menu-title > i {
+        float: right;
+        line-height: 40px;
+    }
+    .sidebar-menu li.menu-title a {
+        color: #ff9b44;
+        display: inline-block;
+        margin-left: auto;
+        padding: 0;
+    }
+    .sidebar-menu li.menu-title a.btn {
+        color: #fff;
+        display: block;
+        float: none;
+        font-size: 15px;
+        margin-bottom: 15px;
+        padding: 10px 15px;
+    }
+    .sidebar-menu ul ul a.active {
+        color: #18aefa;
+    }
+    .mobile_btn {
+        display: none;
+        float: left;
+    }
+    .sidebar .sidebar-menu > ul > li > a span {
+        transition: all 0.2s ease-in-out 0s;
+        display: inline-block;
+        margin-left: 10px;
+        white-space: nowrap;
+    }
+    .sidebar .sidebar-menu > ul > li > a span.chat-user {
+        margin-left: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .sidebar .sidebar-menu > ul > li > a span.badge {
+        margin-left: auto;
+    }
+    .sidebar-menu ul ul a {
+        display: block;
+        font-size: 15px;
+        padding: 7px 10px 7px 45px;
+        position: relative;
+    }
+    .sidebar-menu ul ul {
+        display: none;
+    }
+    .sidebar-menu ul ul ul a {
+        padding-left: 65px;
+    }
+    .sidebar-menu ul ul ul ul a {
+        padding-left: 85px;
+    }
+    .sidebar-menu > ul > li {
+        margin-bottom: 3px;
+        position: relative;
+    }
+    .sidebar-menu > ul > li:last-child {
+        margin-bottom: 0;
+    }
+    .sidebar-menu .menu-arrow {
+        -webkit-transition: -webkit-transform 0.15s;
+        -o-transition: -o-transform 0.15s;
+        transition: transform .15s;
+        position: absolute;
+        right: 15px;
+        display: inline-block;
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        text-rendering: auto;
+        line-height: 40px;
+        font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-transform: translate(0, 0);
+        -ms-transform: translate(0, 0);
+        -o-transform: translate(0, 0);
+        transform: translate(0, 0);
+        line-height: 18px;
+        top: 14px;
+    }
+    .sidebar-menu .menu-arrow:before {
+        content: "\f105";
+    }
+    .sidebar-menu li a.subdrop .menu-arrow {
+        -ms-transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+        -o-transform: rotate(90deg);
+        transform: rotate(90deg);
+    }
+    .sidebar-menu ul ul a .menu-arrow {
+        top: 10px;
+    }
+    .sidebar-menu > ul > li > a {
+        align-items: center;
+        display: flex;
+        justify-content: flex-start;
+        padding: 12px 15px;
+        position: relative;
+        transition: all 0.2s ease-in-out 0s;
+    }
+    .sidebar-menu ul li a i {
+        display: inline-block;
+        font-size: 16px;
+        line-height: 24px;
+        text-align: left;
+        vertical-align: middle;
+        width: 20px;
+        transition: all 0.2s ease-in-out 0s;
+    }
+    .sidebar-menu ul li.menu-title a i {
+        font-size: 16px !important;
+        margin-right: 0;
+        text-align: right;
+        width: auto;
+    }
+    .sidebar-menu li a > .badge {
+        color: #fff;
+    }
+          .main-wrapper {
+            width: 100%;
+            height: 100vh;
+            min-height: 100vh;
+        }
+        .page-wrapper {
+            margin-left: 320px;
+            padding-top: 20px;
+            position: relative;
+            transition: all 0.4s ease;
+        }
+        .page-wrapper > .content {
+            padding: 1.875rem 1.875rem 0;
+        }
+        .page-header {
+            margin-bottom: 1.875rem;
+        }
+        .page-header .breadcrumb {
+            background-color: transparent;
+            color: #6c757d;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0;
+            padding: 0;
+        }
+        .page-header .breadcrumb a {
+            color: #333;
+        }
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .form-control {
+        border: 1px solid #ddd;
+        box-shadow: none;
+        color: #333;
+        font-size: 15px;
+        height: 40px;
+    }
+    .form-control:focus {
+        border-color: #FFBC53;
+        box-shadow: none;
+        outline: 0 none;
+    }
+    .form-control.form-control-sm {
+        height: calc(1.5em + .5rem + 2px);
+    }
+    .form-control-sm {
+        background-color: #fff;
+    }
+
+    .form-control.form-control-lg {
+        height: calc(1.5em + 1rem + 2px);
+    }
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+    .input-group .form-control {
+        height: 40px;
+    }
+
+        .table {
+        color: #333;
+        max-width: 100%;
+        margin-bottom: 0;
+        width: 100%;
+    }
+    .table-striped > tbody > tr:nth-of-type(2n+1) {
+        background-color: #f8f9fa;
+    }
+    .table.no-border > tbody > tr > td,
+    .table > tbody > tr > th,
+    .table.no-border > tfoot > tr > td,
+    .table.no-border > tfoot > tr > th,
+    .table.no-border > thead > tr > td,
+    .table.no-border > thead > tr > th {
+        border-top: 0;
+        padding: 10px 8px;
+    }
+    .table-nowrap td,
+    .table-nowrap th {
+        white-space: nowrap
+    }
+    .table.dataTable {
+        border-collapse: collapse !important;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    table.table td h2 {
+        display: inline-block;
+        font-size: inherit;
+        font-weight: 400;
+        margin: 0;
+        padding: 0;
+        vertical-align: middle;
+    }
+    table.table td h2.table-avatar {
+        align-items: center;
+        display: inline-flex;
+        font-size: inherit;
+        font-weight: 400;
+        margin: 0;
+        padding: 0;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+    table.table td h2 a {
+        color: #333;
+    }
+    table.table td h2 a:hover {
+        color: #FFBC53;
+    }
+    table.table td h2 span {
+        color: #888;
+        display: block;
+        font-size: 12px;
+        margin-top: 3px;
+    }
+    .table thead tr th {
+        font-weight: 600;
+    }
+    .table tbody tr {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    .table.table-center td,
+    .table.table-center th {
+        vertical-align: middle;
+    }
+    .table-hover tbody tr:hover {
+        background-color: #f7f7f7;
+    }
+    .table-hover tbody tr:hover td {
+        color: #474648;
+    }
+    .table-striped thead tr {
+        border-color: transparent;
+    }
+    .table-striped tbody tr {
+        border-color: transparent;
+    }
+    .table-striped tbody tr:nth-of-type(even) {
+        background-color: rgba(255, 255, 255, 0.3);
+    }
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba(235, 235, 235, 0.4);
+    }
+    .table-bordered {
+        border: 1px solid rgba(0, 0, 0, 0.05) !important;
+    }
+    .table-bordered th,
+    .table-bordered td {
+        border-color: rgba(0, 0, 0, 0.05);
+    }
+    .card-table .card-body .table > thead > tr > th {
+        border-top: 0;
+    }
+    .card-table .card-body .table tr td:first-child,
+    .card-table .card-body .table tr th:first-child {
+        padding-left: 1.5rem;
+    }
+    .card-table .card-body .table tr td:last-child,
+    .card-table .card-body .table tr th:last-child {
+        padding-right: 1.5rem;
+    }
+    .card-table .table td, .card-table .table th {
+        border-top: 1px solid #e2e5e8;
+        padding: 1rem 0.75rem;
+        white-space: nowrap;
+    }
+    .table .thead-light th {
+        color: #495057;
+        background-color: #f8f9fa;
+        border-color: #eff2f7;
+    }
+
+</style>
+{%endblock%}
+
+{% block body %}
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-inner slimscroll">
+        <div id="sidebar-menu" class="sidebar-menu">
+            <ul>
+                <li class="menu-title">
+                    <span>Quản lý</span>
+                </li>
+                <!--                <li class="submenu">-->
+                <!--                    <a href="/tiepnhan"><i class="fas fa-user-graduate"></i> <span>Tiếp nhận học sinh</span> <span-->
+                <!--                            class="menu-arrow"></span></a>-->
+                <!--                </li>-->
+                <!--                <li class="submenu">-->
+                <!--                    <a href="/dshocsinh"><i class="fas fa-chalkboard-teacher"></i> <span>Danh sách học sinh</span> <span-->
+                <!--                            class="menu-arrow"></span></a>-->
+                <!--                </li>-->
+                <li class="submenu">
+                    <a href="/nhapdiem"><i class="fas fa-building"></i> <span>Nhập điểm </span> <span
+                            class="menu-arrow"></span></a>
+                </li>
+                <li class="submenu">
+                    <a href="/dsmon"><i class="fas fa-book"></i> <span>Danh sách môn học</span> <span
+                            class="menu-arrow"></span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="page-title">Danh sách môn học</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Môn học</a></li>
+                        <li class="breadcrumb-item active">Danh sách môn học</li>
+                    </ul>
+                </div>
+                <div class="col-auto text-right float-right ml-auto">
+                    <a href="#" class="btn btn-outline-primary mr-2"><i class="fas fa-download"></i>Tải xuống</a>
+                    <a href="/themmon" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="subject" class="table table-hover table-center mb-0 datatable">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tên môn</th>
+                                    <th>Chỉnh sửa</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for m in subject %}
+                                <tr>
+                                    <td>{{ m.id }}</td>
+                                    <td>
+                                        <h2 class="table-avatar">
+                                            <a href="#">{{ m.subjectName }}</a>
+                                        </h2>
+                                    </td>
+                                    <td>
+                                        <div class="actions">
+                                            <a href="/admin" class="btn btn-sm bg-success-light mr-2">
+                                                <i class="fas fa-pen"></i>
+                                            </a>
+                                            <a href="/admin" class="btn btn-sm bg-danger-light">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{%block footer%}
+
+{%endblock%}
