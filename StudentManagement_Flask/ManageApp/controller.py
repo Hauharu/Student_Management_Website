@@ -10,6 +10,9 @@ def index():
     return render_template('index.html')
 
 
+def access_denied():
+    return render_template('layout/page_denied.html')
+
 @app.route('/signout', methods=['GET', 'POST'])
 def user_signout():
     logout_user()

@@ -1,16 +1,13 @@
-import hashlib
 from ManageApp import app, db, dao
 from flask_login import current_user, logout_user
 from flask_admin import Admin, BaseView, expose, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
-from datetime import datetime
 from flask import redirect, request, url_for
 from wtforms import TextAreaField
 from wtforms.widgets import TextArea
 from wtforms.fields.numeric import IntegerField
 from wtforms import validators
-from ManageApp.models import UserRole, UserGender, StudentGrade, ScoreType, Regulations, SemesterType, SemesterType, \
-    UserInformation, User, Subject, Teach, Class, Student, Regulation, Semester, Score, ScoreDetail
+from ManageApp.models import *
 
 
 # Cấu hình cách hiển thị và tương tác với các mô hình trong giao diện quản trị.
@@ -26,7 +23,7 @@ class AuthenticatedModelView(ModelView):
 
 
 # Người dùng đã xác thực có vai trò ADMIN mới có thể truy cập.
-class AuthenticatedBaseView(BaseView):
+class AuthenticatedAdmin(BaseView):
     def is_accessible(self):
         return current_user.is_authenticated and current_user.user_role == UserRole.ADMIN
 
@@ -50,11 +47,36 @@ class CKTextAreaField(TextAreaField):
 class HomeView(AdminIndexView):
     @expose('/')
     def index(self):
-        return self.render('admin/index.html', user_count = dao.user_count())
+        if not current_user.is_authenticated:
+            return redirect(url_for('user_login'))
 
+        if current_user.user_role != UserRole.ADMIN:
+            return redirect(url_for('access_denied'))
+
+        semester = request.args.get('semester', SemesterType.SEMESTER_1.name)
+        year = request.args.get('year', datetime.now().year)
+
+        # Gọi hàm để lấy thống kê học sinh theo học kỳ và năm học
+        amount_of_students_by_period = dao.stats_amount_of_students_by_period(
+            semester=semester,
+            year=year
+        )
+
+        # Gọi hàm để lấy thống kê số lượng người dùng theo vai trò
+        user_count = dao.user_count()
+
+        # Trả về giao diện cùng dữ liệu cần thiết
+        return self.render(
+            'admin/index.html',
+            user_count=user_count,
+            amount_of_students_by_period=amount_of_students_by_period
+        )
+
+    def is_accessible(self):
+        return True
 
 # Quản lý đăng xuất đưa ra trang đăng nhập
-class LogoutView(AuthenticatedBaseView):
+class LogoutView(AuthenticatedAdmin):
     @expose('/')
     def index(self):
         logout_user()
@@ -68,20 +90,24 @@ class BackHomeView(BaseView):
         return redirect(url_for('index'))
 
 
+# Xem thông tin học sinh
 class StudentView(AuthenticatedModelView):
     column_searchable_list = ['name']
     column_filters = ['name', 'email', 'dateOfBirth']
-
+    column_list = ['id','name', 'gender', 'dateOfBirth', 'address', 'phoneNumber', 'email', 'grade']
     column_editable_list = ['name']
     column_export_list = ['students']
+    can_edit = False
+    can_delete = False
     column_labels = {
-        'id': 'Mã số',
+        'id':'ID',
         'name': 'Họ và tên',
         'gender': 'Giới tính',
         'dateOfBirth': 'Ngày sinh',
         'address': 'Địa chỉ',
         'phoneNumber': 'Số điện thoại',
-        'email': 'Email'
+        'email': 'Email',
+        'grade': 'Khối'
 
     }
     column_sortable_list = ['id', 'name']
@@ -93,44 +119,62 @@ class StudentView(AuthenticatedModelView):
     }
 
 
-class MyClassView(AuthenticatedModelView):
-    column_sortable_list = ['className', 'quantity']
-
+# Hồ sơ người dùng
+class UserInformationView(AuthenticatedModelView):
+    can_export = False
+    column_list = ['name', 'gender', 'dateOfBirth', 'address', 'phoneNumber', 'email','joined_date']
     column_labels = {
-        'id': 'Mã lớp',
-        'className': 'Tên lớp',
-        'quantity': 'Sĩ số lớp',
-        'grade': 'Khối',
-        'students': 'hoc sinh'
+        'name': 'Họ và tên',
+        'gender': 'Giới tính',
+        'dateOfBirth': 'Ngày sinh',
+        'address': 'Địa chỉ',
+        'phoneNumber': 'Số điện thoại',
+        'email': 'Email',
+        'joined_date':'Ngày tham gia'
     }
+    column_filters = [
+        'name',
+        'email',
+        'phoneNumber',
+    ]
+    can_view_details = True
 
 
 # Quản lý người dùng
 class UserView(AuthenticatedModelView):
-    column_exclude_list = ['username', 'password', 'user_role', 'active', 'user_information']
+    column_list = ['id','username', 'userInformation', 'user_role', 'is_active']
+    can_export = False
+    can_edit = False
+    column_filters = [
+        'username',
+        'user_role',
+    ]
+    form_excluded_columns = ['classes']
     column_labels = {
+        'id': 'ID',
         'username': 'Tên đăng nhập',
-        'password': 'Mật khẩu',
+        'userInformation':"Họ và tên",
         'user_role': 'Vai trò',
-        'active': 'Trạng thái',
-        'user_information': 'Họ tên người dùng'
+        'is_active':'Trạng thái'
     }
 
 
-class MySubjectView(AuthenticatedModelView):
-    def __init__(self, model, session, **kwargs):
-        super().__init__(model=model, session=session, **kwargs)  # Pass model and session to ModelView
-        # Any additional initialization can go here
-
-    column_list = ['id', 'subjectName', 'grade', 'exam_15mins', 'exam_45mins', 'exam_Final']
-    column_searchable_list = ['id', 'subjectName']
-    column_filters = ['id', 'subjectName', 'grade']
+class SubjectView(AuthenticatedModelView):
+    column_list = ['id','subjectName', 'grade', 'exam_15mins', 'exam_45mins', 'exam_Final']
+    column_searchable_list = ['subjectName']
+    column_filters = [
+        'subjectName',
+        'grade',
+        'exam_15mins',
+        'exam_45mins',
+    ]
     column_labels = {
+        'id': 'ID',
         'subjectName': 'Tên môn học',
         'grade': 'Khối',
-        'exam_15mins': 'Số bài kiểm tra 15 phút',
-        'exam_45mins': 'Số bài kiểm tra 45 phút',
-        'exam_Final': 'Số Bài kiểm tra cuối kỳ'
+        'exam_15mins': 'Số bài 15 phút',
+        'exam_45mins': 'Số bài 45 phút',
+        'exam_Final': 'Bài cuối kỳ',
     }
     form_extra_fields = {
         'exam_15mins': IntegerField('Số bài kiểm tra 15 phút', validators=[validators.NumberRange(min=1, max=5)]),
@@ -138,24 +182,41 @@ class MySubjectView(AuthenticatedModelView):
         'exam_Final': IntegerField('Số Bài kiểm tra cuối kỳ', validators=[validators.NumberRange(min=1, max=1)])
     }
 
+    def apply(view, context, model, name):
+        if model.teachs:
+            result = []
+            for teaching in model.teachs:
+                # Lấy thông tin từ các quan hệ liên kết
+                class_name = teaching.classes.className if teaching.classes else None
+                semester_name = teaching.semester.semester if teaching.semester else None
+                teacher_name = teaching.teacher.UserInformation.name if teaching.teacher and teaching.teacher.UserInformation else None
 
-# Quản lý quy định
-class MyRegulationView(AuthenticatedModelView):
-    def __init__(self, model, session, **kwargs):
-        super().__init__(model=model, session=session, **kwargs)  # Pass model and session to ModelView
+                result.append(f'Lớp: {class_name}, {semester_name}, Giảng viên: {teacher_name}')
+            return ', '.join(result)
+        return 'Rỗng'
 
-    column_list = [
-        'id', 'regulationName', 'content', 'min_value', 'max_value', 'created_date', 'updated_date'
-    ]
-    column_labels = {
-        "regulationName": "Tên quy định",
-        "content": "Nội dung",
-        "min_value": "Độ tuổi tối thiểu",
-        "max_value": "Độ tuổi tối đa",
-        "created_date": "Ngày tạo",
-        "updated_date": "Ngày cập nhật"
+    column_formatters = {
+        'teachs': apply
     }
 
+# Quản lý quy định
+class RegulationView(AuthenticatedModelView):
+    column_list = [
+        'id','regulationName', 'content', 'min_value', 'max_value','classes'
+    ]
+    column_searchable_list = ['regulationName']
+    can_edit = True
+    can_export = False
+    form_excluded_columns = ['students']
+
+    column_labels = {
+        'id': 'ID',
+        "regulationName": "Tên quy định",
+        "content": "Nội dung",
+        "min_value": "Giá trị tối thiểu",
+        "max_value": "Giá trị tối đa",
+        'classes':'Lớp'
+    }
 
 def combined_data(counts_students_of_classes, stats_with_avg):
     combined_data = {}
@@ -175,23 +236,22 @@ def combined_data(counts_students_of_classes, stats_with_avg):
 
     return combined_data_list
 
-
-# Xem số liệu thống kê
 class StatsView(BaseView):
     @expose('/')
     def index(self):
         subjects = dao.get_subjects()
         years = dao.get_years()
+        current_year = dao.get_current_year()
         counts_students_of_classes = dao.count_students_of_classes_by_subject_and_period(
-            subject_id=request.args.get('subject_id'),
+            subject_id=request.args.get('subjectId'),
             semester=request.args.get('semester'),
             year=request.args.get('year'))
-        stats_with_avg = dao.count_students_of_classes_by_subject_and_period(subject_id=request.args.get('subject_id'),
+        stats_with_avg = dao.count_students_of_classes_by_subject_and_period(subject_id=request.args.get('subjectId'),
                                                                              semester=request.args.get('semester'),
                                                                              year=request.args.get('year'),
                                                                              avg_gt_or_equal_to=5)
         stats = combined_data(counts_students_of_classes=counts_students_of_classes, stats_with_avg=stats_with_avg)
-        subject = dao.get_subject_by_id(subject_id=request.args.get('subject+id'))
+        subject = dao.get_subject_by_id(subject_id=request.args.get('subjectId'))
         period = dao.get_period(semester=request.args.get('semester'), year=request.args.get('year'))
         return self.render('admin/stats.html', subjects=subjects, years=years,
                            stats=stats,
@@ -204,10 +264,10 @@ class StatsView(BaseView):
 # Thiết lập quản trị
 admin = Admin(app, index_view=HomeView(), name="Trang quản trị", template_mode='bootstrap4')
 admin.add_view(BackHomeView(name='Trang chính'))
-admin.add_view(UserView(User, db.session, name='User'))
-admin.add_view(MyClassView(Class, db.session, name='Lớp', category='QL Lớp'))
-admin.add_view(StudentView(Student, db.session, name='Học sinh', category="QL Điểm HS"))
-admin.add_view(MySubjectView(Subject, db.session, name='Môn học', category="QL Điểm HS"))
-admin.add_view(MyRegulationView(Regulation, db.session, name='Quản lý quy định'))
+admin.add_view(UserInformationView(UserInformation, db.session, name='Hồ sơ người dùng'))
+admin.add_view(StudentView(Student, db.session, name='Hồ sơ học sinh'))
+admin.add_view(UserView(User, db.session, name='Quản lý người dùng'))
+admin.add_view(RegulationView(Regulation, db.session, name='Quản lý quy định'))
+admin.add_view(SubjectView(Subject, db.session, name='Quản lý Môn học'))
 admin.add_view(StatsView(name='Thống kê'))
 admin.add_view(LogoutView(name='Đăng xuất'))

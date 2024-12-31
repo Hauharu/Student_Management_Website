@@ -79,6 +79,11 @@
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuAvatar">
                 <a class="dropdown-item" href="#">My profile</a>
                 <a class="dropdown-item" href="#">Change Password</a>
+                {% if session['user_role'] == 'STAFF' %}
+                <a class="dropdown-item" href="{{ url_for('staff') }}">Staff Home</a>
+                {% elif session['user_role'] == 'TEACHER' %}
+                <a class="dropdown-item" href="{{ url_for('teacher') }}">Teacher Home</a>
+                {% endif %}
             </div>
         </div>
         <!-- Logout -->

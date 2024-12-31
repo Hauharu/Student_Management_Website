@@ -587,7 +587,7 @@
         <p class="note text-center">Nổi bật</p>
         <!-- Slider đánh giá -->
         <div class="feedback-slider">
-            <div class="list-feedback-slide owl-carousel owl-theme">
+            <div class="list-feedback-slide owl-carousel owl-theme" id="feedback-list">
                 <!-- Mỗi mục đánh giá -->
                 <div class="item">
                     <div class="item-block text-left">
@@ -596,9 +596,9 @@
                             <div class="post-name">Phạm Nguyên Bảo</div>
                             <i class="fa fa-commenting-o fa-4" aria-hidden="true"></i>
                         </div>
-                        <p class="post">Hiệu trưởng</p>
+                        <p class="post">Nhân viên</p>
                         <p class="feedback-text">Thuận lợi dễ sử dụng, không cần đòi hỏi trình độ CNTT cao vẫn dùng
-                            được. </p>
+                            được.</p>
                     </div>
                 </div>
                 <div class="item">
@@ -608,9 +608,9 @@
                             <div class="post-name">Nguyễn Trung Hậu</div>
                             <i class="fa fa-commenting-o fa-4" aria-hidden="true"></i>
                         </div>
-                        <p class="post">Nhân viên</p>
+                        <p class="post">Quản trị viên</p>
                         <p class="feedback-text">Hệ thống giúp tương tác với thông tin học sinh và lập danh sách lớp dễ
-                            dàng</p>
+                            dàng.</p>
                     </div>
                 </div>
                 <div class="item">
@@ -620,19 +620,7 @@
                             <div class="post-name">Nguyễn Vũ Luân</div>
                             <i class="fa fa-commenting-o fa-4" aria-hidden="true"></i>
                         </div>
-                        <p class="post">giáo viên</p>
-                        <p class="feedback-text">Hệ thống giúp nhập, xuất điểm dễ dàng mà không phải sử dụng thêm phần
-                            mềm nào nữa.</p>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="item-block text-left">
-                        <div class="item-block-top">
-                            <!-- Tên người đánh giá -->
-                            <div class="post-name">Trần Xuân Đức</div>
-                            <i class="fa fa-commenting-o fa-4" aria-hidden="true"></i>
-                        </div>
-                        <p class="post">giáo viên</p>
+                        <p class="post">giảng viên</p>
                         <p class="feedback-text">Tốt, hệ thống rất tiện lợi</p>
                     </div>
                 </div>
@@ -643,11 +631,36 @@
                             <div class="post-name">Hứa Quang Đạt</div>
                             <i class="fa fa-commenting-o fa-4" aria-hidden="true"></i>
                         </div>
-                        <p class="post">giáo viên</p>
-                        <p class="feedback-text">Người lập trình xứng đáng 10đ </p>
+                        <p class="post">giảng viên</p>
+                        <p class="feedback-text">Hệ thống rất dễ sử dụng </p>
                     </div>
                 </div>
             </div>
+        </div>
+        <!-- Form nhập đánh giá -->
+        <div class="feedback-form mt-4">
+            <h2 class="text-center">Thêm đánh giá của bạn</h2>
+            <form id="add-feedback-form">
+                <div class="form-group">
+                    <label for="userName">Tên của bạn:</label>
+                    <input type="text" id="userName" class="form-control" placeholder="Nhập tên của bạn" required>
+                </div>
+                <div class="form-group">
+                    <label for="userRole">Vai trò của bạn:</label>
+                    <select id="userRole" class="form-select form-control" required>
+                        <option value="" disabled selected>Chọn vai trò</option>
+                        <option value="Học sinh">Quản trị viên</option>
+                        <option value="Nhân viên">Nhân viên</option>
+                        <option value="Giáo viên">GIảng viên</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="feedbackContent">Nội dung đánh giá:</label>
+                    <textarea id="feedbackContent" class="form-control" placeholder="Nhập nội dung đánh giá"
+                              required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+            </form>
         </div>
     </div>
 </div>
@@ -681,7 +694,54 @@
         }
       });
     });
-
 </script>
 
+
+<script>
+    // Cấu hình cho nhập đánh giá
+    document.getElementById('add-feedback-form').addEventListener('submit', function (event) {
+        event.preventDefault(); // Ngăn reload trang
+
+        // Lấy dữ liệu từ form
+        const userName = document.getElementById('userName').value;
+        const userRole = document.getElementById('userRole').value;
+        const feedbackContent = document.getElementById('feedbackContent').value;
+
+        // Tạo một hộp đánh giá mới
+        const newFeedback = `
+            <div class="item">
+                <div class="item-block text-left">
+                    <div class="item-block-top">
+                        <div class="post-name">${userName}</div>
+                        <i class="fa fa-commenting-o fa-4" aria-hidden="true"></i>
+                    </div>
+                    <p class="post">${userRole}</p>
+                    <p class="feedback-text">${feedbackContent}</p>
+                </div>
+            </div>
+        `;
+
+        // Đẩy hộp mới vào slider
+        const feedbackList = document.getElementById('feedback-list');
+        feedbackList.insertAdjacentHTML('afterbegin', newFeedback);
+
+        // Xóa mục đánh giá đầu tiên (giữ lại các mục phía sau)
+        const firstFeedback = feedbackList.querySelector('.item');
+        if (firstFeedback) {
+            firstFeedback.remove();
+        }
+
+        // Làm mới slider (nếu đang dùng Owl Carousel)
+        $('.owl-carousel').trigger('add.owl.carousel', [$(newFeedback)]).trigger('refresh.owl.carousel');
+
+        // Xóa dữ liệu trong form sau khi thêm
+        document.getElementById('add-feedback-form').reset();
+
+        // Thông báo thành công (tuỳ chọn)
+        alert('Cảm ơn bạn đã gửi đánh giá!');
+    });
+</script>
+
+
 {% endblock %}
+

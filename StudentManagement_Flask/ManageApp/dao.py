@@ -1,6 +1,6 @@
 import hashlib
 from ManageApp.models import *
-from sqlalchemy import desc, func, select, case
+from sqlalchemy import desc, func, select, case, distinct
 from ManageApp import app, db  # SQLAlchemy session
 
 
@@ -12,12 +12,12 @@ def get_user_by_id(user_id):
     return User.query.get(user_id)
 
 
-
 def auth_user(username, password, role):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
     return User.query.filter(User.username.__eq__(username.strip()),
                              User.password.__eq__(password),
                              User.user_role.__eq__(role)).first()
+
 
 def hash_password(passw):
     password = str(hashlib.md5(passw.strip().encode('utf8')).hexdigest())
@@ -50,37 +50,22 @@ def user_count():
 
         return result
 
-#
-#
-# def get_all_student_info():
-#     active_students = Student.query.filter_by(is_active=True).all()
-#     student_info = []
-#     for student in active_students:
-#         info = {
-#             'id': student.id,
-#             'name': student.name,
-#             'gender': student.gender.name,
-#             'joined_date': student.joined_date.strftime('%d-%m-%Y') if student.joined_date else '',
-#             # 'dob': student.dob.strftime('%d-%m-%Y') if student.dob else ''
-#         }
-#         student_info.append(info)
-#     return student_info
-#
-#
-#
-#
-# def create_or_update_student(id=None, **kwargs):
-#     # Cập nhật thông tin học sinh có sẵn
-#     if id:
-#         student = Student.query.get(id)
-#         if student:
-#             for key, value in kwargs.items():
-#                 setattr(student, key, value)
-#     # Tạo mới học sinh
-#     else:
-#         student = Student(**kwargs)
-#         db.session.add(student)
-#
+def get_period(semester, year):
+    return db.session.query(Semester).filter_by(semester=semester, year=year).first()
+
+
+def stats_amount_of_students_by_period(semester=SemesterType.SEMESTER_1.name, year=datetime.now().year.__str__()):
+    period = get_period(semester, year)
+    if period:
+        query = (db.session.query(Class.className, func.count(StudentClass.student_id))
+                 .join(StudentClass)
+                 .filter(StudentClass.semester_id == period.id)
+                 .group_by(Class.className)
+                 )
+        return query.all()
+    else:
+        return []
+
 def get_student_by_id(id):
     return Student.query.get(id)
 
@@ -90,7 +75,7 @@ def get_student_list():
     return student
 
 
-def add_student(name, gender, dateOfBirth, address, phoneNumber, email, admission_date, class_id):
+def add_student(name, gender, dateOfBirth, address, phoneNumber, email, admission_date, regulation_id, semester_id):
     new_student = Student(
         name=name,
         gender=gender,
@@ -99,11 +84,23 @@ def add_student(name, gender, dateOfBirth, address, phoneNumber, email, admissio
         phoneNumber=phoneNumber,
         email=email,
         admission_date=admission_date,
-        class_id=class_id
+        # class_id=class_id , class_id
+        regulation_id=regulation_id,
+        semester_id=semester_id
     )
     db.session.add(new_student)
     db.session.commit()
-    return new_student
+    return new_student.id
+
+def add_student_class(student_id, class_id, semester_id):
+        new_student_class = StudentClass(
+            student_id=student_id,
+            class_id=class_id,
+            semester_id=semester_id
+        )
+        db.session.add(new_student_class)
+        db.session.commit()
+        return new_student_class.id
 
 
 def get_class_by_id(id):
@@ -119,17 +116,28 @@ def get_subject_list():
     subject = Subject.query.all()
     return subject
 
+
 def get_regulation():
-    qd=Regulation.query
+    qd = Regulation.query
     return qd.first()
 
+
 def get_semester():
-    s=Semester.query
+    s = Semester.query
     return s.all()
 
+
 # Chức năng cho Admin
+
+
+def get_current_year():
+    if datetime.now().month < 6:
+        return datetime.now().year - 1
+    return datetime.now().year
+
 def get_period(semester, year):
     return db.session.query(Semester).filter_by(semester=semester, year=year).first()
+
 
 def stats_students_count_by_period(semester=SemesterType.SEMESTER_1.name, year=datetime.now().year.__str__()):
     period = get_period(semester, year)
@@ -164,6 +172,7 @@ def init_regulation():
     # Commit changes to the database
     db.session.commit()
 
+
 def get_subjects():
     return db.session.query(Subject).all()
 
@@ -174,8 +183,8 @@ def get_years():
     return years
 
 
-def count_students_of_classes_by_subject_and_period(subject_id, semester_id, year, avg_gt_or_equal_to=None):
-    period = get_period(semester=semester_id, year=year)
+def count_students_of_classes_by_subject_and_period(subject_id, semester, year, avg_gt_or_equal_to=None):
+    period = get_period(semester=semester, year=year)
     if not period:
         return []
 
@@ -201,7 +210,7 @@ def count_students_of_classes_by_subject_and_period(subject_id, semester_id, yea
         )
         .join(Score, Student.id == Score.student_id)
         .join(ScoreDetail, Score.scoreDetail_id == ScoreDetail.id)
-        .filter(Score.subject_id == subject_id, Score.semester_id == semester_id)
+        .filter(Score.subject_id == subject_id, Score.semester_id == period.id)
         .group_by(Student.id)
     ).subquery()
 
@@ -211,11 +220,11 @@ def count_students_of_classes_by_subject_and_period(subject_id, semester_id, yea
 
     # Base query to retrieve classes and count of students
     base_query = (
-        db.session.query(Class.id, Class.name, func.count(Student.id))
+        db.session.query(Class.id, Class.className, func.count(distinct(Student.id)))
         .join(Teach)
         .join(StudentClass, Class.id == StudentClass.class_id, isouter=True)
         .join(Student, isouter=True)
-        .filter(StudentClass.semester_id == semester.id)
+        .filter(StudentClass.semester_id == period.id)
         .group_by(Class.id)
     )
 

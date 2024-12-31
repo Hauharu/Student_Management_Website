@@ -383,53 +383,127 @@
 
 {%block js%}
 <script>
-    $(document).ready(function () {
-        // Handle select box change event
-        $('#classes_id').change(function () {
-            // Get the selected class ID
-            var selectedClassId = $(this).val();
+<!--    $(document).ready(function () {-->
+<!--        // Handle select box change event-->
+<!--        $('#classes_id').change(function () {-->
+<!--            // Get the selected class ID-->
+<!--            var selectedClassId = $(this).val();-->
 
-            // Make an AJAX request to get data for the selected class
-            $.ajax({
-                url: '/get_data',  // Đường dẫn đến Flask route
-                type: 'POST',
-                contentType: 'application/json', // Đặt kiểu dữ liệu gửi
-                data: JSON.stringify({ 'class_id': selectedClassId }), // Chuyển đổi dữ liệu thành JSON
-                success: function (response) {
-                    // Update the table with the received data
-                    updateTable(response.students, response.class_name);
-                },
-                error: function (error) {
-                    console.log('Error fetching data:', error);
-                }
+<!--            // Make an AJAX request to get data for the selected class-->
+<!--            $.ajax({-->
+<!--                url: '/get_data',  // Đường dẫn đến Flask route-->
+<!--                type: 'POST',-->
+<!--                contentType: 'application/json', // Đặt kiểu dữ liệu gửi-->
+<!--                data: JSON.stringify({ 'class_id': selectedClassId }), // Chuyển đổi dữ liệu thành JSON-->
+<!--                success: function (response) {-->
+<!--                    // Update the table with the received data-->
+<!--                    updateTable(response.students, response.class_name);-->
+<!--                },-->
+<!--                error: function (error) {-->
+<!--                    console.log('Error fetching data:', error);-->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+
+<!--        // Function to update the table with data-->
+<!--        function updateTable(students, className) {-->
+<!--            // Clear existing rows-->
+<!--            $('#bd_bangnhapdiem').empty();-->
+
+<!--            // Append new rows-->
+<!--            if (students.length === 0) {-->
+<!--                // Nếu không có học sinh, hiển thị thông báo-->
+<!--                $('#bd_bangnhapdiem').append('<tr><td colspan="6" class="text-center">Không có học sinh nào trong lớp này</td></tr>');-->
+<!--            } else {-->
+<!--                students.forEach(function (student) {-->
+<!--                    var newRow = '<tr>' +-->
+<!--                        '<td>' + student.id + '</td>' +-->
+<!--                        '<td>' + student.name + '</td>' +-->
+<!--                        '<td><input type="text" class="form-control" id="score_15p_' + student.id + '"></td>' +-->
+<!--                        '<td><input type="text" class="form-control" id="score_1tiet_' + student.id + '"></td>' +-->
+<!--                        '<td><input type="text" class="form-control" id="score_exam_' + student.id + '"></td>' +-->
+<!--                        '</tr>';-->
+<!--                    $('#bd_bangnhapdiem').append(newRow);-->
+<!--                });-->
+<!--            }-->
+<!--        }-->
+<!--    });-->
+$(document).ready(function () {
+    // Handle select box change event
+    $('#classes_id').change(function () {
+        var selectedClassId = $(this).val();
+
+        $.ajax({
+            url: '/get_data',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ 'class_id': selectedClassId }),
+            success: function (response) {
+                updateTable(response.students, response.class_name);
+            },
+            error: function (error) {
+                console.log('Error fetching data:', error);
+            }
+        });
+    });
+
+    function updateTable(students, className) {
+        $('#bd_bangnhapdiem').empty();
+
+        if (students.length === 0) {
+            $('#bd_bangnhapdiem').append('<tr><td colspan="6" class="text-center">Không có học sinh nào trong lớp này</td></tr>');
+        } else {
+            students.forEach(function (student) {
+                var newRow = '<tr>' +
+                    '<td>' + student.id + '</td>' +
+                    '<td>' + student.name + '</td>' +
+                    '<td><input type="text" class="form-control" id="score_15p_' + student.id + '"></td>' +
+                    '<td><input type="text" class="form-control" id="score_1tiet_' + student.id + '"></td>' +
+                    '<td><input type="text" class="form-control" id="score_exam_' + student.id + '"></td>' +
+                    '</tr>';
+                $('#bd_bangnhapdiem').append(newRow);
+            });
+        }
+    }
+
+
+ $(document).on('click', '#save_scores_btn', function () {
+        console.log("Button clicked!");
+        var scores = [];
+
+        $('#bd_bangnhapdiem tr').each(function () {
+            var studentId = $(this).find('td').first().text();
+            var score15p = $(this).find('#score_15p_' + studentId).val();
+            var score1tiet = $(this).find('#score_1tiet_' + studentId).val();
+            var scoreExam = $(this).find('#score_exam_' + studentId).val();
+            var subjectId = $('#subject_id').val();
+            var semesterId = $('#semester_id').val();
+
+            scores.push({
+                student_id: studentId,
+                score_15p: score15p,
+                score_1tiet: score1tiet,
+                score_exam: scoreExam,
+                subject_id: subjectId,
+                semester_id: semesterId
             });
         });
 
-        // Function to update the table with data
-        function updateTable(students, className) {
-            // Clear existing rows
-            $('#bd_bangnhapdiem').empty();
-
-            // Append new rows
-            if (students.length === 0) {
-                // Nếu không có học sinh, hiển thị thông báo
-                $('#bd_bangnhapdiem').append('<tr><td colspan="6" class="text-center">Không có học sinh nào trong lớp này</td></tr>');
-            } else {
-                students.forEach(function (student) {
-    <!--                var formattedDateOfBirth = formatDateOfBirth(student.dateOfBirth);-->
-                    var newRow = '<tr>' +
-                        '<td>' + student.id + '</td>' +
-                        '<td>' + student.name + '</td>' +
-                        '<td>' + '<input type="text" class="form-control">' + '</td>' +
-                        '<td>' + '<input type="text" class="form-control">' + '</td>' +
-                        '<td>' + '<input type="text" class="form-control">' + '</td>' +
-    <!--                    '<td><button class="btn-sua-hs btn btn-warning" data-id="' + student.id + '"><i class="fas fa-pen"></i></button></td>' +-->
-                        '</tr>';
-                    $('#bd_bangnhapdiem').append(newRow);
-                });
+        $.ajax({
+            url: '/save_scores',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ scores: scores }),
+            success: function (response) {
+                alert('Điểm đã được lưu thành công!');
+            },
+            error: function (error) {
+                console.log('Error saving scores:', error);
+                alert('Có lỗi xảy ra khi lưu điểm!');
             }
-        }
+        });
     });
+});
 </script>
 {%endblock%}
 
@@ -451,6 +525,10 @@
                 <!--                </li>-->
                 <li class="submenu">
                     <a href="/nhapdiem"><i class="fas fa-building"></i> <span>Nhập điểm </span> <span
+                            class="menu-arrow"></span></a>
+                </li>
+                <li class="submenu">
+                    <a href="/xuatdiem"><i class="fas fa-building"></i> <span>Xuất điểm </span> <span
                             class="menu-arrow"></span></a>
                 </li>
                 <li class="submenu">
@@ -494,7 +572,7 @@
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Chọn môn</label>
-                                        <select class="form-control" name="chonmon">
+                                        <select class="form-control" name="" id="subject_id">
                                             <option disabled selected>Chọn môn</option>
                                             {% for m in subject %}
                                             <option value="{{ m.id }}">{{ m.subjectName }}</option>
@@ -555,7 +633,9 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Họ tên</th>
-                                    <th>Thông tin điểm</th>
+                                    <th>Điểm 15p</th>
+                                    <th>Điểm 1 tiết</th>
+                                    <th>Điểm thi</th>
                                 </tr>
                                 </thead>
                                 <tbody id="bd_bangnhapdiem">
@@ -565,13 +645,12 @@
                     </div>
                     <div class="col-12 col-sm-6">
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Lưu thông tin</button>
+                            <button type="button" id="save_scores_btn" class="btn btn-primary">Lưu thông tin</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 {% endblock %}

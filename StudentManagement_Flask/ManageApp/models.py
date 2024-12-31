@@ -6,6 +6,7 @@ from flask_login import UserMixin
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey, Enum, Date, DateTime, CheckConstraint, \
     UniqueConstraint
+from datetime import date
 
 
 ################################################### Class Abstract #####################################################
@@ -67,7 +68,7 @@ class UserInformation(BaseModel):
     __tablename__ = 'user_information'
     name = Column(String(50), nullable=False)
     gender = Column(Enum(UserGender), default=UserGender.MALE)
-    dateOfBirth = Column(DateTime, nullable=False)
+    dateOfBirth = Column(Date, nullable=False)
     address = Column(String(255), nullable=False)
     phoneNumber = Column(String(10), nullable=False, unique=True)
     email = Column(String(255), nullable=False, unique=True)
@@ -102,7 +103,7 @@ class Student(BaseModel):
     __tablename__ = 'student'
     name = Column(String(50), nullable=False)
     gender = Column(Enum(UserGender), default=UserGender.MALE)
-    dateOfBirth = Column(DateTime, nullable=False)
+    dateOfBirth = Column(Date, nullable=False)
     address = Column(String(255), nullable=False)
     phoneNumber = Column(String(10), nullable=False, unique=True)
     email = Column(String(255), nullable=False, unique=True)
@@ -114,12 +115,12 @@ class Student(BaseModel):
     semester_id = Column(Integer, ForeignKey('semester.id'), nullable=False)
 
     def __str__(self):
-        return self.first_name + ' ' + self.last_name
+        return self.name
 
 
 class Semester(BaseModel):
     __tablename__ = 'semester'
-    semester = Column(String(50), nullable=False)
+    semester = Column(Enum(SemesterType), nullable=False)
     year = Column(Integer, default=datetime.now().year)
     teach = relationship('Teach', backref='semester', lazy=True)
     student = relationship("Student", backref="semester", lazy=True)
@@ -135,11 +136,12 @@ class Semester(BaseModel):
 
 class Subject(BaseModel):
     __tablename__ = 'subject'
-    subjectName = Column(String(20), nullable=False)
+    subjectName = Column(String(20))
     grade = Column(Enum(StudentGrade), default=StudentGrade.GRADE_10TH)
     exam_15mins = Column(Integer, nullable=False)
     exam_45mins = Column(Integer, nullable=False)
     exam_Final = Column(Integer, default=False)
+    teach = relationship('Teach', backref='subjects', lazy=True)
 
     __table_args__ = (
         CheckConstraint("exam_15mins >= 1 AND exam_15mins <=5", name="check_exam_15mins"),
@@ -167,7 +169,7 @@ class Class(BaseModel):
     year = Column(Integer, default=datetime.now().year)
     teach = relationship('Teach', backref='class', lazy=True)
     teacher_id = Column(Integer, ForeignKey(User.id), unique=True)
-    student_Class = relationship('StudentClass', backref='class', lazy=True)
+    student_Class = relationship('StudentClass', backref='class', lazy=True, uselist=False)
     regulation_id = Column(Integer, ForeignKey('regulation.id'), nullable=True)
 
     __table_args__ = (
@@ -264,26 +266,26 @@ if __name__ == "__main__":
 
         # CHẠY TỪNG BẢNG DỮ LIỆU, CHẠY CẢ 2 BẢNG DỮ LIỆU SCOREDETAIL VÀ SCORE
 
-        # Tạo dữ liệu mẫu cho UserInformation
+        # # Tạo dữ liệu mẫu cho UserInformation
         # user_info1 = UserInformation(
-        #     name="Nguyễn Trung Hậu", gender=UserGender.MALE, dateOfBirth=datetime(1990, 5, 15), address="Bến Tre",
+        #     name="Nguyễn Trung Hậu", gender=UserGender.MALE, dateOfBirth=date(1990, 5, 15), address="Bến Tre",
         #     phoneNumber="0123765789", email="trunghau@osh.edu.vn")
         # user_info2 = UserInformation(
-        #     name="Phạm Nguyên Bảo", gender=UserGender.MALE, dateOfBirth=datetime(1992, 7, 20), address="Trà Vinh",
+        #     name="Phạm Nguyên Bảo", gender=UserGender.MALE, dateOfBirth=date(1992, 7, 20), address="Trà Vinh",
         #     phoneNumber="0234567890", email="nguyenbao@osh.edu.vn")
         # user_info3 = UserInformation(
-        #     name="Nguyễn Vũ Luân", gender=UserGender.MALE, dateOfBirth=datetime(1985, 3, 30), address="Đồng Tháp",
+        #     name="Nguyễn Vũ Luân", gender=UserGender.MALE, dateOfBirth=date(1985, 3, 30), address="Đồng Tháp",
         #     phoneNumber="0345678901", email="vuluan@osh.edu.vn")
         # user_info4 = UserInformation(
-        #     name="Trần Xuân Đức", gender=UserGender.MALE, dateOfBirth=datetime(1985, 3, 30), address="Bạc Liêu",
+        #     name="Trần Xuân Đức", gender=UserGender.MALE, dateOfBirth=date(1985, 3, 30), address="Bạc Liêu",
         #     phoneNumber="0765437890", email="xuanduc@osh.edu.vn")
         # user_info5 = UserInformation(
-        #     name="Hứa Quang Đạt", gender=UserGender.MALE, dateOfBirth=datetime(1985, 3, 30), address="An Giang",
+        #     name="Hứa Quang Đạt", gender=UserGender.MALE, dateOfBirth=date(1985, 3, 30), address="An Giang",
         #     phoneNumber="0398234901", email="quangdat@osh.edu.vn")
         # db.session.add_all([user_info1, user_info2, user_info3, user_info4, user_info5])
         # db.session.commit()
-
-        # Tạo dữ liệu mẫu cho User
+        #
+        # # Tạo dữ liệu mẫu cho User
         # user1 = User(
         #     username="hau", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
         #     user_role=UserRole.ADMIN, userInformation_id=1)
@@ -307,16 +309,16 @@ if __name__ == "__main__":
         # )
         # db.session.add_all([user1, user2, user3, user4, user5])
         # db.session.commit()
-
-        # Tạo dữ liệu mẫu cho Semester
+        #
+        # # Tạo dữ liệu mẫu cho Semester
         # semester1 = Semester(
         #     semester="SEMESTER_1", year=2024)
         # semester2 = Semester(
         #     semester="SEMESTER_2", year=2024)
         # db.session.add_all([semester1, semester2])
         # db.session.commit()
-
-        # Tạo dữ liệu mẫu cho Regulation
+        #
+        # # Tạo dữ liệu mẫu cho Regulation
         # regulation1 = Regulation(
         #     regulationName="Quy định về tuổi học sinh", content="Độ tuổi học sinh phải từ 15 đến 20 tuổi.",
         #     min_value=15, max_value=20, type=Regulations.Re_Age
@@ -328,8 +330,8 @@ if __name__ == "__main__":
         # )
         # db.session.add_all([regulation1, regulation2])
         # db.session.commit()
-
-        # Tạo dữ liệu mẫu cho Student
+        #
+        # # Tạo dữ liệu mẫu cho Student
         # student1 = Student(
         #     name="Trần Thị Lan", gender=UserGender.FEMALE, dateOfBirth=datetime(2007, 4, 20),
         #     address="Trà Vinh", phoneNumber="0789012345", email="lantran@osh.edu.vn", grade=StudentGrade.GRADE_11ST,
@@ -337,38 +339,43 @@ if __name__ == "__main__":
         # )
         #
         # student2 = Student(
-        #     name="Lê Thị Hoa", gender=UserGender.FEMALE, dateOfBirth=datetime(2009, 2, 10),
+        #     name="Lê Thị Hoa", gender=UserGender.FEMALE, dateOfBirth=date(2009, 2, 10),
         #     address="Đồng Tháp", phoneNumber="0890123456", email="hoale@osh.edu.vn", grade=StudentGrade.GRADE_12ND,
         #     regulation_id=1, semester_id=1
         # )
         #
         # student3 = Student(
-        #     name="Phạm Văn Nam", gender=UserGender.MALE, dateOfBirth=datetime(2008, 5, 5),
+        #     name="Phạm Văn Nam", gender=UserGender.MALE, dateOfBirth=date(2008, 5, 5),
         #     address="An Giang", phoneNumber="0901234567", email="nampham@osh.edu.vn", grade=StudentGrade.GRADE_10TH,
         #     regulation_id=1, semester_id=1
         # )
         #
         # student4 = Student(
-        #     name="Hoàng thị Hương", gender=UserGender.FEMALE, dateOfBirth=datetime(2007, 10, 10),
+        #     name="Hoàng thị Hương", gender=UserGender.FEMALE, dateOfBirth=date(2007, 10, 10),
         #     address="Bạc Liêu", phoneNumber="0912345678", email="huonghoang@osh.edu.vn", grade=StudentGrade.GRADE_11ST,
         #     regulation_id=1, semester_id=1
         # )
         #
         # student5 = Student(
-        #     name="Ngô Trọng Phúc", gender=UserGender.MALE, dateOfBirth=datetime(2006, 12, 15),
+        #     name="Ngô Trọng Phúc", gender=UserGender.MALE, dateOfBirth=date(2006, 12, 15),
         #     address="Cà Mau", phoneNumber="0923456789", email="phucngo@osh.edu.vn", grade=StudentGrade.GRADE_12ND,
         #     regulation_id=1, semester_id=1
         # )
         #
         # student6 = Student(
-        #     name="Dương Hoàng Mai", gender=UserGender.FEMALE, dateOfBirth=datetime(2008, 9, 25),
+        #     name="Dương Hoàng Mai", gender=UserGender.FEMALE, dateOfBirth=date(2008, 9, 25),
         #     address="Hậu Giang", phoneNumber="0934567890", email="maiduong@osh.edu.vn", grade=StudentGrade.GRADE_10TH,
         #     regulation_id=1, semester_id=1
         # )
-        # db.session.add_all([student1, student2, student3, student4, student5, student6])
+        # student7 = Student(
+        #     name="Dương Hoàng Dũng", gender=UserGender.MALE, dateOfBirth=date(2008, 9, 25),
+        #     address="Hậu Giang", phoneNumber="0888765678", email="dungduong@osh.edu.vn", grade=StudentGrade.GRADE_10TH,
+        #     regulation_id=1, semester_id=1
+        # )
+        # db.session.add_all([student1, student2, student3, student4, student5, student6,student7])
         # db.session.commit()
-
-        # Tạo dữ liệu mẫu cho Subject
+        #
+        # # Tạo dữ liệu mẫu cho Subject
         # subject1 = Subject(subjectName="Toán", grade=StudentGrade.GRADE_10TH, exam_15mins=2, exam_45mins=2,
         #                    exam_Final=1)
         # subject2 = Subject(subjectName="Vật Lý", grade=StudentGrade.GRADE_11ST, exam_15mins=3, exam_45mins=2,
@@ -392,8 +399,8 @@ if __name__ == "__main__":
         # db.session.add_all(
         #     [subject1, subject2, subject3, subject4, subject5, subject6, subject7, subject8, subject9, subject10])
         # db.session.commit()
-
-        # Tạo dữ liệu mẫu cho Class
+        #
+        # # Tạo dữ liệu mẫu cho Class
         # class1 = Class(
         #     className="10C1", quantity=40, grade=StudentGrade.GRADE_10TH, year=2024, teacher_id=3, regulation_id=2)
         # class2 = Class(
@@ -402,8 +409,8 @@ if __name__ == "__main__":
         #     className="12C1", quantity=30, grade=StudentGrade.GRADE_12ND, year=2024, teacher_id=5, regulation_id=2)
         # db.session.add_all([class1, class2, class3])
         # db.session.commit()
-
-        # Tạo dữ liệu mẫu cho ScoreDetail
+        #
+        # # Tạo dữ liệu mẫu cho ScoreDetail
         # score_detail1 = ScoreDetail(score=10.0, type=ScoreType.EXAM_15MINS, created_date=datetime.now(), student_id=1)
         # score_detail2 = ScoreDetail(score=8.0, type=ScoreType.EXAM_45MINS, created_date=datetime.now(), student_id=2)
         # score_detail3 = ScoreDetail(score=7.0, type=ScoreType.EXAM_FINAL, created_date=datetime.now(), student_id=3)
@@ -412,8 +419,8 @@ if __name__ == "__main__":
         # score_detail6 = ScoreDetail(score=9.0, type=ScoreType.EXAM_45MINS, created_date=datetime.now(), student_id=6)
         # db.session.add_all([score_detail1, score_detail2, score_detail3, score_detail4, score_detail5, score_detail6])
         # db.session.commit()
-
-        # Tạo dữ liệu mẫu cho Score
+        #
+        # # Tạo dữ liệu mẫu cho Score
         # score1 = Score(
         #     score=10.0, type=ScoreType.EXAM_15MINS, count=1, scoreDetail_id=score_detail1.id, student_id=1,
         #     semester_id=1, subject_id=1
@@ -439,4 +446,24 @@ if __name__ == "__main__":
         #     semester_id=1, subject_id=6
         # )
         # db.session.add_all([score1, score2, score3, score4, score5, score6])
+        # db.session.commit()
+        #
+        # # Tạo dữ liệu mẫu cho student_class
+        # student_class1 = StudentClass(student_id=1, class_id=1, semester_id=1)
+        # student_class2 = StudentClass(student_id=2, class_id=1, semester_id=1)
+        # student_class3 = StudentClass(student_id=3, class_id=2, semester_id=1)
+        # student_class4 = StudentClass(student_id=4, class_id=2, semester_id=1)
+        # student_class5 = StudentClass(student_id=5, class_id=3, semester_id=1)
+        # student_class6 = StudentClass(student_id=6, class_id=3, semester_id=1)
+        # student_class7 = StudentClass(student_id=7, class_id=1, semester_id=1)
+        # db.session.add_all(
+        #     [student_class1, student_class2, student_class3, student_class4, student_class5, student_class6,student_class7])
+        # db.session.commit()
+        #
+        # # Thêm dữ liệu mẫu cho Teach
+        # teach1 = Teach(teacher_id=1, subject_id=1, class_id=1, semester_id=1)
+        # teach2 = Teach(teacher_id=1, subject_id=2, class_id=1, semester_id=1)
+        # teach3 = Teach(teacher_id=2, subject_id=1, class_id=2, semester_id=2)
+        # teach4 = Teach(teacher_id=2, subject_id=2, class_id=2, semester_id=2)
+        # db.session.add_all([teach1, teach2, teach3, teach4])
         # db.session.commit()

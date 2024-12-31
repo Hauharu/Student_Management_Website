@@ -445,6 +445,80 @@ table.table td h2 span {
         }
     });
 
+
+    $(document).on('click', '.btn-sua-hs', function () {
+    var studentId = $(this).data('id');
+
+    // Gửi AJAX để lấy thông tin học sinh
+    $.ajax({
+        url: '/get_student', // Flask route để lấy thông tin học sinh
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ 'student_id': studentId }),
+        success: function (response) {
+            // Điền thông tin vào form modal
+            $('#name').val(response.name);
+            $('#dateOfBirth').val(response.dateOfBirth);
+            $('#gender').val(response.gender);
+            $('#address').val(response.address);
+            $('#phoneNumber').val(response.phoneNumber);
+            $('#email').val(response.email);
+            $('#admission_date').val(response.admission_date);
+            $('#class_id').val(response.class_id);
+
+            // Hiển thị modal
+            $('#modalchinhhs').modal('show');
+        },
+        error: function (error) {
+            console.log('Error fetching student data:', error);
+        }
+    });
+});
+
+
+$(document).ready(function() {
+    $('#formchinhhs').submit(function (event) {
+        event.preventDefault();
+        console.log('Form submitted'); // Thêm log để kiểm tra
+
+        // Lấy dữ liệu từ form
+       var updatedData = {
+    id: $('#student_id').data('id'), // Lấy ID sinh viên từ hidden input
+    name: $('#name').val(),
+    dateOfBirth: $('#dateOfBirth').val(),
+    gender: $('#gender').val(),
+    address: $('#address').val(),
+    phoneNumber: $('#phoneNumber').val(),
+    email: $('#email').val(),
+    admission_date: $('#admission_date').val(),
+    class_id: $('#class_id').val(),  // Không phải mảng nếu chỉ có 1 class_id
+    semester_id: 1
+};
+
+        // Gửi AJAX để cập nhật dữ liệu
+        $.ajax({
+            url: '/update_student', // Flask route để cập nhật thông tin học sinh
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(updatedData),
+            success: function (response) {
+                alert('Cập nhật thành công!');
+                $('#modalchinhhs').modal('hide');
+                $('#classes_id').trigger('change'); // Cập nhật lại bảng nếu cần
+            },
+            error: function (error) {
+                console.log('Error updating student data:', error);
+                alert('Có lỗi xảy ra khi cập nhật!');
+            }
+        });
+
+        return false; // Ngừng gửi form
+    });
+});
+
+
+
+
     function hienThiDanhSachLopHoc() {
         $.ajax({
             url: '/get_danh_sach_lop',  // Địa chỉ API để lấy danh sách lớp học
@@ -566,10 +640,6 @@ table.table td h2 span {
                 </li>
                 <li class="submenu">
                     <a href="/dshocsinh"><i class="fas fa-chalkboard-teacher"></i> <span>Danh sách học sinh</span> <span
-                            class="menu-arrow"></span></a>
-                </li>
-                <li class="submenu">
-                    <a href="/themlop"><i class="fas fa-building"></i> <span>Thêm lớp học </span> <span
                             class="menu-arrow"></span></a>
                 </li>
                 <li class="submenu">
