@@ -1,0 +1,466 @@
+{% extends 'layout/base.html' %}
+
+
+{% block title %}Tiếp nhận học sinh{% endblock %}
+
+{%block css%}
+<style>
+    .sidebar {
+        background-color: #f7f7fa;
+        border-right: 1px solid #ececf5;
+        bottom: 0;
+        left: 0;
+        margin-top: 0;
+        position: fixed;
+        top: 60px;
+        transition: all 0.2s ease-in-out 0s;
+        width: 320px;
+        z-index: 1001;
+    }
+    <!--.sidebar.opened {-->
+    <!--	-webkit-transition: all 0.4s ease;-->
+    <!--	-moz-transition: all 0.4s ease;-->
+    <!--	transition: all 0.4s ease;-->
+    <!--}-->
+    .sidebar-inner {
+        height: 100%;
+        min-height: 100%;
+        transition: all 0.2s ease-in-out 0s;
+    }
+    .sidebar-menu {
+        padding: 15px;
+    }
+    .sidebar-menu ul {
+        font-size: 15px;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        position: relative;
+    }
+    .sidebar-menu li a {
+        color: #6f6f6f;
+        display: block;
+        font-size: 16px;
+        height: auto;
+        padding: 0 20px;
+    }
+    .sidebar-menu li a:hover {
+        color: #18aefa;
+    }
+    .sidebar-menu > ul > li > a:hover {
+        background-color: #fff;
+        color: #18aefa;
+        margin: 0px -15px;
+        padding-left: 30px;
+    }
+    .sidebar-menu li.active > a {
+        background-color: #fff;
+        color: #18aefa;
+        position: relative;
+        margin: 0px -15px;
+        padding-left: 30px;
+    }
+    .sidebar-menu li.active > a::before {
+        width: 5px;
+        content: "";
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        background: #18aefa;
+    <!--    -webkit-transition: all 0.5s;-->
+    <!--    -ms-transition: all 0.5s;-->
+    <!--    transition: all 0.5s;-->
+    }
+    .menu-title {
+        color: #9e9e9e;
+        display: flex;
+        font-size: 14px;
+        opacity: 1;
+        padding: 5px 15px;
+        white-space: nowrap;
+    }
+    .menu-title > i {
+        float: right;
+        line-height: 40px;
+    }
+    .sidebar-menu li.menu-title a {
+        color: #ff9b44;
+        display: inline-block;
+        margin-left: auto;
+        padding: 0;
+    }
+    <!--.sidebar-menu li.menu-title a.btn {-->
+    <!--    color: #fff;-->
+    <!--    display: block;-->
+    <!--    float: none;-->
+    <!--    font-size: 15px;-->
+    <!--    margin-bottom: 15px;-->
+    <!--    padding: 10px 15px;-->
+    <!--}-->
+    .sidebar-menu ul ul a.active {
+        color: #18aefa;
+    }
+    <!--.mobile_btn {-->
+    <!--	display: none;-->
+    <!--	float: left;-->
+    <!--}-->
+
+    .sidebar .sidebar-menu > ul > li > a span {
+        transition: all 0.2s ease-in-out 0s;
+        display: inline-block;
+        margin-left: 10px;
+        white-space: nowrap;
+    }
+    .sidebar .sidebar-menu > ul > li > a span.chat-user {
+        margin-left: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .sidebar .sidebar-menu > ul > li > a span.badge {
+        margin-left: auto;
+    }
+    .sidebar-menu ul ul a {
+        display: block;
+        font-size: 15px;
+        padding: 7px 10px 7px 45px;
+        position: relative;
+    }
+    .sidebar-menu ul ul {
+        display: none;
+    }
+    .sidebar-menu ul ul ul a {
+        padding-left: 65px;
+    }
+    .sidebar-menu ul ul ul ul a {
+        padding-left: 85px;
+    }
+    .sidebar-menu > ul > li {
+        margin-bottom: 3px;
+        position: relative;
+    }
+    <!--.sidebar-menu > ul > li:last-child {-->
+    <!--    margin-bottom: 0;-->
+    <!--}-->
+    .sidebar-menu .menu-arrow {
+        -webkit-transition: -webkit-transform 0.15s;
+        -o-transition: -o-transform 0.15s;
+        transition: transform .15s;
+        position: absolute;
+        right: 15px;
+        display: inline-block;
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        text-rendering: auto;
+        line-height: 40px;
+        font-size: 16px;
+    <!--	-webkit-font-smoothing: antialiased;-->
+    <!--	-moz-osx-font-smoothing: grayscale;-->
+    <!--	-webkit-transform: translate(0, 0);-->
+    <!--	-ms-transform: translate(0, 0);-->
+    <!--	-o-transform: translate(0, 0);-->
+    <!--	transform: translate(0, 0);-->
+        line-height: 18px;
+        top: 14px;
+    }
+    .sidebar-menu .menu-arrow:before {
+        content: "\f105";
+    }
+    .sidebar-menu li a.subdrop .menu-arrow {
+        -ms-transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+        -o-transform: rotate(90deg);
+        transform: rotate(90deg);
+    }
+    .sidebar-menu ul ul a .menu-arrow {
+        top: 10px;
+    }
+    .sidebar-menu > ul > li > a {
+        align-items: center;
+        display: flex;
+        justify-content: flex-start;
+        padding: 12px 15px;
+        position: relative;
+        transition: all 0.2s ease-in-out 0s;
+    }
+    .sidebar-menu ul li a i {
+        display: inline-block;
+        font-size: 16px;
+        line-height: 24px;
+        text-align: left;
+        vertical-align: middle;
+        width: 20px;
+        transition: all 0.2s ease-in-out 0s;
+    }
+    .sidebar-menu ul li.menu-title a i {
+        font-size: 16px !important;
+        margin-right: 0;
+        text-align: right;
+        width: auto;
+    }
+    .sidebar-menu li a > .badge {
+        color: #fff;
+    }
+
+     .main-wrapper {
+        width: 100%;
+        height: 100vh;
+        min-height: 100vh;
+    }
+    .page-wrapper {
+        margin-left: 320px;
+        padding-top: 20px;
+        position: relative;
+        transition: all 0.4s ease;
+    }
+    .page-wrapper > .content {
+        padding: 1.875rem 1.875rem 0;
+    }
+    .page-header {
+        margin-bottom: 1.875rem;
+    }
+    .page-header .breadcrumb {
+        background-color: transparent;
+        color: #6c757d;
+        font-size: 1rem;
+        font-weight: 500;
+        margin-bottom: 0;
+        padding: 0;
+    }
+    .page-header .breadcrumb a {
+        color: #333;
+    }
+    .page-title {
+        font-size: 28px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 5px;
+    }
+    .form-control {
+      height: auto !important;
+      line-height: 1.5 !important;
+      padding: 8px !important;
+      font-size: 16px !important;
+    }
+</style>
+{%endblock%}
+
+{% block body %}
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-inner slimscroll">
+        <div id="sidebar-menu" class="sidebar-menu">
+            <ul>
+                <li class="menu-title">
+                    <span>Quản lý</span>
+                </li>
+                <li class="submenu">
+                    <a href="/tiepnhan"><i class="fas fa-user-graduate"></i> <span>Tiếp nhận học sinh</span></a>
+                </li>
+                <li class="submenu">
+                    <a href="/dshocsinh"><i class="fas fa-chalkboard-teacher"></i> <span>Danh sách học sinh</span></a>
+                </li>
+                <li class="submenu">
+                    <a href="/dslop"><i class="fas fa-book"></i> <span>Danh sách lớp</span></a>
+                </li>
+                <li class="submenu">
+                    <a href="/calendar"><i class="fas fa-calendar"></i> <span>Lịch biểu</span> <span
+                            class="menu-arrow"></span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="page-title">Tiếp nhận học sinh</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item">Học sinh</li>
+                        <li class="breadcrumb-item active">Tiếp nhận học sinh</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nút xuất file Excel -->
+        {% if info_student %}
+        <div class="row">
+            <div>
+                <button type="button" class="btn btn-success" id="exportExcel"> Xuất Excel</button>
+            </div>
+        </div>
+        <!-- Hiển thị hồ sơ học sinh -->
+        <div class="A4">
+            <table id="studentTable" class="table" align="center">
+                <tr align="center">
+                    <th colspan="2" style="text-align: center;">HỒ SƠ HỌC SINH</th>
+                </tr>
+                <tr>
+                    <td>Họ tên: {{ info_student.name }}</td>
+                    <td>Giới tính: {{ info_student.gender.value }}</td>
+                </tr>
+                <tr>
+                    <td>Ngày sinh: {{ info_student.dateOfBirth }}</td>
+                    <td>Địa chỉ: {{ info_student.address }}</td>
+                </tr>
+                <tr>
+                    <td>Số điện thoại: {{ info_student.phoneNumber }}</td>
+                    <td>Email: {{ info_student.email }}</td>
+                </tr>
+            </table>
+        </div>
+        {% endif %}
+
+        <!-- Thông báo -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <!-- Form tiếp nhận học sinh -->
+        <form method="POST" action="/tiepnhan" id="ftiepnhan">
+            <div class="row">
+                <div class="col-12">
+                    <h5 class="form-title"><span>Thông tin học sinh</span></h5>
+                </div>
+                <div class="col-12 col-sm-6">
+                    <div class="form-group">
+                        <label>Họ và tên</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6">
+                    <div class="form-group">
+                        <label>Giới tính</label>
+                        <select class="form-control" name="gender" required>
+                            <option disabled selected>Chọn giới tính</option>
+                            <option>Nam</option>
+                            <option>Nữ</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6">
+                    <div class="form-group">
+                        <label>Ngày sinh</label>
+                        <input type="date" name="dateOfBirth" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6">
+                    <div class="form-group">
+                        <label>Địa chỉ</label>
+                        <input type="text" name="address" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6">
+                    <div class="form-group">
+                        <label>Số điện thoại</label>
+                        <input type="text" name="phoneNumber" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6">
+                    <div class="form-group">
+                        <label>Ngày nhập học</label>
+                        <input type="date" name="admission_date" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6">
+                    <div class="form-group">
+                        <label>Mã lớp</label>
+                        <input type="text" name="class_id" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Tiếp nhận</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script> <!-- Thêm thư viện Excel -->
+
+<script>
+    // Tự động ẩn thông báo sau 3 giây
+    window.onload = function() {
+        setTimeout(function() {
+            var alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                alert.style.display = 'none';
+            });
+        }, 3000);  // 3000 milliseconds = 3 seconds
+    };
+
+    // Chức năng xuất file Excel khi nhấn nút
+
+document.getElementById('exportExcel').addEventListener('click', function () {
+    // Lấy dữ liệu từ bảng hồ sơ học sinh
+    var table = document.getElementById('studentTable');
+    if (table) {
+        // Trước khi xuất, xử lý bảng để định dạng "Ngày sinh" chỉ chứa ngày
+        var rows = table.rows;
+        for (var i = 0; i < rows.length; i++) {
+            var cells = rows[i].cells;
+            for (var j = 0; j < cells.length; j++) {
+                var cellText = cells[j].innerText.trim();
+                if (cellText.includes('Ngày sinh:')) {
+                    let dateValue = cellText.replace("Ngày sinh: ", "").trim();
+                    if (dateValue) {
+                        // Chuyển định dạng ngày thành MM/DD/YYYY
+                        let dateObj = new Date(dateValue);
+                        if (!isNaN(dateObj)) {
+                            let formattedDate = (dateObj.getMonth() + 1) + '/' + dateObj.getDate() + '/' + dateObj.getFullYear();
+                            cells[j].innerText = "Ngày sinh: " + formattedDate;
+                        } else {
+                            console.error("Giá trị ngày không hợp lệ:", dateValue);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Tạo workbook từ bảng
+        var wb = XLSX.utils.table_to_book(table, { sheet: "Hồ Sơ Học Sinh" });
+
+        // Lấy worksheet để định dạng thêm (nếu cần)
+        var ws = wb.Sheets["Hồ Sơ Học Sinh"];
+        var range = XLSX.utils.decode_range(ws['!ref']);
+
+        // Tinh chỉnh chiều rộng cột
+        ws['!cols'] = [];
+        for (var C = range.s.c; C <= range.e.c; ++C) {
+            var maxLength = 0;
+            for (var R = range.s.r; R <= range.e.r; ++R) {
+                var cell_address = { r: R, c: C };
+                var cell = ws[XLSX.utils.encode_cell(cell_address)];
+                if (cell && cell.v) {
+                    maxLength = Math.max(maxLength, cell.v.toString().length);
+                }
+            }
+            ws['!cols'][C] = { wch: maxLength + 2 }; // Thêm khoảng trống để hiển thị đầy đủ
+        }
+
+        // Tạo file Excel và tải xuống
+        XLSX.writeFile(wb, 'hoso_hocsinh.xlsx');
+    } else {
+        alert('Không tìm thấy bảng để xuất Excel');
+    }
+});
+
+</script>
+{% endblock %}
