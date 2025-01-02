@@ -1,0 +1,151 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+
+{% if current_user.is_authenticated %}
+<h2 class="alert-success p-3">
+    Chào {{ current_user.userInformation.name }}, Bạn đang truy cập với vai trò {{ current_user.user_role.value }}
+</h2>
+
+<div class="row">
+    <!-- Thống kê người dùng -->
+    <div class="col-md-5">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th colspan="2">THỐNG KÊ NGƯỜI DÙNG</th>
+                </tr>
+                <tr>
+                    <th>Vai trò</th>
+                    <th>Số lượng</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for role, count in user_count %}
+                <tr>
+                    <td>{{ role }}</td>
+                    <td>{{ count }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-7">
+        <h4 class="text-center">Biểu đồ số lượng người dùng</h4>
+        <canvas id="userChart"></canvas>
+    </div>
+</div>
+
+<!-- Thống kê số lượng học sinh trong lớp -->
+<div class="row mt-4">
+    <div class="col-md-4 col-12">
+        <h4 class="text-center">Thống kê số lượng học sinh</h4>
+        <form class="mb-2">
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="sems" class="form-label">Học kỳ:</label>
+                    <br />
+                    <select class="form-select form-select-lg p-2" id="sems" name="semester">
+                        <option value="SEMESTER_1">Học kỳ 1</option>
+                        <option value="SEMESTER_2">Học kỳ 2</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="year" class="form-label">Năm học:</label>
+                    <input id="year" name="year" type="text" class="form-control" placeholder="2024" required>
+                </div>
+                <div class="col-md-4 d-flex align-items-end"> <!-- Align the button properly -->
+                    <button type="submit" class="btn btn-primary w-100">Lọc</button> <!-- Full width button -->
+                </div>
+            </div>
+        </form>
+        <table class="table table-bordered">
+            <thead class="table-primary">
+                <tr>
+                    <th>Tên lớp</th>
+                    <th>Sĩ số</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for class_name, student_count in amount_of_students_by_period %}
+                <tr>
+                    <td>{{ class_name }}</td>
+                    <td>{{ student_count }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-7 offset-md-1"> <!-- Slightly reduced width and added margin -->
+        <h4 class="text-center">Biểu đồ số lượng học sinh/ Lớp</h4>
+        <canvas id="studentChart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Dữ liệu cho biểu đồ người dùng
+    let userLabels = [];
+    let userData = [];
+    {% for role, count in user_count %}
+    userLabels.push('{{ role }}');
+    userData.push({{ count }});
+    {% endfor %}
+
+    // Dữ liệu cho biểu đồ học sinh trong lớp
+    let classLabels = [];
+    let classData = [];
+    {% for class_name, student_count in amount_of_students_by_period %}
+    classLabels.push('{{ class_name }}');
+    classData.push({{ student_count }});
+    {% endfor %}
+
+    window.onload = function() {
+        // Biểu đồ thống kê người dùng
+        const userCtx = document.getElementById('userChart');
+        new Chart(userCtx, {
+            type: 'pie', // Biểu đồ tròn
+            data: {
+                labels: userLabels,
+                datasets: [{
+                    label: '# Số lượng',
+                    data: userData,
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.7)', // Màu xanh
+                        'rgba(255, 99, 132, 0.7)', // Màu đỏ
+                        'rgba(255, 206, 86, 0.7)', // Màu vàng
+                        'rgba(75, 192, 192, 0.7)'  // Màu xanh ngọc
+                    ],
+                    borderWidth: 1
+                }]
+            }
+        });
+
+        // Biểu đồ thống kê học sinh trong lớp
+        const studentCtx = document.getElementById('studentChart');
+        new Chart(studentCtx, {
+            type: 'pie', // Biểu đồ tròn
+            data: {
+                labels: classLabels,
+                datasets: [{
+                    label: '# Số lượng học sinh',
+                    data: classData,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(153, 102, 255, 0.7)',
+                        'rgba(255, 159, 64, 0.7)'
+                    ],
+                    borderWidth: 1
+                }]
+            }
+        });
+    }
+</script>
+
+{% else %}
+<h1>Vui lòng đăng nhập với vai trò Quản trị viên</h1>
+{% endif %}
+
+{% endblock %}
