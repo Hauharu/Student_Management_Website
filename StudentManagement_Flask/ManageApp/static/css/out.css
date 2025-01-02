@@ -1,0 +1,35 @@
+body {
+  background: rgb(204,204,204);
+}
+.A4 {
+   background: white;
+   width: 21cm;
+   height: 29.7cm;
+   display: block;
+   margin: 0 auto;
+   padding: 10px 25px;
+   margin-bottom: 0.5cm;
+   margin-top: 0.5cm;
+   box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+}
+@media print {
+  body, page {
+    margin: 27mm 16mm 27mm 16mm;
+    box-shadow: 0;
+
+  }
+}
+
+
+table, th, td{
+    border: 2px solid black;
+    margin-top: 1cm;
+}
+
+tr{
+    height: 52px;
+}
+
+td{
+    width: 345px;
+}
