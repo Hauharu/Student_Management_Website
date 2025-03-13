@@ -1,4 +1,4 @@
-# This is a mid-term group assignment on the topic of a high school student management website using Python Flask Framework
+# High school student management website using Python Flask Framework
 
 # Group information
 | ID         | Full Name        |
